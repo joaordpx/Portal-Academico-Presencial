@@ -1,0 +1,332 @@
+.wrapper {
+  width: 100%;
+  background-color: #f8fafc;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: system-ui, -apple-system, sans-serif;
+
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animateIn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* CARD BRANCO MASTER */
+.mainCardWrapper {
+  width: 100%;
+  max-width: 960px;
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 15px 35px -10px rgba(41, 22, 111, 0.08);
+  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  box-sizing: border-box;
+}
+
+/* Título */
+.titleWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.mainTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  color: rgb(41, 22, 111);
+  text-align: center;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.titleLine {
+  width: 45px;
+  height: 3px;
+  background-color: #38bdf8;
+  border-radius: 2px;
+}
+
+/* Tabela */
+.tableCard {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 80px 70px 1fr;
+  background-color: rgb(41, 22, 111);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 12px 20px;
+  align-items: center;
+  text-align: center;
+}
+
+.tableHeader .colTarefa {
+  text-align: left;
+  padding-left: 12px;
+}
+
+.tableBody {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 80px 70px 1fr;
+  padding: 12px 20px;
+  align-items: center;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.tableRow:last-child {
+  border-bottom: none;
+}
+
+.tableRow:hover {
+  background-color: #f8fafc;
+  transform: translateX(4px);
+}
+
+.rowChecked {
+  background-color: #f1f5f9;
+}
+
+.rowChecked .taskText {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+.colFeito {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.colNum {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.colTarefa {
+  padding-left: 12px;
+  text-align: left;
+}
+
+/* Checkbox */
+.checkboxBox {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #cbd5e1;
+  border-radius: 4px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.checkboxBox.checked {
+  background-color: rgb(41, 22, 111);
+  border-color: rgb(41, 22, 111);
+}
+
+.checkIcon {
+  width: 14px;
+  height: 14px;
+  color: #ffffff;
+}
+
+/* Número da tarefa */
+.numBadge {
+  background-color: rgb(41, 22, 111);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(41, 22, 111, 0.2);
+}
+
+/* Texto da tarefa */
+.taskText {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: #334155;
+  margin: 0;
+  line-height: 1.4;
+  transition: color 0.2s ease;
+}
+
+/* Caixa de Dica */
+.tipBox {
+  width: 100%;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-sizing: border-box;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.tipBox:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+.tipIconWrapper {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: rgb(41, 22, 111);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(41, 22, 111, 0.2);
+}
+
+.tipExclamation {
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.tipContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+
+.tipContent strong {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: rgb(41, 22, 111);
+}
+
+.tipContent p {
+  font-size: 0.88rem;
+  color: #475569;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Paginação */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.paginationButton {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: rgb(41, 22, 111);
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.paginationButton:hover:not(:disabled) {
+  background-color: #f8fafc;
+  border-color: rgb(41, 22, 111);
+  transform: translateY(-1px);
+}
+
+.paginationButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.paginationInfo {
+  color: #475569;
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Responsividade Mobile */
+@media (max-width: 768px) {
+  .mainCardWrapper {
+    padding: 16px 12px;
+  }
+
+  .tableHeader,
+  .tableRow {
+    grid-template-columns: 55px 45px 1fr;
+    padding: 10px 8px;
+  }
+
+  .taskText {
+    font-size: 0.85rem;
+  }
+
+  .tipBox {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .pagination {
+    gap: 10px;
+  }
+
+  .paginationButton {
+    padding: 8px 12px;
+    font-size: 0.82rem;
+  }
+
+  .paginationInfo {
+    font-size: 0.82rem;
+  }
+}

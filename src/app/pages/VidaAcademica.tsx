@@ -36,6 +36,7 @@ const sections = [
           {
             title: "Manual do Calouro",
             desc: "Roteiro completo para os primeiros passos na universidade.",
+            href: "/manual-calouro",
           },
           {
             title: "Acesso aos Sistemas",

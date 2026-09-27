@@ -77,4 +77,8 @@ export const router = createBrowserRouter([
       },
     ],
   },
+ {
+        path: "manual-calouro",
+        lazy: async () => ({ Component: (await import("./pages/ManualCalouro")).ManualCalouro }),
+      },
 ]);

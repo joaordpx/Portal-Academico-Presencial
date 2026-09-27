@@ -1,0 +1,807 @@
+.headerContainer {
+  position: sticky;
+  top: 0;
+
+  width: 100%;
+
+  z-index: 100;
+
+  box-sizing: border-box;
+
+  /*
+   * Header maior e mais proporcional
+   * à Hero Section.
+   */
+  padding: 20px 40px;
+
+  background: rgba(248, 250, 252, 0.92);
+
+  border-bottom:
+    1px solid rgba(226, 232, 240, 0.9);
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+
+/* ========================================
+   HEADER APÓS SCROLL
+======================================== */
+
+.isScrolled {
+  background: rgba(255, 255, 255, 0.96);
+
+  border-color: rgba(226, 232, 240, 1);
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.07);
+}
+
+
+/* ========================================
+   CONTEÚDO
+======================================== */
+
+.headerContent {
+  width: 100%;
+  max-width: 1400px;
+
+  min-height: 52px;
+
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 40px;
+}
+
+
+/* ========================================
+   LOGO
+======================================== */
+
+.logoBrand {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  flex-shrink: 0;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.logoBrand:hover {
+  opacity: 0.88;
+}
+
+.logoBrand:active {
+  transform: scale(0.98);
+}
+
+
+/* ========================================
+   ÍCONE DA LOGO
+======================================== */
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 52px;
+  height: 44px;
+
+  flex-shrink: 0;
+}
+
+.logoImg {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: contain;
+
+  filter:
+    invert(13%)
+    sepia(80%)
+    saturate(3821%)
+    hue-rotate(248deg)
+    brightness(88%)
+    contrast(101%);
+}
+
+
+/* ========================================
+   TEXTO DA LOGO
+======================================== */
+
+.logoText {
+  display: flex;
+  flex-direction: column;
+
+  color: rgb(41, 22, 111);
+
+  font-family:
+    'Plus Jakarta Sans',
+    system-ui,
+    sans-serif;
+
+  line-height: 1.25;
+}
+
+.title {
+  font-size: 0.8rem;
+
+  font-weight: 600;
+
+  letter-spacing: 0.01em;
+
+  white-space: nowrap;
+}
+
+.subtitle {
+  margin-top: 2px;
+
+  font-size: 0.98rem;
+
+  font-weight: 800;
+
+  white-space: nowrap;
+}
+
+
+/* ========================================
+   MENU DESKTOP
+======================================== */
+
+.navMenu {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+}
+
+
+/* ========================================
+   BOTÕES DO MENU
+======================================== */
+
+.navButton {
+  position: relative;
+
+  padding: 12px 16px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: transparent;
+
+  color: #475569;
+
+  font-family:
+    'Plus Jakarta Sans',
+    system-ui,
+    sans-serif;
+
+  font-size: 0.9rem;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    transform 0.2s ease;
+}
+
+
+/* Linha decorativa */
+
+.navButton::after {
+  content: '';
+
+  position: absolute;
+
+  left: 50%;
+  bottom: 5px;
+
+  width: 0;
+  height: 2px;
+
+  border-radius: 10px;
+
+  background: #f59e0b;
+
+  transform: translateX(-50%);
+
+  transition:
+    width 0.3s cubic-bezier(
+      0.16,
+      1,
+      0.3,
+      1
+    );
+}
+
+.navButton:hover {
+  color: rgb(41, 22, 111);
+
+  background:
+    rgba(41, 22, 111, 0.05);
+}
+
+.navButton:hover::after {
+  width: calc(100% - 32px);
+}
+
+
+/* ========================================
+   ITEM ATIVO
+======================================== */
+
+.navButtonActive {
+  color: rgb(41, 22, 111);
+
+  background:
+    rgba(41, 22, 111, 0.06);
+}
+
+.navButtonActive::after {
+  width: calc(100% - 32px);
+}
+
+
+/* ========================================
+   BOTÃO HAMBÚRGUER
+======================================== */
+
+.menuToggle {
+  display: none;
+
+  width: 48px;
+  height: 48px;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-direction: column;
+
+  gap: 5px;
+
+  padding: 0;
+
+  border:
+    1px solid rgba(41, 22, 111, 0.1);
+
+  border-radius: 12px;
+
+  background:
+    rgba(255, 255, 255, 0.7);
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.2s ease;
+}
+
+.menuToggle:hover {
+  background:
+    rgba(41, 22, 111, 0.05);
+
+  border-color:
+    rgba(41, 22, 111, 0.2);
+}
+
+.menuToggle:active {
+  transform: scale(0.96);
+}
+
+.burgerLine {
+  width: 22px;
+  height: 2px;
+
+  border-radius: 10px;
+
+  background:
+    rgb(41, 22, 111);
+
+  transition:
+    transform 0.25s ease,
+    opacity 0.2s ease;
+}
+
+
+/* ========================================
+   ANIMAÇÃO HAMBÚRGUER
+======================================== */
+
+.menuToggleOpen .burgerLine:nth-child(1) {
+  transform:
+    translateY(7px)
+    rotate(45deg);
+}
+
+.menuToggleOpen .burgerLine:nth-child(2) {
+  opacity: 0;
+}
+
+.menuToggleOpen .burgerLine:nth-child(3) {
+  transform:
+    translateY(-7px)
+    rotate(-45deg);
+}
+
+
+/* ========================================
+   OVERLAY MOBILE
+======================================== */
+
+.mobileOverlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 90;
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  background:
+    rgba(15, 23, 42, 0.3);
+
+  backdrop-filter: blur(2px);
+
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+}
+
+.mobileOverlayVisible {
+  opacity: 1;
+
+  visibility: visible;
+}
+
+
+/* ========================================
+   MENU MOBILE
+======================================== */
+
+.mobileMenu {
+  display: none;
+}
+
+
+/* ========================================
+   TABLETS
+======================================== */
+
+@media (max-width: 1100px) {
+  .headerContainer {
+    padding: 18px 28px;
+  }
+
+  .headerContent {
+    gap: 24px;
+  }
+
+  .navMenu {
+    gap: 4px;
+  }
+
+  .navButton {
+    padding: 11px 12px;
+
+    font-size: 0.84rem;
+  }
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 768px) {
+  .headerContainer {
+    padding: 14px 20px;
+  }
+
+  .headerContent {
+    min-height: 46px;
+  }
+
+  /* Menu desktop desaparece */
+
+  .navMenu {
+    display: none;
+  }
+
+  /* Botão mobile aparece */
+
+  .menuToggle {
+    display: flex;
+  }
+
+  /* No mobile fica somente o símbolo */
+
+  .logoText {
+    display: none;
+  }
+
+  .logoWrapper {
+    width: 48px;
+    height: 40px;
+  }
+
+
+  /* ========================================
+     MENU FLUTUANTE
+  ======================================== */
+
+  .mobileMenu {
+    position: fixed;
+
+    top:
+      calc(
+        var(--header-height, 76px) + 8px
+      );
+
+    left: 16px;
+    right: 16px;
+
+    z-index: 110;
+
+    display: flex;
+    flex-direction: column;
+
+    min-height: 480px;
+
+    max-height:
+      calc(
+        100dvh -
+        var(--header-height, 76px) -
+        24px
+      );
+
+    padding: 24px;
+
+    box-sizing: border-box;
+
+    border:
+      1px solid rgba(226, 232, 240, 0.9);
+
+    border-radius: 22px;
+
+    background:
+      rgba(255, 255, 255, 0.98);
+
+    box-shadow:
+      0 25px 60px
+      rgba(15, 23, 42, 0.18);
+
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform:
+      translateY(-15px)
+      scale(0.98);
+
+    pointer-events: none;
+
+    transition:
+      opacity 0.3s ease,
+      visibility 0.3s ease,
+      transform
+        0.3s
+        cubic-bezier(
+          0.16,
+          1,
+          0.3,
+          1
+        );
+  }
+
+  .mobileMenuOpen {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+      translateY(0)
+      scale(1);
+
+    pointer-events: auto;
+  }
+
+
+  /* ========================================
+     CABEÇALHO DO MENU
+  ======================================== */
+
+  .mobileMenuHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+
+    color: #64748b;
+
+    font-size: 0.68rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.18em;
+  }
+
+  .mobileCloseButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+
+    padding: 0;
+
+    border:
+      1px solid #e2e8f0;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    color:
+      rgb(41, 22, 111);
+
+    font-size: 1.5rem;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .mobileCloseButton:active {
+    transform: scale(0.94);
+  }
+
+
+  /* ========================================
+     LINKS DO MENU MOBILE
+  ======================================== */
+
+  .mobileNavItems {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+  }
+
+  .mobileNavButton {
+    display: grid;
+
+    grid-template-columns:
+      38px
+      1fr
+      auto;
+
+    align-items: center;
+
+    width: 100%;
+
+    padding: 20px 0;
+
+    border: none;
+
+    border-bottom:
+      1px solid #eef2f6;
+
+    background: transparent;
+
+    color: #1e293b;
+
+    text-align: left;
+
+    font-family:
+      'Plus Jakarta Sans',
+      system-ui,
+      sans-serif;
+
+    cursor: pointer;
+
+    opacity: 0;
+
+    transform:
+      translateX(-10px);
+
+    transition:
+      opacity 0.35s ease,
+      transform 0.35s ease,
+      color 0.2s ease;
+  }
+
+  .mobileMenuOpen .mobileNavButton {
+    opacity: 1;
+
+    transform: translateX(0);
+  }
+
+  .mobileNavButtonActive {
+    color:
+      rgb(41, 22, 111);
+  }
+
+  .mobileNavNumber {
+    color: #94a3b8;
+
+    font-size: 0.7rem;
+
+    font-weight: 700;
+  }
+
+  .mobileNavLabel {
+    font-size: 1rem;
+
+    font-weight: 700;
+  }
+
+  .mobileNavArrow {
+    color: #f59e0b;
+
+    font-size: 1.3rem;
+
+    transition:
+      transform 0.2s ease;
+  }
+
+  .mobileNavButton:active
+  .mobileNavArrow {
+    transform:
+      translateX(4px);
+  }
+
+
+  /* ========================================
+     FOOTER DO MENU
+  ======================================== */
+
+  .mobileMenuFooter {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: auto;
+
+    padding-top: 26px;
+
+    border-top:
+      1px solid #e2e8f0;
+  }
+
+  .mobileMenuFooter p {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 0.72rem;
+  }
+
+  .mobileMenuFooter strong {
+    color:
+      rgb(41, 22, 111);
+
+    font-size: 0.86rem;
+  }
+
+  .footerDot {
+    width: 10px;
+    height: 10px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #f59e0b;
+
+    box-shadow:
+      0 0 0 5px
+      rgba(245, 158, 11, 0.12);
+  }
+}
+
+
+/* ========================================
+   CELULARES PEQUENOS
+======================================== */
+
+@media (max-width: 390px) {
+  .headerContainer {
+    padding: 12px 16px;
+  }
+
+  .logoWrapper {
+    width: 44px;
+    height: 38px;
+  }
+
+  .menuToggle {
+    width: 46px;
+    height: 46px;
+  }
+
+  .mobileMenu {
+    left: 10px;
+    right: 10px;
+
+    padding: 20px;
+
+    border-radius: 18px;
+  }
+
+  .mobileNavButton {
+    padding: 17px 0;
+  }
+
+  .mobileNavLabel {
+    font-size: 0.94rem;
+  }
+}
+
+
+/* ========================================
+   ACESSIBILIDADE
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      0.01ms !important;
+  }
+}

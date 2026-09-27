@@ -1,0 +1,20 @@
+/* Container e alinhamento do espaço do logotipo */
+.logoArea {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px; /* Altura máxima reservada para o espaço da imagem */
+}
+
+.unimontesLogoImg {
+  height: 100%;
+  width: auto;
+  max-width: 140px; /* Evita que logos muito largas distorçam o cabeçalho */
+  object-fit: contain;
+}

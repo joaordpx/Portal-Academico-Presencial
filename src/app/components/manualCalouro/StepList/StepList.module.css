@@ -1,0 +1,37 @@
+.stepsList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.stepItem {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px 0;
+}
+
+.stepNumber {
+  background-color: #003366;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.stepDetails h4 {
+  font-size: 1rem;
+  color: #003366;
+  margin-bottom: 4px;
+}
+
+.stepDetails p {
+  font-size: 0.9rem;
+  color: #555555;
+}

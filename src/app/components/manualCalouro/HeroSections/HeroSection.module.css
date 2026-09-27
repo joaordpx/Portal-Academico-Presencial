@@ -1,0 +1,1290 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&display=swap');
+
+
+/* ========================================
+   HERO PRINCIPAL
+======================================== */
+
+.heroWrapper {
+  position: relative;
+
+  width: 100vw;
+  min-height: calc(100vh - var(--header-height, 66px));
+
+  left: 50%;
+  right: 50%;
+
+  margin-left: -50vw;
+  margin-right: -50vw;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 70px 0;
+
+  box-sizing: border-box;
+  overflow: hidden;
+
+  font-family: 'Plus Jakarta Sans', sans-serif;
+
+  background:
+    radial-gradient(
+      circle at 10% 15%,
+      rgba(245, 158, 11, 0.1),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 90% 80%,
+      rgba(41, 22, 111, 0.04),
+      transparent 30%
+    ),
+    #f8fafc;
+}
+
+
+/* ========================================
+   ELEMENTOS DECORATIVOS
+======================================== */
+
+.backgroundShape {
+  position: absolute;
+
+  width: 500px;
+  height: 500px;
+
+  top: -250px;
+  right: -180px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(41, 22, 111, 0.035);
+
+  pointer-events: none;
+}
+
+
+.backgroundCircle {
+  position: absolute;
+
+  width: 300px;
+  height: 300px;
+
+  left: -150px;
+  bottom: -150px;
+
+  border-radius: 50%;
+
+  border: 45px solid rgba(245, 158, 11, 0.05);
+
+  pointer-events: none;
+}
+
+
+/* ========================================
+   CONTAINER PRINCIPAL
+======================================== */
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 1320px;
+
+  margin: 0 auto;
+  padding: 0 40px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.05fr)
+    minmax(420px, 0.95fr);
+
+  gap: 80px;
+
+  align-items: center;
+
+  box-sizing: border-box;
+}
+
+
+/* ========================================
+   COLUNA DE TEXTO
+======================================== */
+
+.textColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  gap: 20px;
+
+  opacity: 0;
+
+  transform:
+    translateY(30px);
+
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+/* ========================================
+   CATEGORIA
+======================================== */
+
+.categoryHeader {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+}
+
+
+.categoryLine {
+  width: 36px;
+  height: 3px;
+
+  border-radius: 20px;
+
+  background:
+    #f59e0b;
+}
+
+
+.categoryText {
+  font-size: 0.72rem;
+
+  font-weight: 800;
+
+  letter-spacing: 0.18em;
+
+  color:
+    #64748b;
+}
+
+
+/* ========================================
+   BADGE MANUAL DO CALOURO
+======================================== */
+
+.manualBadge {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding:
+    8px 14px;
+
+  border-radius: 100px;
+
+  border:
+    1px solid rgba(41, 22, 111, 0.12);
+
+  background:
+    rgba(255, 255, 255, 0.8);
+
+  box-shadow:
+    0 5px 15px rgba(15, 23, 42, 0.04);
+
+  color:
+    rgb(41, 22, 111);
+
+  font-size: 0.78rem;
+
+  font-weight: 700;
+}
+
+
+.badgeIcon {
+  font-size: 0.9rem;
+}
+
+
+/* ========================================
+   TÍTULO
+======================================== */
+
+.editorialTitle {
+  margin: 0;
+
+  max-width: 700px;
+
+  font-size:
+    clamp(3.5rem, 5.4vw, 5.7rem);
+
+  line-height:
+    0.98;
+
+  letter-spacing:
+    -0.06em;
+
+  font-weight:
+    900;
+
+  color:
+    #172033;
+}
+
+
+/* Palavra "calouro" */
+
+.editorialTitle span {
+  font-family:
+    'Playfair Display', serif;
+
+  font-style:
+    italic;
+
+  font-weight:
+    700;
+
+  color:
+    rgb(41, 22, 111);
+}
+
+
+/* "não se perder" */
+
+.editorialTitle em {
+  font-family:
+    'Playfair Display', serif;
+
+  font-style:
+    italic;
+
+  font-weight:
+    700;
+
+  color:
+    #f59e0b;
+}
+
+
+/* ========================================
+   DESCRIÇÃO
+======================================== */
+
+.editorialDescription {
+  max-width:
+    590px;
+
+  margin: 0;
+
+  color:
+    #64748b;
+
+  font-size:
+    1.02rem;
+
+  line-height:
+    1.8;
+}
+
+
+/* ========================================
+   MENSAGEM DE APOIO
+======================================== */
+
+.supportMessage {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top:
+    6px;
+}
+
+
+.supportIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background:
+    rgba(245, 158, 11, 0.12);
+
+  color:
+    #f59e0b;
+
+  font-size:
+    1rem;
+}
+
+
+.supportMessage div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+
+.supportMessage strong {
+  color:
+    #1f2937;
+
+  font-size:
+    0.78rem;
+}
+
+
+.supportMessage span {
+  color:
+    #64748b;
+
+  font-size:
+    0.74rem;
+}
+
+
+/* ========================================
+   COLUNA DA IMAGEM
+======================================== */
+
+.imageColumn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.imageContainerWrapper {
+  position: relative;
+
+  width: 100%;
+  max-width: 540px;
+
+  opacity: 0;
+
+  transform:
+    translateY(30px);
+
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+
+  transition-delay:
+    0.15s;
+}
+
+
+/* ========================================
+   LOGO DA UNIMONTES NO FUNDO
+
+   Fica atrás da imagem e aparece
+   discretamente pelas laterais.
+======================================== */
+
+.unimontesLogoBackground {
+  position: absolute;
+
+  width:
+    620px;
+
+  right:
+    -220px;
+
+  top:
+    50%;
+
+  transform:
+    translateY(-50%)
+    rotate(8deg);
+
+  opacity:
+    0.045;
+
+  pointer-events:
+    none;
+
+  z-index:
+    -1;
+}
+
+
+.unimontesLogoBackground img {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  filter:
+    grayscale(1)
+    contrast(1.2);
+}
+
+
+/* ========================================
+   MOLDURA AMARELA
+======================================== */
+
+.yellowBackdropFrame {
+  position: absolute;
+
+  top: -18px;
+  right: -18px;
+
+  bottom: 18px;
+  left: 18px;
+
+  border-radius:
+    24px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fbbf24,
+      #f59e0b
+    );
+
+  z-index:
+    0;
+}
+
+
+/* ========================================
+   FRAME DA IMAGEM
+======================================== */
+
+.imageFrame {
+  position: relative;
+
+  width: 100%;
+  height: 470px;
+
+  overflow: hidden;
+
+  border-radius:
+    20px;
+
+  background:
+    #e5e7eb;
+
+  box-shadow:
+    0 25px 60px
+    rgba(15, 23, 42, 0.18);
+
+  z-index:
+    1;
+}
+
+
+.heroImage {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit:
+    cover;
+
+  transition:
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+.imageContainerWrapper:hover .heroImage {
+  transform:
+    scale(1.05);
+}
+
+
+/* ========================================
+   OVERLAY DA IMAGEM
+======================================== */
+
+.imageOverlay {
+  position: absolute;
+
+  inset: 0;
+
+  z-index:
+    1;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(17, 24, 39, 0.65),
+      rgba(17, 24, 39, 0.05) 60%,
+      transparent
+    );
+
+  pointer-events:
+    none;
+}
+
+
+/* ========================================
+   BADGE VERMELHO
+======================================== */
+
+.matriculasBadge {
+  position: absolute;
+
+  top: 20px;
+  left: 20px;
+
+  z-index:
+    3;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding:
+    9px 15px;
+
+  border-radius:
+    100px;
+
+  background:
+    #ef4444;
+
+  color:
+    #ffffff;
+
+  box-shadow:
+    0 8px 20px
+    rgba(239, 68, 68, 0.3);
+
+  font-size:
+    0.68rem;
+
+  font-weight:
+    800;
+
+  text-transform:
+    uppercase;
+
+  letter-spacing:
+    0.08em;
+}
+
+
+.badgeDot {
+  width: 7px;
+  height: 7px;
+
+  border-radius:
+    50%;
+
+  background:
+    #ffffff;
+}
+
+
+/* ========================================
+   INFORMAÇÃO SOBRE A IMAGEM
+======================================== */
+
+.imageInfo {
+  position: absolute;
+
+  left: 24px;
+  right: 24px;
+  bottom: 24px;
+
+  z-index:
+    3;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  color:
+    #ffffff;
+}
+
+
+.imageInfoIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 46px;
+  height: 46px;
+
+  flex-shrink: 0;
+
+  border-radius:
+    50%;
+
+  background:
+    #f59e0b;
+
+  font-size:
+    1rem;
+}
+
+
+.imageInfoText {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+
+.imageInfoText strong {
+  font-size:
+    0.95rem;
+}
+
+
+.imageInfoText span {
+  font-size:
+    0.74rem;
+
+  opacity:
+    0.85;
+}
+
+
+/* ========================================
+   CARD FLUTUANTE
+======================================== */
+
+.floatingCard {
+  position: absolute;
+
+  right:
+    -40px;
+
+  bottom:
+    -35px;
+
+  z-index:
+    5;
+
+  width:
+    245px;
+
+  display: flex;
+
+  gap: 12px;
+
+  padding:
+    16px;
+
+  border-radius:
+    16px;
+
+  background:
+    rgba(255, 255, 255, 0.96);
+
+  box-shadow:
+    0 20px 45px
+    rgba(15, 23, 42, 0.16);
+
+  backdrop-filter:
+    blur(12px);
+}
+
+
+.floatingIcon {
+  font-size:
+    1.5rem;
+}
+
+
+.floatingCard div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+
+.floatingCard strong {
+  font-size:
+    0.78rem;
+
+  color:
+    #172033;
+}
+
+
+.floatingCard span {
+  font-size:
+    0.68rem;
+
+  line-height:
+    1.45;
+
+  color:
+    #64748b;
+}
+
+
+/* ========================================
+   ANIMAÇÃO DE ENTRADA
+======================================== */
+
+.isVisible .textColumn,
+.isVisible .imageContainerWrapper {
+  opacity: 1;
+
+  transform:
+    translateY(0);
+}
+
+
+/* ========================================
+   TABLET
+======================================== */
+
+@media (max-width: 1100px) {
+  .heroContent {
+    grid-template-columns: 1fr;
+
+    gap: 65px;
+
+    padding:
+      0 30px;
+  }
+
+
+  .textColumn {
+    max-width:
+      750px;
+  }
+
+
+  .imageContainerWrapper {
+    max-width:
+      650px;
+  }
+
+
+  .imageFrame {
+    height:
+      450px;
+  }
+
+
+  .unimontesLogoBackground {
+    width:
+      550px;
+
+    right:
+      -180px;
+  }
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 640px) {
+  .heroWrapper {
+    min-height:
+      auto;
+
+    padding:
+      55px 0 80px;
+  }
+
+
+  .heroContent {
+    padding:
+      0 20px;
+
+    gap:
+      55px;
+  }
+
+
+  .editorialTitle {
+    font-size:
+      clamp(3.2rem, 14vw, 4.5rem);
+  }
+
+
+  .editorialDescription {
+    font-size:
+      0.94rem;
+
+    line-height:
+      1.75;
+  }
+
+
+  .categoryText {
+    font-size:
+      0.64rem;
+
+    letter-spacing:
+      0.14em;
+  }
+
+
+  .imageFrame {
+    height:
+      350px;
+
+    border-radius:
+      16px;
+  }
+
+
+  .yellowBackdropFrame {
+    top: -12px;
+    right: -12px;
+
+    bottom: 12px;
+    left: 12px;
+
+    border-radius:
+      18px;
+  }
+
+
+  .matriculasBadge {
+    top: 15px;
+    left: 15px;
+
+    font-size:
+      0.6rem;
+
+    padding:
+      8px 12px;
+  }
+
+
+  .imageInfo {
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+  }
+
+
+  .imageInfoIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+
+  .floatingCard {
+    right:
+      10px;
+
+    bottom:
+      -45px;
+
+    width:
+      210px;
+
+    padding:
+      14px;
+  }
+
+
+  .unimontesLogoBackground {
+    width:
+      380px;
+
+    right:
+      -170px;
+
+    opacity:
+      0.035;
+  }
+
+
+  .supportMessage {
+    margin-top:
+      5px;
+  }
+}
+
+
+/* ========================================
+   TELAS MUITO PEQUENAS
+======================================== */
+
+@media (max-width: 400px) {
+  .editorialTitle {
+    font-size:
+      3rem;
+  }
+
+
+  .imageFrame {
+    height:
+      310px;
+  }
+
+
+  .floatingCard {
+    width:
+      190px;
+  }
+}
+
+/* ========================================
+   RESPONSIVIDADE
+======================================== */
+
+/* Notebook e tablets grandes */
+
+@media (max-width: 1100px) {
+  .heroWrapper {
+    min-height: auto;
+    padding: 80px 0;
+  }
+
+  .heroContent {
+    grid-template-columns: 1fr;
+    gap: 64px;
+
+    max-width: 760px;
+    padding: 0 32px;
+  }
+
+  .textColumn {
+    max-width: 700px;
+  }
+
+  .editorialTitle {
+    font-size: clamp(3.8rem, 8vw, 5.5rem);
+  }
+
+  .imageColumn {
+    width: 100%;
+  }
+
+  .imageContainerWrapper {
+    width: 100%;
+    max-width: 680px;
+  }
+
+  .imageFrame {
+    height: clamp(380px, 55vw, 500px);
+  }
+
+  .unimontesLogoBackground {
+    width: 520px;
+    right: -150px;
+  }
+}
+
+
+/* ========================================
+   TABLETS
+======================================== */
+
+@media (max-width: 768px) {
+  .heroWrapper {
+    padding: 60px 0 90px;
+  }
+
+  .heroContent {
+    gap: 55px;
+    padding: 0 24px;
+  }
+
+  .editorialTitle {
+    font-size: clamp(3.4rem, 10vw, 4.8rem);
+  }
+
+  .editorialDescription {
+    max-width: 620px;
+    font-size: 1rem;
+  }
+
+  .imageFrame {
+    height: 420px;
+  }
+
+  .floatingCard {
+    right: 20px;
+  }
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 640px) {
+  .heroWrapper {
+    width: 100vw;
+    min-height: auto;
+
+    padding: 48px 0 80px;
+
+    overflow: hidden;
+  }
+
+  .heroContent {
+    display: flex;
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 52px;
+
+    padding: 0 20px;
+  }
+
+
+  /* TEXTO */
+
+  .textColumn {
+    width: 100%;
+    gap: 18px;
+  }
+
+  .categoryHeader {
+    gap: 10px;
+  }
+
+  .categoryLine {
+    width: 28px;
+    height: 2px;
+  }
+
+  .categoryText {
+    font-size: 0.62rem;
+    letter-spacing: 0.13em;
+  }
+
+  .manualBadge {
+    padding: 7px 12px;
+    font-size: 0.72rem;
+  }
+
+
+  /* TÍTULO */
+
+  .editorialTitle {
+    font-size: clamp(3rem, 13vw, 4.4rem);
+
+    line-height: 1;
+
+    letter-spacing: -0.055em;
+
+    word-break: normal;
+  }
+
+
+  /* DESCRIÇÃO */
+
+  .editorialDescription {
+    max-width: 100%;
+
+    font-size: 0.95rem;
+
+    line-height: 1.7;
+  }
+
+
+  /* MENSAGEM DE APOIO */
+
+  .supportMessage {
+    width: 100%;
+
+    margin-top: 2px;
+  }
+
+  .supportIcon {
+    width: 36px;
+    height: 36px;
+  }
+
+
+  /* IMAGEM */
+
+  .imageColumn {
+    width: 100%;
+  }
+
+  .imageContainerWrapper {
+    width: 100%;
+    max-width: none;
+  }
+
+  .imageFrame {
+    width: 100%;
+
+    height: auto;
+
+    aspect-ratio: 4 / 5;
+
+    min-height: 340px;
+
+    border-radius: 18px;
+  }
+
+  .heroImage {
+    object-position: center;
+  }
+
+
+  /* MOLDURA AMARELA */
+
+  .yellowBackdropFrame {
+    top: -10px;
+    right: -10px;
+
+    bottom: 10px;
+    left: 10px;
+
+    border-radius: 20px;
+  }
+
+
+  /* BADGE DA FOTO */
+
+  .matriculasBadge {
+    top: 16px;
+    left: 16px;
+
+    padding: 8px 12px;
+
+    font-size: 0.58rem;
+
+    letter-spacing: 0.07em;
+  }
+
+
+  /* INFORMAÇÃO DA IMAGEM */
+
+  .imageInfo {
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+
+    gap: 10px;
+  }
+
+  .imageInfoIcon {
+    width: 40px;
+    height: 40px;
+
+    font-size: 0.85rem;
+  }
+
+  .imageInfoText strong {
+    font-size: 0.82rem;
+  }
+
+  .imageInfoText span {
+    font-size: 0.68rem;
+    line-height: 1.4;
+  }
+
+
+  /* CARD FLUTUANTE */
+
+  .floatingCard {
+    position: relative;
+
+    right: auto;
+    bottom: auto;
+
+    width: calc(100% - 24px);
+
+    margin: -20px auto 0;
+
+    padding: 14px 16px;
+
+    border-radius: 14px;
+  }
+
+
+  /* LOGO DA UNIMONTES */
+
+  .unimontesLogoBackground {
+    width: 320px;
+
+    right: -150px;
+
+    top: 45%;
+
+    opacity: 0.035;
+  }
+
+
+  /* DECORAÇÃO */
+
+  .backgroundShape {
+    width: 280px;
+    height: 280px;
+
+    top: -150px;
+    right: -180px;
+  }
+
+  .backgroundCircle {
+    width: 200px;
+    height: 200px;
+
+    left: -130px;
+    bottom: -100px;
+
+    border-width: 30px;
+  }
+}
+
+
+/* ========================================
+   CELULARES PEQUENOS
+======================================== */
+
+@media (max-width: 390px) {
+  .heroContent {
+    padding: 0 16px;
+  }
+
+  .editorialTitle {
+    font-size: clamp(2.8rem, 13vw, 3.5rem);
+  }
+
+  .editorialDescription {
+    font-size: 0.9rem;
+  }
+
+  .imageFrame {
+    min-height: 300px;
+  }
+
+  .manualBadge {
+    font-size: 0.68rem;
+  }
+
+  .categoryText {
+    font-size: 0.56rem;
+  }
+}
+
+
+/* ========================================
+   TELAS GRANDES
+======================================== */
+
+@media (min-width: 1440px) {
+  .heroContent {
+    padding: 0 20px;
+  }
+
+  .imageFrame {
+    height: 500px;
+  }
+}

@@ -1,0 +1,42 @@
+.optionCard {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d0e1f9;
+  padding: 15px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #222222;
+  transition: all 0.2s ease;
+  background-color: #ffffff;
+}
+
+.optionCard:hover {
+  border-color: #0056b3;
+  box-shadow: 0 4px 12px rgba(0, 86, 179, 0.15);
+  transform: translateY(-2px);
+}
+
+.highlight {
+  background-color: #eef5fc;
+}
+
+.icon {
+  font-size: 1.5rem;
+  margin-right: 15px;
+}
+
+.cardContent h3 {
+  font-size: 1rem;
+  color: #003366;
+}
+
+.cardContent p {
+  font-size: 0.8rem;
+  color: #555555;
+}
+
+.arrow {
+  margin-left: auto;
+  font-weight: bold;
+  color: #0056b3;
+}

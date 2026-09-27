@@ -1,0 +1,128 @@
+.wrapper {
+  width: 100%;
+  background-color: #f8fafc;
+  padding: 64px 20px 32px 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  font-family: system-ui, -apple-system, sans-serif;
+  
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animateIn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.container {
+  width: 100%;
+  max-width: 1060px; /* Reduzido levemente para que os cards fiquem menos compridos/largos horizontalmente */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+}
+
+.titleWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.mainTitle {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: rgb(41, 22, 111);
+  margin: 0;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.titleLine {
+  width: 60px;
+  height: 4px;
+  background-color: #38bdf8;
+  border-radius: 2px;
+}
+
+.cardsGrid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px; /* Espaçamento proporcional */
+}
+
+.card {
+  background: linear-gradient(135deg, #0f172a 0%, rgb(41, 22, 111) 50%, #2563eb 100%);
+  border-radius: 20px;
+  padding: 50px 22px; /* Mantém uma boa altura em cima e embaixo, com largura compacta */
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  box-shadow: 0 12px 30px -8px rgba(41, 22, 111, 0.25);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  cursor: default;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px -10px rgba(41, 22, 111, 0.35);
+}
+
+.iconContainer {
+  width: 44px;
+  height: 44px;
+  color: #38bdf8; /* Cor exata da linha abaixo do título */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconContainer svg {
+  width: 100%;
+  height: 100%;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-top: 28px;
+}
+
+.cardTitle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.cardDescription {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+  .cardsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 540px) {
+  .cardsGrid {
+    grid-template-columns: 1fr;
+  }
+  .mainTitle {
+    font-size: 1.8rem;
+  }
+}
