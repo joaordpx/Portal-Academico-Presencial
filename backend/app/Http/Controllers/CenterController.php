@@ -46,6 +46,7 @@ class CenterController extends Controller
     {
         $data = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:centers,name',
+            'acronym' => 'required|string|max:10|unique:centers,acronym',
         ])->validated();
 
         return $this->centerService
@@ -61,6 +62,7 @@ class CenterController extends Controller
     {
         $data = Validator::make($request->all(), [
             'name' => 'sometimes|string|max:255|unique:centers,name,' . $id,
+            'acronym' => 'sometimes|string|max:10|unique:centers,acronym,' . $id,
         ])->validated();
 
         return $this->centerService->updateCenter((int) $id, $data);
