@@ -18,6 +18,7 @@ class CenterFactory extends Factory
     {
         return [
             'name' => $this->faker->unique()->company(),
+            'acronym' => strtoupper($this->faker->unique()->lexify('???')),
         ];
     }
 }

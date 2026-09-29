@@ -17,6 +17,7 @@ class Center extends Model
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'acronym' => $this->acronym,
             'description' => "Academic Center: {$this->name}",
         ];
     }
@@ -30,6 +31,7 @@ class Center extends Model
      */
     protected $fillable = [
         'name',
+        'acronym',
     ];
 
     /**
