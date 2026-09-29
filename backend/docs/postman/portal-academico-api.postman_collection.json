@@ -1,0 +1,497 @@
+{
+  "info": {
+    "_postman_id": "7b8edcc3-5c0d-4c8a-a922-portal-academico",
+    "name": "Portal Academico API",
+    "description": "Collection para testar os modulos REST do backend do Portal Academico. Rode primeiro Auth Web Session / Get CSRF Token e depois Login as Suporte para acessar rotas protegidas por auth:web.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.request.headers.upsert({ key: 'Accept', value: 'application/json' });"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000" },
+    { "key": "api_url", "value": "{{base_url}}/api" },
+    { "key": "support_email", "value": "suporte@example.com" },
+    { "key": "admin_email", "value": "admin@example.com" },
+    { "key": "student_email", "value": "test@example.com" },
+    { "key": "password", "value": "password" },
+    { "key": "csrf_token", "value": "" },
+    { "key": "center_id", "value": "1" },
+    { "key": "department_id", "value": "1" },
+    { "key": "course_id", "value": "1" },
+    { "key": "subject_id", "value": "1" },
+    { "key": "document_id", "value": "1" },
+    { "key": "event_id", "value": "1" },
+    { "key": "user_id", "value": "1" },
+    { "key": "admin_user_id", "value": "2" },
+    { "key": "created_center_id", "value": "" },
+    { "key": "created_department_id", "value": "" },
+    { "key": "created_course_id", "value": "" },
+    { "key": "created_subject_id", "value": "" },
+    { "key": "created_document_id", "value": "" },
+    { "key": "created_user_id", "value": "" },
+    { "key": "run_suffix", "value": "{{$timestamp}}" }
+  ],
+  "item": [
+    {
+      "name": "Auth Web Session",
+      "item": [
+        {
+          "name": "Get CSRF Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "const match = pm.response.text().match(/name=\"_token\"\\s+value=\"([^\"]+)\"/);",
+                  "pm.test('csrf token exists', () => pm.expect(match, 'csrf token').to.not.be.null);",
+                  "if (match) pm.collectionVariables.set('csrf_token', match[1]);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "text/html" }
+            ],
+            "url": "{{base_url}}/login"
+          }
+        },
+        {
+          "name": "Login as Suporte",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('login redirects or succeeds', () => pm.expect([200, 302]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "text/html" },
+              { "key": "Content-Type", "value": "application/x-www-form-urlencoded" }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "_token", "value": "{{csrf_token}}", "type": "text" },
+                { "key": "email", "value": "{{support_email}}", "type": "text" },
+                { "key": "password", "value": "{{password}}", "type": "text" }
+              ]
+            },
+            "url": "{{base_url}}/login"
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "text/html" },
+              { "key": "Content-Type", "value": "application/x-www-form-urlencoded" }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "_token", "value": "{{csrf_token}}", "type": "text" }
+              ]
+            },
+            "url": "{{base_url}}/logout"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search",
+      "item": [
+        {
+          "name": "Unified Search",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('has data and meta', () => { pm.expect(json).to.have.property('data'); pm.expect(json).to.have.property('meta'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{api_url}}/search?q=computacao&entity_type=all&per_page=10",
+              "host": ["{{api_url}}"],
+              "path": ["search"],
+              "query": [
+                { "key": "q", "value": "computacao" },
+                { "key": "entity_type", "value": "all" },
+                { "key": "per_page", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Suggestions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('data is array', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{api_url}}/search/suggest?q=sis"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Centers",
+      "item": [
+        {
+          "name": "List Centers",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('data is array', () => pm.expect(json.data).to.be.an('array'));",
+                  "if (json.data && json.data.length) pm.collectionVariables.set('center_id', json.data[0].id);"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{api_url}}/centers?per_page=10" }
+        },
+        {
+          "name": "Show Center",
+          "event": [
+            {
+              "listen": "test",
+              "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));", "pm.test('has data', () => pm.expect(pm.response.json()).to.have.property('data'));"] }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{api_url}}/centers/{{center_id}}" }
+        },
+        {
+          "name": "Create Center",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 201', () => pm.response.to.have.status(201));",
+                  "const id = pm.response.json().data && pm.response.json().data.id;",
+                  "if (id) pm.collectionVariables.set('created_center_id', id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Centro Postman {{run_suffix}}\"\n}" },
+            "url": "{{api_url}}/centers"
+          }
+        },
+        {
+          "name": "Update Center",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));"] } }],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Centro Postman Atualizado {{run_suffix}}\"\n}" },
+            "url": "{{api_url}}/centers/{{created_center_id}}"
+          }
+        },
+        {
+          "name": "Delete Center",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 204', () => pm.response.to.have.status(204));"] } }],
+          "request": { "method": "DELETE", "url": "{{api_url}}/centers/{{created_center_id}}" }
+        }
+      ]
+    },
+    {
+      "name": "Departments",
+      "item": [
+        {
+          "name": "List Departments",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));", "const json = pm.response.json();", "if (json.data && json.data.length) pm.collectionVariables.set('department_id', json.data[0].id);"] } }],
+          "request": { "method": "GET", "url": "{{api_url}}/departments?per_page=10" }
+        },
+        {
+          "name": "Show Department",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));"] } }],
+          "request": { "method": "GET", "url": "{{api_url}}/departments/{{department_id}}" }
+        },
+        {
+          "name": "Create Department",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 201', () => pm.response.to.have.status(201));", "const id = pm.response.json().data && pm.response.json().data.id;", "if (id) pm.collectionVariables.set('created_department_id', id);"] } }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"center_id\": {{center_id}},\n  \"name\": \"Departamento Postman {{run_suffix}}\"\n}" },
+            "url": "{{api_url}}/departments"
+          }
+        },
+        {
+          "name": "Update Department",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));"] } }],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Departamento Postman Atualizado {{run_suffix}}\"\n}" },
+            "url": "{{api_url}}/departments/{{created_department_id}}"
+          }
+        },
+        {
+          "name": "Delete Department",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 204', () => pm.response.to.have.status(204));"] } }],
+          "request": { "method": "DELETE", "url": "{{api_url}}/departments/{{created_department_id}}" }
+        }
+      ]
+    },
+    {
+      "name": "Courses",
+      "item": [
+        {
+          "name": "List Courses",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));", "const json = pm.response.json();", "if (json.data && json.data.length) pm.collectionVariables.set('course_id', json.data[0].id);"] } }],
+          "request": { "method": "GET", "url": "{{api_url}}/courses?per_page=10" }
+        },
+        {
+          "name": "Show Course",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));", "pm.test('has subjects key', () => pm.expect(pm.response.json().data).to.have.property('subjects'));"] } }],
+          "request": { "method": "GET", "url": "{{api_url}}/courses/{{course_id}}" }
+        },
+        {
+          "name": "Create Course",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 201', () => pm.response.to.have.status(201));", "const id = pm.response.json().data && pm.response.json().data.id;", "if (id) pm.collectionVariables.set('created_course_id', id);"] } }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Curso Postman {{run_suffix}}\",\n  \"type\": \"graduacao\",\n  \"center_id\": {{center_id}},\n  \"department_id\": {{department_id}},\n  \"area\": \"Computacao\",\n  \"shift\": \"Noite\",\n  \"min_duration\": 8,\n  \"market_description\": \"Curso criado pela collection do Postman.\",\n  \"coordinator_email\": \"coord.postman@example.com\"\n}" },
+            "url": "{{api_url}}/courses"
+          }
+        },
+        {
+          "name": "Update Course",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));"] } }],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"shift\": \"Integral\",\n  \"market_description\": \"Curso atualizado pela collection do Postman.\"\n}" },
+            "url": "{{api_url}}/courses/{{created_course_id}}"
+          }
+        },
+        {
+          "name": "Delete Course",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 204', () => pm.response.to.have.status(204));"] } }],
+          "request": { "method": "DELETE", "url": "{{api_url}}/courses/{{created_course_id}}" }
+        }
+      ]
+    },
+    {
+      "name": "Subjects",
+      "item": [
+        {
+          "name": "List Subjects",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));", "const json = pm.response.json();", "if (json.data && json.data.length) pm.collectionVariables.set('subject_id', json.data[0].id);"] } }],
+          "request": { "method": "GET", "url": "{{api_url}}/subjects?per_page=10" }
+        },
+        {
+          "name": "Show Subject",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));"] } }],
+          "request": { "method": "GET", "url": "{{api_url}}/subjects/{{subject_id}}" }
+        },
+        {
+          "name": "Create Subject",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 201', () => pm.response.to.have.status(201));", "const id = pm.response.json().data && pm.response.json().data.id;", "if (id) pm.collectionVariables.set('created_subject_id', id);"] } }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"course_id\": {{course_id}},\n  \"period\": 1,\n  \"name\": \"Disciplina Postman {{run_suffix}}\"\n}" },
+            "url": "{{api_url}}/subjects"
+          }
+        },
+        {
+          "name": "Update Subject",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));"] } }],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"period\": 2,\n  \"name\": \"Disciplina Postman Atualizada {{run_suffix}}\"\n}" },
+            "url": "{{api_url}}/subjects/{{created_subject_id}}"
+          }
+        },
+        {
+          "name": "Delete Subject",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 204', () => pm.response.to.have.status(204));"] } }],
+          "request": { "method": "DELETE", "url": "{{api_url}}/subjects/{{created_subject_id}}" }
+        }
+      ]
+    },
+    {
+      "name": "Documents",
+      "item": [
+        {
+          "name": "List Documents",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));", "const json = pm.response.json();", "if (json.data && json.data.length) pm.collectionVariables.set('document_id', json.data[0].id);"] } }],
+          "request": { "method": "GET", "url": "{{api_url}}/documents?per_page=10" }
+        },
+        {
+          "name": "Show Document",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));"] } }],
+          "request": { "method": "GET", "url": "{{api_url}}/documents/{{document_id}}" }
+        },
+        {
+          "name": "Upload Document",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 201', () => pm.response.to.have.status(201));", "const id = pm.response.json().data && pm.response.json().data.id;", "if (id) pm.collectionVariables.set('created_document_id', id);"] } }],
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "title", "value": "Documento Postman {{run_suffix}}", "type": "text" },
+                { "key": "description", "value": "Upload de teste pela collection.", "type": "text" },
+                { "key": "document_type", "value": "notice", "type": "text" },
+                { "key": "context_type", "value": "course", "type": "text" },
+                { "key": "context_id", "value": "{{course_id}}", "type": "text" },
+                { "key": "is_public", "value": "1", "type": "text" },
+                { "key": "file", "type": "file", "src": [] }
+              ]
+            },
+            "url": "{{api_url}}/documents"
+          }
+        },
+        {
+          "name": "Download Document",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));"] } }],
+          "request": { "method": "GET", "url": "{{api_url}}/documents/{{document_id}}/download" }
+        },
+        {
+          "name": "Delete Document",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 204', () => pm.response.to.have.status(204));"] } }],
+          "request": { "method": "DELETE", "url": "{{api_url}}/documents/{{created_document_id}}" }
+        }
+      ]
+    },
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "List Events",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));", "const json = pm.response.json();", "if (json.data && json.data.length) pm.collectionVariables.set('event_id', json.data[0].id);"] } }],
+          "request": { "method": "GET", "url": "{{api_url}}/events?per_page=10" }
+        },
+        {
+          "name": "Show Event",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));"] } }],
+          "request": { "method": "GET", "url": "{{api_url}}/events/{{event_id}}" }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "List Users",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));", "const json = pm.response.json();", "if (json.data && json.data.length) pm.collectionVariables.set('user_id', json.data[0].id);", "const admin = (json.data || []).find(user => (user.roles || []).includes('admin') || user.role === 'admin');", "if (admin) pm.collectionVariables.set('admin_user_id', admin.id);"] } }],
+          "request": { "method": "GET", "url": "{{api_url}}/users?per_page=10" }
+        },
+        {
+          "name": "Show User",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));"] } }],
+          "request": { "method": "GET", "url": "{{api_url}}/users/{{user_id}}" }
+        },
+        {
+          "name": "Create User",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 201', () => pm.response.to.have.status(201));", "const id = pm.response.json().data && pm.response.json().data.id;", "if (id) pm.collectionVariables.set('created_user_id', id);"] } }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Usuario Postman {{run_suffix}}\",\n  \"cpf\": null,\n  \"matricula\": \"PM{{run_suffix}}\",\n  \"email\": \"postman.{{run_suffix}}@example.com\",\n  \"password\": \"password\",\n  \"password_confirmation\": \"password\",\n  \"course_id\": null,\n  \"role\": \"aluno\"\n}" },
+            "url": "{{api_url}}/users"
+          }
+        },
+        {
+          "name": "Update User",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));"] } }],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Usuario Postman Atualizado {{run_suffix}}\",\n  \"role\": \"aluno\"\n}" },
+            "url": "{{api_url}}/users/{{created_user_id}}"
+          }
+        },
+        {
+          "name": "Delete User",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 204', () => pm.response.to.have.status(204));"] } }],
+          "request": { "method": "DELETE", "url": "{{api_url}}/users/{{created_user_id}}" }
+        }
+      ]
+    },
+    {
+      "name": "Admin Course Links",
+      "item": [
+        {
+          "name": "List Admin Courses",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200', () => pm.response.to.have.status(200));"] } }],
+          "request": { "method": "GET", "url": "{{api_url}}/admins/{{admin_user_id}}/courses?per_page=10" }
+        },
+        {
+          "name": "Link Course to Admin",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 201 or already linked validation', () => pm.expect([201, 422]).to.include(pm.response.code));"] } }],
+          "request": { "method": "POST", "url": "{{api_url}}/admins/{{admin_user_id}}/courses/{{course_id}}" }
+        },
+        {
+          "name": "Unlink Course from Admin",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 204', () => pm.response.to.have.status(204));"] } }],
+          "request": { "method": "DELETE", "url": "{{api_url}}/admins/{{admin_user_id}}/courses/{{course_id}}" }
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('status is 200 or 503', () => pm.expect([200, 503]).to.include(pm.response.code));", "pm.test('has services object', () => pm.expect(pm.response.json()).to.have.property('services'));"] } }],
+          "request": { "method": "GET", "url": "{{api_url}}/health" }
+        }
+      ]
+    }
+  ]
+}
