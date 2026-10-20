@@ -1,374 +1,201 @@
-import type { CursoResumo, Curso, CursoDetalheView } from "../types";
+import { ApiError, fetchApi } from "./api";
+import type { CursoResumo, Curso, CursoDetalheView, CursoDocLink, VagasCurso } from "../types";
 
 /**
- * Serviço de Cursos.
+ * Serviço de Cursos — consome a API pública do backend (somente leitura).
  *
- * Os dados abaixo são simulados (mock). Para integrar com o backend,
- * basta descomentar a chamada `fetchApi` correspondente e remover o mock
- * — os componentes já consomem estas funções e não precisarão mudar.
- *
- * Backend previsto (Laravel): GET /courses e GET /courses/{slug}.
+ * A API devolve o registro CRU (`CursoResumo` / `Curso`); toda a formatação
+ * de apresentação, inclusive os blocos genéricos de estágio e TCC, é montada
+ * aqui em `toCursoView`. O banco nunca guarda texto de apresentação.
  */
 
-const IMG = {
-  ti: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=70",
-  saude:
-    "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=70",
-  direito:
-    "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=70",
-  educacao:
-    "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=70",
-  engenharia:
-    "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=800&q=70",
-  cinema:
-    "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=800&q=70",
-  agro: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=800&q=70",
-  geografia:
-    "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=70",
-  gestao:
-    "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=70",
+/**
+ * Documentos institucionais válidos para todos os cursos, publicados no site
+ * oficial. O calendário muda a cada ano letivo: atualizar o link aqui (ou, no
+ * futuro, cadastrá-lo no painel como documento institucional).
+ */
+const UP = "https://unimontes.br/wp-content/uploads";
+const NORMAS_GRADUACAO = `${UP}/2026/09/NORMAS_regulamentacao_ensino_n984_10-dez-2025.pdf`;
+const NORMAS_MONITORIA = `${UP}/2022/04/Normas-Gerais-para-Regulamentacao-da-Monitoria..pdf`;
+const CALENDARIO = {
+  label: "Calendário Acadêmico 2026",
+  url: `${UP}/2026/01/r-983-e-anexo.pdf`,
+  desc: "Datas do ano letivo — Resolução CEPEx nº 983/2025.",
 };
-
-const cursos: CursoResumo[] = [
-  {
-    slug: "sistemas-de-informacao",
-    nome: "Sistemas de Informação",
-    grau: "Bacharelado",
-    modalidade: "Presencial",
-    campus: "Montes Claros",
-    centro: "CCET",
-    turno: "Noturno",
-    area: "Exatas e da Terra",
-    duracao: 8,
-    imagem: IMG.ti,
-  },
-  {
-    slug: "cinema-e-audiovisual",
-    nome: "Cinema e Audiovisual",
-    grau: "Licenciatura",
-    modalidade: "Presencial",
-    campus: "Montes Claros",
-    centro: "CCH",
-    turno: "Noturno",
-    area: "Linguística, Letras e Artes",
-    duracao: 8,
-    imagem: IMG.cinema,
-  },
-  {
-    slug: "agronomia",
-    nome: "Agronomia",
-    grau: "Especialização",
-    modalidade: "EAD",
-    campus: "Januária",
-    centro: "CCBS",
-    turno: "Integral",
-    area: "Ciências Agrárias",
-    duracao: 10,
-    imagem: IMG.agro,
-  },
-  {
-    slug: "psicologia",
-    nome: "Psicologia",
-    grau: "Bacharelado",
-    modalidade: "Híbrido",
-    campus: "Montes Claros",
-    centro: "CCBS",
-    turno: "Matutino",
-    area: "Ciências da Saúde",
-    duracao: 10,
-    imagem: IMG.saude,
-  },
-  {
-    slug: "ciencias-contabeis",
-    nome: "Ciências Contábeis",
-    grau: "Bacharelado",
-    modalidade: "Presencial",
-    campus: "Montes Claros",
-    centro: "CCSA",
-    turno: "Noturno",
-    area: "Ciências Sociais e Aplicadas",
-    duracao: 8,
-    imagem: IMG.gestao,
-  },
-  {
-    slug: "direito",
-    nome: "Direito",
-    grau: "Técnico",
-    modalidade: "Presencial",
-    campus: "Montes Claros",
-    centro: "CCSA",
-    turno: "Noturno",
-    area: "Ciências Sociais e Aplicadas",
-    duracao: 8,
-    imagem: IMG.direito,
-  },
-  {
-    slug: "medicina",
-    nome: "Medicina",
-    grau: "Bacharelado",
-    modalidade: "Presencial",
-    campus: "Montes Claros",
-    centro: "CCBS",
-    turno: "Integral",
-    area: "Ciências da Saúde",
-    duracao: 12,
-    imagem: IMG.saude,
-  },
-  {
-    slug: "administracao",
-    nome: "Administração",
-    grau: "Bacharelado",
-    modalidade: "Presencial",
-    campus: "Montes Claros",
-    centro: "CCSA",
-    turno: "Integral",
-    area: "Ciências Sociais e Aplicadas",
-    duracao: 8,
-    imagem: IMG.gestao,
-  },
-  {
-    slug: "engenharia-civil",
-    nome: "Engenharia Civil",
-    grau: "Tecnólogo",
-    modalidade: "Presencial",
-    campus: "Montes Claros",
-    centro: "CCET",
-    turno: "Integral",
-    area: "Engenharias",
-    duracao: 8,
-    imagem: IMG.engenharia,
-  },
-  {
-    slug: "geografia",
-    nome: "Geografia",
-    grau: "Bacharelado",
-    modalidade: "Presencial",
-    campus: "São Francisco",
-    centro: "CCH",
-    turno: "Noturno",
-    area: "Ciências Humanas",
-    duracao: 8,
-    imagem: IMG.geografia,
-  },
-  {
-    slug: "pedagogia",
-    nome: "Pedagogia",
-    grau: "Licenciatura",
-    modalidade: "Presencial",
-    campus: "Montes Claros",
-    centro: "CCH",
-    turno: "Noturno",
-    area: "Ciências Humanas",
-    duracao: 8,
-    imagem: IMG.educacao,
-  },
-  {
-    slug: "enfermagem",
-    nome: "Enfermagem",
-    grau: "Bacharelado",
-    modalidade: "Presencial",
-    campus: "Montes Claros",
-    centro: "CCBS",
-    turno: "Integral",
-    area: "Ciências da Saúde",
-    duracao: 10,
-    imagem: IMG.saude,
-  },
-  {
-    slug: "historia",
-    nome: "História",
-    grau: "Licenciatura",
-    modalidade: "Presencial",
-    campus: "Montes Claros",
-    centro: "CCH",
-    turno: "Noturno",
-    area: "Ciências Humanas",
-    duracao: 8,
-    imagem: IMG.educacao,
-  },
-  {
-    slug: "engenharia-agricola",
-    nome: "Engenharia Agrícola e Ambiental",
-    grau: "Bacharelado",
-    modalidade: "Presencial",
-    campus: "Januária",
-    centro: "CCET",
-    turno: "Integral",
-    area: "Engenharias",
-    duracao: 10,
-    imagem: IMG.engenharia,
-  },
-  {
-    slug: "ciencias-biologicas",
-    nome: "Ciências Biológicas",
-    grau: "Licenciatura",
-    modalidade: "Presencial",
-    campus: "Montes Claros",
-    centro: "CCBS",
-    turno: "Vespertino",
-    area: "Ciências Biológicas",
-    duracao: 8,
-    imagem: IMG.agro,
-  },
-  {
-    slug: "matematica",
-    nome: "Matemática",
-    grau: "Licenciatura",
-    modalidade: "EAD",
-    campus: "São Francisco",
-    centro: "CCET",
-    turno: "Noturno",
-    area: "Exatas e da Terra",
-    duracao: 8,
-    imagem: IMG.ti,
-  },
-];
 
 /** Lista de cursos (página /cursos) */
 export async function getCursos(): Promise<CursoResumo[]> {
-  // return fetchApi<CursoResumo[]>("/courses");
-  return cursos;
+  return fetchApi<CursoResumo[]>("/cursos");
 }
 
 /**
  * Detalhe de um curso pelo slug (página /cursos/:slug).
  *
- * Fluxo: obtém o registro CRU e o transforma na VIEW derivada.
- * Ao integrar, troque `mockCurso(slug)` por `fetchApi<Curso>(...)` —
- * `toCursoView` (formatação para a UI) permanece igual.
+ * Devolve `null` quando o curso não existe ou não está publicado (404);
+ * qualquer outra falha é propagada para a página exibir o estado de erro.
  */
 export async function getCurso(slug: string): Promise<CursoDetalheView | null> {
-  // const curso = await fetchApi<Curso>(`/courses/${slug}`);
-  const curso = mockCurso(slug);
-  return curso ? toCursoView(curso) : null;
+  try {
+    const curso = await fetchApi<Curso>(`/cursos/${encodeURIComponent(slug)}`);
+    return toCursoView(curso);
+  } catch (erro) {
+    if (erro instanceof ApiError && erro.status === 404) return null;
+    throw erro;
+  }
+}
+
+/** "Matutino e Noturno" / "Montes Claros, Januária e Unaí" */
+function juntar(itens: string[]) {
+  return itens.length <= 1
+    ? (itens[0] ?? "")
+    : `${itens.slice(0, -1).join(", ")} e ${itens[itens.length - 1]}`;
 }
 
 /**
- * MOCK: monta um registro CRU (equivalente a uma linha da tabela + relações).
- * Some quando o backend passar a fornecer o `Curso` completo.
+ * Vagas agrupadas por quantidade/periodicidade, para caber num card:
+ * "70 anuais (Montes Claros) · 35 anuais por campus (7 campi)"
  */
-function mockCurso(slug: string): Curso | null {
-  const base = cursos.find((c) => c.slug === slug) ?? cursos.find((c) => c.slug === "direito");
-  if (!base) return null;
-  return {
-    ...base,
-    vagas: 50,
-    descricao: [
-      `O curso forma profissionais críticos e humanistas, capazes de interpretar a realidade social e atuar com responsabilidade ética nos diversos campos do ${base.nome.toLowerCase()}.`,
-      "A formação combina teoria, prática e atividades de extensão junto à comunidade, cobrindo as áreas fundamentais, profissionais e aplicadas da profissão.",
-      "A infraestrutura inclui salas amplas, biblioteca especializada, laboratórios e projetos de atendimento à população.",
-    ],
-    perfilEgresso: [
-      "Interpretar e aplicar os conhecimentos da área com rigor técnico e sensibilidade social.",
-      "Atuar na defesa de direitos e na promoção da cidadania.",
-      "Compreender a função social da profissão em contextos contemporâneos.",
-      "Desenvolver raciocínio crítico e capacidade de argumentação.",
-      "Realizar pesquisa científica aplicada à sua área de formação.",
-      "Exercer liderança e trabalhar em equipes multidisciplinares.",
-    ],
-    mercadoTrabalho: [
-      {
-        titulo: "Setor Público",
-        descricao: "Carreiras em órgãos e instituições públicas via concurso.",
-      },
-      { titulo: "Iniciativa Privada", descricao: "Atuação em empresas e organizações do setor." },
-      { titulo: "Autônomo", descricao: "Prestação de serviços de forma independente." },
-      { titulo: "Consultoria", descricao: "Assessoria técnica especializada a empresas e órgãos." },
-      { titulo: "Terceiro Setor", descricao: "ONGs, fundações e projetos sociais." },
-      { titulo: "Docência e Pesquisa", descricao: "Carreira acadêmica e produção científica." },
-    ],
-    documentos: {},
-    estagio: {
-      intro:
-        "O estágio supervisionado é componente curricular obrigatório, com carga horária de 300 horas, realizado a partir da segunda metade do curso.",
-      informacoes: [
-        { rotulo: "Carga horária", valor: "300 horas obrigatórias" },
-        { rotulo: "Período", valor: "A partir do 7º período" },
-        { rotulo: "Local", valor: "Unidade concedente conveniada ao curso" },
-        { rotulo: "Orientação", valor: "Professor orientador designado" },
-      ],
-      descricao:
-        "Durante o estágio, o estudante tem contato direto com a prática profissional, participando das atividades típicas da área de formação sob supervisão.",
-      documentosNecessarios: [
-        "Termo de Compromisso de Estágio",
-        "Plano de Atividades",
-        "Relatórios periódicos de acompanhamento",
-        "Relatório final de estágio",
-      ],
-      contatoEmail: "estagios@unimontes.br",
-    },
-    tcc: {
-      intro: `O Trabalho de Conclusão de Curso (TCC) é requisito obrigatório para a obtenção do grau em ${base.nome}. Consiste na elaboração de monografia ou artigo científico sobre tema de relevância na área.`,
-      orientacoes: [
-        { rotulo: "Modalidade", valor: "Monografia ou artigo científico" },
-        { rotulo: "Período", valor: "Nos dois últimos períodos" },
-        { rotulo: "Orientação", valor: "Professor orientador da área temática escolhida" },
-        { rotulo: "Apresentação", valor: "Defesa pública perante banca examinadora" },
-      ],
-      descricao:
-        "O TCC deve seguir as normas técnicas da ABNT e o regulamento específico do curso. A defesa é realizada perante banca composta por três professores avaliadores.",
-      etapas: [
-        "Escolha do tema e orientador",
-        "Elaboração do projeto de pesquisa",
-        "Desenvolvimento da pesquisa e redação",
-        "Entrega da versão preliminar para o orientador",
-        "Revisão e ajustes",
-        "Entrega da versão final",
-        "Defesa pública",
-      ],
-      documentos: [
-        { label: "Regulamento de TCC do curso" },
-        { label: "Manual de normas técnicas (ABNT)" },
-        { label: "Modelo de formatação" },
-        { label: "Calendário de prazos e entregas" },
-      ],
-    },
-    arquivos: [
-      { label: "Horários", destaque: true, desc: "Horários de aula por turma e período letivo." },
-      {
-        label: "Matriz Curricular",
-        destaque: true,
-        desc: "Disciplinas, períodos e carga horária do curso.",
-      },
-      { label: "Ementas", destaque: true, desc: "Conteúdo programático de cada disciplina." },
-      { label: "PPC — Projeto Pedagógico do Curso" },
-      { label: "Regulamento de Estágio" },
-      { label: "Normas de TCC" },
-      { label: "Atividades Complementares" },
-      { label: "Formulários" },
-      { label: "Perguntas Frequentes" },
-    ],
-    coordenacao: {
-      intro: `A coordenação do curso de ${base.nome} está à disposição para atender estudantes, professores e comunidade externa em relação a informações acadêmicas, documentação, matrículas e demais assuntos relacionados ao curso.`,
-      coordenador: "Prof.(a) Coordenador(a) do Curso",
-      email: "coordenacao@unimontes.br",
-      telefone: "(38) 3229-8000",
-      localizacao: "Campus Universitário Prof. Darcy Ribeiro — bloco e sala do curso",
-      horarioAtendimento: "Segunda a sexta, conforme horário divulgado",
-    },
-  };
+function formatarVagas(vagas: VagasCurso[]) {
+  const grupos = new Map<string, string[]>();
+  for (const v of vagas) {
+    const chave = v.periodicidade ? `${v.quantidade} ${v.periodicidade}` : `${v.quantidade}`;
+    grupos.set(chave, [...(grupos.get(chave) ?? []), v.campus]);
+  }
+  return Array.from(grupos, ([chave, campi]) => {
+    if (vagas.length === 1) return chave;
+    return campi.length === 1
+      ? `${chave} (${campi[0]})`
+      : `${chave} por campus (${campi.length} campi)`;
+  }).join(" · ");
+}
+
+/** Aba "Documentos": links do curso + documentos institucionais comuns */
+function montarArquivos(c: Curso): CursoDocLink[] {
+  const arquivos: CursoDocLink[] = [];
+  if (c.documentos.matrizUrl)
+    arquivos.push({
+      label: "Estrutura Curricular",
+      url: c.documentos.matrizUrl,
+      destaque: true,
+      desc: "Disciplinas, períodos e carga horária do curso.",
+    });
+  if (c.documentos.ppcUrl)
+    arquivos.push({
+      label: "Projeto Pedagógico do Curso (PPC)",
+      url: c.documentos.ppcUrl,
+      destaque: true,
+      desc: "Objetivos, perfil do egresso e organização do curso.",
+    });
+  arquivos.push({ ...CALENDARIO, destaque: true });
+  arquivos.push(...c.documentosExtras);
+  if (c.regulamentoTccUrl)
+    arquivos.push({ label: "Regulamento de TCC do curso", url: c.regulamentoTccUrl });
+  arquivos.push({
+    label: "Normas para Regulamentação do Ensino (graduação)",
+    url: NORMAS_GRADUACAO,
+  });
+  arquivos.push({ label: "Normas Gerais de Monitoria", url: NORMAS_MONITORIA });
+  if (c.paginaOficial)
+    arquivos.push({ label: "Página do curso no site da Unimontes", url: c.paginaOficial });
+  return arquivos;
 }
 
 /**
  * Transforma o registro CRU na VIEW derivada consumida pela página de detalhe.
  * Aqui mora toda a formatação de apresentação — mantida no frontend.
+ *
+ * Os blocos de estágio e TCC trazem as regras gerais da universidade; os
+ * detalhes de cada curso ficam no PPC e no regulamento, linkados nos documentos.
  */
-function toCursoView(c: Curso): CursoDetalheView {
-  const anos = Math.round(c.duracao / 2);
+export function toCursoView(c: Curso): CursoDetalheView {
+  const anos = c.duracao ? Math.round(c.duracao / 2) : undefined;
+  const vagas = formatarVagas(c.vagas);
+
   return {
     ...c,
-    eyebrow: `Graduação ${c.grau}`,
-    tipo: c.turno,
-    duracaoLabel: `${anos} anos`,
+    eyebrow: c.grau === "Tecnólogo" ? "Graduação Tecnológica" : `Graduação ${c.grau}`,
+    tipo: juntar(c.turnos),
+    duracaoLabel: anos ? `${anos} anos` : "Consulte o PPC",
     dados: [
-      { rotulo: "Duração", valor: `${anos} anos (${c.duracao} períodos)` },
-      { rotulo: "Centro de Ensino", valor: c.centro },
-      { rotulo: "Campus", valor: c.campus },
+      {
+        rotulo: "Duração",
+        valor: c.duracao ? `${anos} anos (${c.duracao} semestres)` : "Consulte o PPC",
+      },
+      ...(c.centro ? [{ rotulo: "Centro de Ensino", valor: c.centro }] : []),
+      { rotulo: c.campi.length > 1 ? "Campi" : "Campus", valor: juntar(c.campi) },
       { rotulo: "Grau", valor: c.grau },
       { rotulo: "Modalidade", valor: c.modalidade },
-      { rotulo: "Turno", valor: c.turno },
+      { rotulo: c.turnos.length > 1 ? "Turnos" : "Turno", valor: juntar(c.turnos) },
       { rotulo: "Área", valor: c.area },
-      { rotulo: "Vagas", valor: `${c.vagas} vagas` },
+      ...(vagas ? [{ rotulo: "Vagas", valor: vagas }] : []),
     ],
+    estagio: {
+      intro: `O estágio curricular obrigatório do curso de ${c.nome} segue o Projeto Pedagógico do Curso (PPC), que define carga horária, período de realização e forma de acompanhamento.`,
+      informacoes: [
+        {
+          rotulo: "Estágio obrigatório",
+          valor: "Conforme o PPC — orientações com a coordenação do curso",
+        },
+        {
+          rotulo: "Estágio não obrigatório",
+          valor: "Remunerado, sem vínculo empregatício — Balcão de Estágio da CAE",
+        },
+        {
+          rotulo: "Quem pode participar",
+          valor: "Acadêmicos regularmente matriculados e frequentes",
+        },
+        { rotulo: "Primeiro passo", valor: "Termo de Convênio entre a empresa e a Unimontes" },
+      ],
+      descricao:
+        "Para o estágio não obrigatório, a Coordenadoria de Apoio ao Estudante (CAE) mantém convênios com empresas de Montes Claros e região. O modelo de Termo de Convênio é solicitado pelo e-mail cae@unimontes.br. A CAE atende das 7h às 21h, em frente à Secretaria Geral (Prédio 2).",
+      documentosNecessarios: [
+        "Termo de Convênio entre a empresa e a Unimontes",
+        "Termo de Compromisso de Estágio",
+        "Termo aditivo, em caso de prorrogação",
+        "Termo de rescisão, em caso de encerramento antecipado",
+      ],
+      contatoEmail: "cae@unimontes.br",
+    },
+    tcc: {
+      intro: `O Trabalho de Conclusão de Curso, quando previsto na estrutura curricular de ${c.nome}, segue o PPC e o regulamento aprovado pelo colegiado do curso.`,
+      orientacoes: [
+        { rotulo: "Regulamento", valor: "Definido pelo colegiado do curso" },
+        {
+          rotulo: "Normas gerais",
+          valor: "Normas para Regulamentação do Ensino nos Cursos de Graduação (dez/2025)",
+        },
+        { rotulo: "Orientação", valor: "Professor orientador da área do tema" },
+        { rotulo: "Dúvidas", valor: "Coordenação do curso" },
+      ],
+      descricao:
+        "Prazos, formato (monografia, artigo ou outro produto) e forma de avaliação variam entre os cursos. Confira o regulamento do seu curso e os prazos do calendário acadêmico.",
+      etapas: [
+        "Escolha do tema e do orientador",
+        "Elaboração do projeto",
+        "Desenvolvimento e redação",
+        "Entrega para avaliação",
+        "Apresentação ou defesa, conforme o regulamento",
+        "Entrega da versão final",
+      ],
+      documentos: [
+        ...(c.regulamentoTccUrl
+          ? [{ label: "Regulamento de TCC do curso", url: c.regulamentoTccUrl }]
+          : []),
+        ...(c.documentos.ppcUrl
+          ? [{ label: "Projeto Pedagógico do Curso (PPC)", url: c.documentos.ppcUrl }]
+          : []),
+        { label: "Normas de Graduação", url: NORMAS_GRADUACAO },
+        { label: CALENDARIO.label, url: CALENDARIO.url },
+      ],
+    },
+    arquivos: montarArquivos(c),
+    coordenacao: {
+      intro: `A coordenação do curso de ${c.nome} atende estudantes e comunidade em assuntos acadêmicos do curso. Declarações, histórico e demais documentos são solicitados à Secretaria Geral.`,
+      coordenador: c.coordenacao.coordenador ?? "Coordenação do curso",
+      email: c.coordenacao.email ?? undefined,
+      telefone: c.coordenacao.telefone ?? undefined,
+      localizacao: c.coordenacao.localizacao ?? undefined,
+      horarioAtendimento: "Conforme horário divulgado pela coordenação",
+    },
   };
 }
