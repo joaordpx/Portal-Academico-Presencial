@@ -13,6 +13,14 @@ Pirapora, Salinas, São Francisco).
 
 ---
 
+## Repositório
+
+```
+frontend/   # portal público (React + Vite)
+backend/    # API e painel administrativo (Laravel + Filament) — ver backend/README.md
+docs/       # documentos de trabalho
+```
+
 ## Stack
 
 | Camada | Tecnologia |
@@ -23,11 +31,17 @@ Pirapora, Salinas, São Francisco).
 | Componentes | Radix UI + shadcn/ui |
 | Animações | Motion |
 | Ícones | Lucide |
-| Backend (em integração) | Laravel 12 + MySQL + Meilisearch |
+| Backend | Laravel 12 + Filament 5 + MySQL (SQLite no desenvolvimento) |
 
 ---
 
-## Como rodar
+## Como rodar o frontend
+
+Todos os comandos abaixo são executados dentro de `frontend/`.
+
+```bash
+cd frontend
+```
 
 ```bash
 npm install
@@ -45,9 +59,11 @@ Para gerar o build de produção:
 npm run build
 ```
 
+O backend tem o próprio passo a passo em [`backend/README.md`](backend/README.md).
+
 ### Variáveis de ambiente
 
-Crie um arquivo `.env` na raiz:
+Crie um arquivo `frontend/.env`:
 
 ```
 VITE_API_URL=http://localhost:8000/api
@@ -57,10 +73,10 @@ Se a variável não for definida, o padrão é `http://localhost:8000/api`.
 
 ---
 
-## Estrutura do projeto
+## Estrutura do frontend
 
 ```
-src/
+frontend/src/
 ├── app/
 │   ├── routes.tsx              # definição das rotas
 │   ├── pages/                  # uma página por rota
@@ -102,7 +118,7 @@ As demais cores são **acentos semânticos**:
 | 🟡 `#FFB800` | destaque, biblioteca |
 | 🔵 `#2563EB` | links de texto |
 
-Componentes de seção reutilizáveis (`src/app/components/layout/SectionLayout.tsx`):
+Componentes de seção reutilizáveis (`frontend/src/app/components/layout/SectionLayout.tsx`):
 
 | Componente | Uso |
 |---|---|

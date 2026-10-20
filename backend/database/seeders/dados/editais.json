@@ -1,0 +1,101 @@
+[
+  {
+    "id": 2,
+    "titulo": "Seleção de trabalhos para a Revista Intercâmbio v. 23",
+    "tipo": "Extensão",
+    "curso": "Todos os cursos",
+    "campus": "Todos os campi",
+    "prazo": "2026-10-30",
+    "url": "https://unimontes.br/edital/envio-trabalhos-revista-intercambio-volume-23/"
+  },
+  {
+    "id": 3,
+    "titulo": "Mestrado e Doutorado em Desenvolvimento Social — PPGDS 01/2027",
+    "tipo": "Pós-Graduação",
+    "curso": "Graduados",
+    "campus": "Montes Claros",
+    "prazo": "2026-11-05",
+    "url": "https://unimontes.br/edital/ppgds-01-2027-mestrado-doutorado/"
+  },
+  {
+    "id": 1,
+    "titulo": "Bolsa de extensão no Festival Psiu Poético — Edital PREx nº 11/2026",
+    "tipo": "Extensão",
+    "curso": "Todos os cursos",
+    "campus": "Montes Claros",
+    "prazo": "2026-10-06",
+    "url": "https://unimontes.br/edital/edital-no-11-2026-pro-reitoria-de-extensao-destinado-a-atividades-no-psiu-poetico/"
+  },
+  {
+    "id": 4,
+    "titulo": "Mestrado Profissional em Educação Inclusiva — PROFEI 2027",
+    "tipo": "Pós-Graduação",
+    "curso": "Graduados",
+    "campus": "Montes Claros",
+    "prazo": "2026-10-06",
+    "url": "https://unimontes.br/edital/mestrado-profei-2027/"
+  },
+  {
+    "id": 6,
+    "titulo": "Mestrado e Doutorado em Geografia — PPGEO 02/2026",
+    "tipo": "Pós-Graduação",
+    "curso": "Graduados",
+    "campus": "Montes Claros",
+    "prazo": "2026-09-28",
+    "url": "https://unimontes.br/edital/edital-n-02-2026-processo-seletivo-de-ingresso-de-estudante-regular-no-mestrado-e-doutorado-em-geografia-da-unimontes/"
+  },
+  {
+    "id": 5,
+    "titulo": "Bolsas de extensão — Jogos das Associações Atléticas (10/2026)",
+    "tipo": "Extensão",
+    "curso": "Todos os cursos",
+    "campus": "Montes Claros",
+    "prazo": "2026-09-27",
+    "url": "https://unimontes.br/edital/bolsas-extensao-organizacao-jogos-atleticas-10-2026/"
+  },
+  {
+    "id": 7,
+    "titulo": "Bolsas de extensão — UNICOPA",
+    "tipo": "Extensão",
+    "curso": "Todos os cursos",
+    "campus": "Montes Claros",
+    "prazo": "2026-09-09",
+    "url": "https://unimontes.br/edital/bolsas-de-extensao-unicopa/"
+  },
+  {
+    "id": 8,
+    "titulo": "Bolsistas para a ação de extensão “A Gosto da Unimontes” — PREx 07/2026",
+    "tipo": "Extensão",
+    "curso": "Todos os cursos",
+    "campus": "Montes Claros",
+    "prazo": "2026-09-08",
+    "url": "https://unimontes.br/edital/selecao-de-bolsistas-que-atuarao-na-acao-de-extensao-a-gosto-da-unimontes/"
+  },
+  {
+    "id": 9,
+    "titulo": "Monitoria voluntária — 3º processo seletivo",
+    "tipo": "Monitoria",
+    "curso": "Odontologia",
+    "campus": "Montes Claros",
+    "prazo": "2026-09-06",
+    "url": "https://unimontes.br/unimontes-segue-com-inscricoes-abertas-para-monitoria-voluntaria-no-curso-de-odontologia/"
+  },
+  {
+    "id": 10,
+    "titulo": "Auxílio Saúde, Esporte e Cultura — Emenda Parlamentar 04/2026",
+    "tipo": "Assistência",
+    "curso": "Todos os cursos",
+    "campus": "Todos os campi",
+    "prazo": "2026-08-11",
+    "url": "https://unimontes.br/edital/auxilio-saude-esporte-cultura-emenda-parlamentar-04-2026/"
+  },
+  {
+    "id": 11,
+    "titulo": "Programa Estadual de Assistência Estudantil — PEAES 05/2026",
+    "tipo": "Assistência",
+    "curso": "Todos os cursos",
+    "campus": "Todos os campi",
+    "prazo": "2026-08-10",
+    "url": "https://unimontes.br/edital/programa-de-assistencia-estudantil-peaes-05-2026/"
+  }
+]

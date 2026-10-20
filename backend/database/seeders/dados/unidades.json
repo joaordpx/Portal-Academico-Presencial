@@ -1,0 +1,327 @@
+[
+  {
+    "slug": "almenara",
+    "nome": "Campus Almenara",
+    "cidade": "Almenara/MG",
+    "regiao": "Vale do Jequitinhonha",
+    "endereco": "Rua Doutor Sabino Silva, 1 — Bairro Santo Antônio, Almenara/MG · CEP 39900-000",
+    "contato": {
+      "telefone": "(38) 3229-8460",
+      "email": "campus.almenara@unimontes.br"
+    },
+    "horarios": [
+      {
+        "horas": "07h às 22h30"
+      }
+    ],
+    "cursos": [
+      "Letras Português",
+      "Pedagogia"
+    ],
+    "servicos": [
+      "6 salas de aula com projetor",
+      "Auditório",
+      "Biblioteca",
+      "Laboratório de Informática"
+    ]
+  },
+  {
+    "slug": "bocaiuva",
+    "nome": "Campus Bocaiuva",
+    "cidade": "Bocaiuva/MG",
+    "regiao": "Norte de Minas",
+    "endereco": "Rua Professora Augusta Ribeiro Drumond, 441 — Bairro Alterosa, Bocaiuva/MG · CEP 39390-000",
+    "contato": {
+      "telefone": "(38) 3251-5023",
+      "email": "secretaria.bocaiuva@unimontes.br"
+    },
+    "horarios": [
+      {
+        "horas": "07h às 22h30"
+      }
+    ],
+    "cursos": [],
+    "servicos": []
+  },
+  {
+    "slug": "brasilia-de-minas",
+    "nome": "Campus Brasília de Minas",
+    "cidade": "Brasília de Minas/MG",
+    "regiao": "Norte de Minas",
+    "endereco": "Av. Rui Barbosa, 265 — Centro, Brasília de Minas/MG · CEP 39330-000",
+    "contato": {
+      "telefone": "(38) 3231-2304",
+      "email": "campus.brasiliademinas@unimontes.br"
+    },
+    "horarios": [
+      {
+        "horas": "07h às 23h"
+      }
+    ],
+    "cursos": [
+      "Administração",
+      "Pedagogia"
+    ],
+    "servicos": [
+      "8 salas de aula",
+      "Biblioteca",
+      "Laboratório de Informática",
+      "Sala de Estágio",
+      "Cantina"
+    ]
+  },
+  {
+    "slug": "espinosa",
+    "nome": "Campus Espinosa",
+    "cidade": "Espinosa/MG",
+    "regiao": "Norte de Minas",
+    "endereco": "Av. JK, 725 — Bairro Santa Tereza, Espinosa/MG · CEP 39510-000",
+    "contato": {
+      "telefone": "(38) 3812-1542",
+      "email": "campus.espinosa@unimontes.br"
+    },
+    "horarios": [
+      {
+        "horas": "07h às 22h30"
+      }
+    ],
+    "cursos": [
+      "Letras Português",
+      "Pedagogia"
+    ],
+    "servicos": [
+      "Auditório",
+      "Biblioteca",
+      "Laboratório de Informática",
+      "Laboratório de Práticas Pedagógicas",
+      "Sala de estudos",
+      "Cantina"
+    ]
+  },
+  {
+    "slug": "janauba",
+    "nome": "Campus Janaúba",
+    "cidade": "Janaúba/MG",
+    "regiao": "Norte de Minas",
+    "endereco": "Av. Reinaldo Viana, 2630 — Bairro Bico da Pedra, Janaúba/MG · CEP 39440-000",
+    "contato": {
+      "telefone": "(38) 3229-8421",
+      "email": "campus.janauba@unimontes.br"
+    },
+    "horarios": [
+      {
+        "dias": "Segunda a sexta",
+        "horas": "07h às 22h30"
+      },
+      {
+        "dias": "Sábado",
+        "horas": "07h às 17h"
+      }
+    ],
+    "cursos": [
+      "Agronomia",
+      "Engenharia Florestal",
+      "História",
+      "Medicina Veterinária",
+      "Pedagogia",
+      "Tecnologia em Gestão do Agronegócio",
+      "Zootecnia"
+    ],
+    "servicos": [
+      "17 salas de aula",
+      "Auditório",
+      "Biblioteca",
+      "Estufas e viveiros de mudas",
+      "Fazenda Experimental (15 km do centro)"
+    ]
+  },
+  {
+    "slug": "januaria",
+    "nome": "Campus Januária",
+    "cidade": "Januária/MG",
+    "regiao": "Norte de Minas",
+    "endereco": "Rua do Sertanejo, 212 — Vila Fátima, Januária/MG · CEP 39480-000",
+    "contato": {
+      "telefone": "(38) 3621-5932",
+      "email": "campus.januaria@unimontes.br"
+    },
+    "horarios": [
+      {
+        "horas": "07h às 22h30"
+      }
+    ],
+    "cursos": [
+      "Educação Física",
+      "Letras Inglês",
+      "Letras Português",
+      "Pedagogia"
+    ],
+    "servicos": [
+      "Biblioteca"
+    ]
+  },
+  {
+    "slug": "joaima",
+    "nome": "Núcleo Joaíma",
+    "cidade": "Joaíma/MG",
+    "regiao": "Vale do Jequitinhonha",
+    "endereco": "Av. Brasília, 400 — Centro, Joaíma/MG · CEP 39890-000",
+    "contato": {
+      "telefone": "(33) 3745-1599",
+      "email": "nucleo.joaima@unimontes.br"
+    },
+    "horarios": [
+      {
+        "horas": "07h às 22h"
+      }
+    ],
+    "cursos": [],
+    "servicos": [
+      "4 salas de aula",
+      "Biblioteca",
+      "Laboratório de Informática",
+      "Laboratório de Física e Matemática",
+      "Cantina"
+    ]
+  },
+  {
+    "slug": "paracatu",
+    "nome": "Campus Paracatu",
+    "cidade": "Paracatu/MG",
+    "regiao": "Noroeste de Minas",
+    "endereco": "Rua Cristal, 351 — Bairro Amoreiras II, Paracatu/MG",
+    "contato": {
+      "telefone": "(38) 99184-0220",
+      "email": "campus.paracatu@unimontes.br"
+    },
+    "horarios": [
+      {
+        "horas": "13h às 23h20"
+      },
+      {
+        "rotulo": "Biblioteca",
+        "horas": "18h30 às 22h"
+      }
+    ],
+    "cursos": [
+      "Letras Português",
+      "Pedagogia"
+    ],
+    "servicos": [
+      "Auditório",
+      "Biblioteca",
+      "Laboratório de Informática",
+      "Laboratório de Física",
+      "Quadra poliesportiva coberta"
+    ]
+  },
+  {
+    "slug": "pirapora",
+    "nome": "Campus Pirapora",
+    "cidade": "Pirapora/MG",
+    "regiao": "Norte de Minas",
+    "endereco": "Rua Raimundo Nascimento, 432 — Santos Dumont, Pirapora/MG · CEP 39270-000",
+    "contato": {
+      "telefone": "(38) 3741-3056",
+      "email": "campus.pirapora@unimontes.br"
+    },
+    "horarios": [
+      {
+        "rotulo": "Campus",
+        "horas": "13h às 18h"
+      },
+      {
+        "rotulo": "Biblioteca e Laboratório de Informática",
+        "horas": "16h às 22h"
+      }
+    ],
+    "cursos": [
+      "Geografia",
+      "Pedagogia"
+    ],
+    "servicos": [
+      "8 salas de aula com projetor",
+      "Biblioteca",
+      "Laboratório de Informática"
+    ]
+  },
+  {
+    "slug": "salinas",
+    "nome": "Campus Salinas",
+    "cidade": "Salinas/MG",
+    "regiao": "Norte de Minas",
+    "endereco": "Rua Miguel de Almeida, 85 — Centro, Salinas/MG · CEP 39560-000",
+    "contato": {
+      "telefone": "(38) 3841-4780",
+      "email": "campus.salinas@unimontes.br"
+    },
+    "horarios": [
+      {
+        "horas": "07h às 22h40"
+      }
+    ],
+    "cursos": [
+      "Ciências Contábeis"
+    ],
+    "servicos": [
+      "Biblioteca",
+      "Laboratório",
+      "Salas de extensão e de pesquisa"
+    ]
+  },
+  {
+    "slug": "sao-francisco",
+    "nome": "Campus São Francisco",
+    "cidade": "São Francisco/MG",
+    "regiao": "Norte de Minas",
+    "endereco": "Rua Maurício Ribas, 453 — Jardim Graziela, São Francisco/MG · CEP 39300-000",
+    "contato": {
+      "telefone": "(38) 3229-8099",
+      "email": "campus.saofrancisco@unimontes.br"
+    },
+    "horarios": [
+      {
+        "horas": "07h às 22h30"
+      }
+    ],
+    "cursos": [
+      "Letras Português",
+      "Matemática"
+    ],
+    "servicos": [
+      "8 salas de aula",
+      "Biblioteca",
+      "Laboratório de Informática",
+      "Laboratório de Física",
+      "Quadra poliesportiva coberta",
+      "Cantina"
+    ]
+  },
+  {
+    "slug": "unai",
+    "nome": "Campus Unaí",
+    "cidade": "Unaí/MG",
+    "regiao": "Noroeste de Minas",
+    "endereco": "Av. Vereador João Narciso, 1380 — Bairro Cachoeira, Unaí/MG · CEP 38610-000",
+    "contato": {
+      "telefone": "(38) 3677-4919",
+      "email": "campus.unai@unimontes.br"
+    },
+    "horarios": [
+      {
+        "horas": "07h às 22h30"
+      }
+    ],
+    "cursos": [
+      "Ciências Biológicas",
+      "Letras Inglês"
+    ],
+    "servicos": [
+      "11 salas de aula",
+      "Auditório",
+      "Biblioteca",
+      "Laboratório de Informática",
+      "Laboratórios de Ciências Biológicas"
+    ]
+  }
+]

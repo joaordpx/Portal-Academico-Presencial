@@ -1,0 +1,369 @@
+[
+  {
+    "id": 1,
+    "slug": "predio-1",
+    "nome": "Prédio 1",
+    "numero": 1,
+    "tipo": "Salas de aula",
+    "campus": "Campus Montes Claros",
+    "descricao": "Sede do Centro de Ciências Sociais Aplicadas, com salas de aula e as coordenações dos cursos do centro.",
+    "centro": {
+      "sigla": "CCSA",
+      "nome": "Centro de Ciências Sociais Aplicadas"
+    },
+    "cursosDoCentro": [
+      "Administração",
+      "Ciências Contábeis",
+      "Ciências Econômicas",
+      "Ciências Sociais",
+      "Direito",
+      "Serviço Social",
+      "Tecnologia em Gestão Pública"
+    ],
+    "setores": [
+      "Direção do CCSA",
+      "Coordenações dos cursos do CCSA"
+    ],
+    "servicos": [
+      "Salas de aula"
+    ],
+    "localizacao": "Prédio 1 — Campus Darcy Ribeiro",
+    "contato": {},
+    "horarios": [
+      {
+        "horas": "07h às 22h"
+      }
+    ],
+    "svgId": "predio-1"
+  },
+  {
+    "id": 2,
+    "slug": "predio-2",
+    "nome": "Prédio 2",
+    "numero": 2,
+    "tipo": "Salas de aula",
+    "campus": "Campus Montes Claros",
+    "descricao": "Sede do Centro de Ciências Humanas. No térreo funciona a Secretaria Geral; em frente a ela, a Coordenadoria de Apoio ao Estudante (CAE).",
+    "centro": {
+      "sigla": "CCH",
+      "nome": "Centro de Ciências Humanas"
+    },
+    "cursosDoCentro": [
+      "Artes Visuais",
+      "Ciências da Religião",
+      "Cinema e Audiovisual",
+      "Filosofia",
+      "Geografia",
+      "História",
+      "Letras Espanhol",
+      "Letras Inglês",
+      "Letras Português",
+      "Música",
+      "Pedagogia",
+      "Teatro"
+    ],
+    "setores": [
+      "Direção do CCH",
+      "Secretaria Geral (térreo)",
+      "Coordenadoria de Apoio ao Estudante (CAE)",
+      "NUSI — Núcleo de Sociedade Inclusiva",
+      "NUICRI — Núcleo de História e Cultura Regional"
+    ],
+    "servicos": [
+      "Auditório",
+      "Laboratório de Informática",
+      "Laboratório de Línguas",
+      "Laboratórios de Artes (escultura, pintura, fotografia e cenotécnica)",
+      "Refeitório"
+    ],
+    "localizacao": "Prédio 2 — Campus Darcy Ribeiro",
+    "contato": {
+      "telefone": "(38) 3229-8230"
+    },
+    "horarios": [
+      {
+        "horas": "07h às 22h"
+      }
+    ],
+    "svgId": "predio-2"
+  },
+  {
+    "id": 3,
+    "slug": "secretaria-geral",
+    "nome": "Secretaria Geral",
+    "tipo": "Administrativo",
+    "campus": "Campus Montes Claros",
+    "descricao": "Matrícula inicial, declarações, histórico, diplomas, colação de grau e alterações cadastrais. Muitas solicitações são feitas por e-mail ao responsável pelo seu curso, sem precisar ir ao local.",
+    "cursosDoCentro": [],
+    "setores": [
+      "Secretaria Geral",
+      "Recepção",
+      "Registro de diplomas"
+    ],
+    "servicos": [
+      "Matrícula inicial",
+      "Declarações (digital ou impressa)",
+      "Histórico e diploma",
+      "Colação de grau",
+      "Alteração de dados cadastrais e nome social"
+    ],
+    "localizacao": "Prédio 2 (CCH) · Térreo",
+    "contato": {
+      "telefone": "(38) 3229-8040",
+      "email": "secretaria.recepcao@unimontes.br"
+    },
+    "horarios": [
+      {
+        "dias": "Segunda a sexta",
+        "horas": "atendimento por curso — veja o horário do responsável pelo seu curso"
+      }
+    ],
+    "svgId": "secretaria-geral"
+  },
+  {
+    "id": 4,
+    "slug": "cae",
+    "nome": "Coordenadoria de Apoio ao Estudante (CAE)",
+    "tipo": "Serviço",
+    "campus": "Campus Montes Claros",
+    "descricao": "Estágio não obrigatório (Balcão de Estágio e convênios com empresas), acolhimento de calouros na Unicalourada e intercâmbio entre acadêmicos.",
+    "cursosDoCentro": [],
+    "setores": [
+      "Pró-Reitoria de Extensão"
+    ],
+    "servicos": [
+      "Balcão de Estágio",
+      "Termos de convênio de estágio",
+      "Unicalourada"
+    ],
+    "localizacao": "Em frente à Secretaria Geral — Prédio 2",
+    "contato": {
+      "telefone": "(38) 3229-8163",
+      "email": "cae@unimontes.br"
+    },
+    "horarios": [
+      {
+        "horas": "07h às 21h"
+      }
+    ],
+    "svgId": "cae"
+  },
+  {
+    "id": 5,
+    "slug": "predio-3",
+    "nome": "Prédio 3",
+    "numero": 3,
+    "tipo": "Salas de aula",
+    "campus": "Campus Montes Claros",
+    "descricao": "Sede do Centro de Ciências Exatas e Tecnológicas, com salas de aula e as coordenações dos cursos do centro.",
+    "centro": {
+      "sigla": "CCET",
+      "nome": "Centro de Ciências Exatas e Tecnológicas"
+    },
+    "cursosDoCentro": [
+      "Engenharia Civil",
+      "Engenharia de Sistemas",
+      "Engenharia Elétrica e Eletrônica",
+      "Física",
+      "Inteligência Artificial",
+      "Matemática",
+      "Sistemas de Informação"
+    ],
+    "setores": [
+      "Direção do CCET",
+      "Coordenações dos cursos do CCET"
+    ],
+    "servicos": [
+      "Salas de aula"
+    ],
+    "localizacao": "Prédio 3 — Campus Darcy Ribeiro",
+    "contato": {
+      "telefone": "(38) 3229-8270",
+      "email": "dir.ccet@unimontes.br"
+    },
+    "horarios": [
+      {
+        "horas": "07h às 22h"
+      }
+    ],
+    "svgId": "predio-3"
+  },
+  {
+    "id": 6,
+    "slug": "biblioteca-central",
+    "nome": "Biblioteca Central Prof. Antônio Jorge",
+    "numero": 4,
+    "tipo": "Biblioteca",
+    "campus": "Campus Montes Claros",
+    "descricao": "Sede do Sistema de Bibliotecas da Unimontes: livros, periódicos, teses e dissertações, terminais de autoatendimento para empréstimo e Sala de Obras Raras e Especiais.",
+    "cursosDoCentro": [],
+    "setores": [
+      "Diretoria de Biblioteca Universitária (DBU)",
+      "Sala de Obras Raras e Especiais"
+    ],
+    "servicos": [
+      "Empréstimo por autoatendimento",
+      "Renovação e reserva on-line (Pergamum)",
+      "Infopesquisa — computadores para pesquisa",
+      "Portal de Periódicos CAPES (Rede CAFe)",
+      "Plataforma elevatória e livros em braille"
+    ],
+    "localizacao": "Prédio 4 — Campus Darcy Ribeiro",
+    "contato": {
+      "telefone": "(38) 3229-8212",
+      "email": "biblioteca.central@unimontes.br"
+    },
+    "horarios": [
+      {
+        "dias": "Segunda a sexta",
+        "horas": "07h30 às 22h30"
+      }
+    ],
+    "svgId": "biblioteca"
+  },
+  {
+    "id": 7,
+    "slug": "reitoria",
+    "nome": "Prédio 5 — Reitoria",
+    "numero": 5,
+    "tipo": "Administrativo",
+    "campus": "Campus Montes Claros",
+    "descricao": "Sede da administração superior: Gabinete do Reitor, pró-reitorias e diretorias, como a de Tecnologia da Informação (DTI), responsável pelo WebGiz e pela rede Wi-Fi.",
+    "cursosDoCentro": [],
+    "setores": [
+      "Gabinete do Reitor",
+      "Pró-Reitoria de Extensão — salas 202/203",
+      "Diretoria de Tecnologia da Informação (DTI) — 2º andar, sala 206"
+    ],
+    "servicos": [
+      "Atendimento administrativo",
+      "Suporte de TI e Wi-Fi (DTI)"
+    ],
+    "localizacao": "Prédio 5 — Campus Darcy Ribeiro",
+    "contato": {
+      "telefone": "(38) 3229-8101",
+      "email": "gabinete.reitor@unimontes.br"
+    },
+    "horarios": [
+      {
+        "horas": "08h às 18h"
+      }
+    ],
+    "svgId": "reitoria"
+  },
+  {
+    "id": 8,
+    "slug": "predio-6",
+    "nome": "Prédio 6",
+    "numero": 6,
+    "tipo": "Salas de aula",
+    "campus": "Campus Montes Claros",
+    "descricao": "Sede do Centro de Ciências Biológicas e da Saúde, com salas de aula e as coordenações dos cursos do centro.",
+    "centro": {
+      "sigla": "CCBS",
+      "nome": "Centro de Ciências Biológicas e da Saúde"
+    },
+    "cursosDoCentro": [
+      "Ciências Biológicas",
+      "Educação Física",
+      "Enfermagem",
+      "Farmácia",
+      "Medicina",
+      "Odontologia",
+      "Psicologia"
+    ],
+    "setores": [
+      "Direção do CCBS",
+      "Coordenações dos cursos do CCBS"
+    ],
+    "servicos": [
+      "Salas de aula"
+    ],
+    "localizacao": "Prédio 6 — Campus Darcy Ribeiro",
+    "contato": {},
+    "horarios": [
+      {
+        "horas": "07h às 22h"
+      }
+    ],
+    "svgId": "predio-6"
+  },
+  {
+    "id": 9,
+    "slug": "restaurante-universitario",
+    "nome": "Restaurante Universitário",
+    "numero": 10,
+    "tipo": "Alimentação",
+    "campus": "Campus Montes Claros",
+    "descricao": "Refeições balanceadas com preço subsidiado pelo Governo do Estado — em média 1.900 refeições por dia. Fica na entrada norte do campus-sede.",
+    "cursosDoCentro": [],
+    "setores": [],
+    "servicos": [
+      "Almoço",
+      "Jantar",
+      "Refeição para acadêmicos: R$ 2,50"
+    ],
+    "localizacao": "Prédio 10 — entrada norte do Campus Darcy Ribeiro",
+    "contato": {},
+    "horarios": [
+      {
+        "rotulo": "Almoço",
+        "horas": "10h30 às 13h30"
+      },
+      {
+        "rotulo": "Jantar",
+        "horas": "17h30 às 20h"
+      }
+    ],
+    "svgId": "ru"
+  },
+  {
+    "id": 10,
+    "slug": "centro-tecnologico",
+    "nome": "Centro Tecnológico (CT)",
+    "tipo": "Laboratório",
+    "campus": "Campus Montes Claros",
+    "descricao": "Espaço de aulas e laboratórios ligado ao CCET, usado pelo curso de Engenharia Civil.",
+    "cursosDoCentro": [],
+    "setores": [],
+    "servicos": [
+      "Laboratórios",
+      "Salas de aula"
+    ],
+    "localizacao": "Campus Darcy Ribeiro",
+    "contato": {},
+    "horarios": [],
+    "svgId": "centro-tecnologico"
+  },
+  {
+    "id": 11,
+    "slug": "centro-esportivo",
+    "nome": "Centro Esportivo Universitário (CEU)",
+    "tipo": "Esportivo",
+    "campus": "Campus Montes Claros",
+    "descricao": "Centro Esportivo Universitário Reitor João Valle Maurício: aulas de Educação Física, uso da comunidade acadêmica e projetos de futebol, natação, hidroginástica e tênis abertos à comunidade.",
+    "cursosDoCentro": [],
+    "setores": [
+      "Pró-Reitoria de Extensão"
+    ],
+    "servicos": [
+      "3 quadras poliesportivas",
+      "2 quadras de tênis",
+      "Pista de atletismo",
+      "Campo de futebol e campo society",
+      "Piscina olímpica",
+      "Academia"
+    ],
+    "localizacao": "Campus Darcy Ribeiro",
+    "contato": {
+      "telefone": "(38) 3229-8054",
+      "email": "ceu@unimontes.br"
+    },
+    "horarios": [
+      {
+        "horas": "07h às 19h"
+      }
+    ],
+    "svgId": "centro-esportivo"
+  }
+]

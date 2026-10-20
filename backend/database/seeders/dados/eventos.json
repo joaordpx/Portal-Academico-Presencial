@@ -1,0 +1,127 @@
+[
+  {
+    "id": 1,
+    "slug": "4-corrida-eles-com-elas-pela-vida",
+    "titulo": "4ª Corrida Eles com Elas pela Vida",
+    "descricao": "Corrida de 5 km do Hospital Universitário Clemente de Faria pela saúde mental e pela prevenção ao suicídio.",
+    "conteudo": [
+      "O Hospital Universitário Clemente de Faria (HUCF), vinculado à Unimontes, promove a 4ª edição da corrida Eles com Elas pela Vida, com percurso de cinco quilômetros.",
+      "A iniciativa une incentivo ao esporte, promoção da saúde mental e conscientização sobre a prevenção ao suicídio, reunindo comunidade acadêmica, pessoas com 60 anos ou mais e a população em geral.",
+      "A largada e a chegada são no Parque Cândido Canela. Os kits foram entregues no sábado (19/09), das 9h às 16h, no mesmo local."
+    ],
+    "tipo": "Comunitário",
+    "data": "2026-09-20",
+    "horario": "Largada às 8h",
+    "local": "Parque Cândido Canela",
+    "campus": "Montes Claros",
+    "imagem": "https://unimontes.br/wp-content/uploads/2026/06/WhatsApp-Image-2026-06-30-at-13.13.01-1.jpeg",
+    "origem": "manual",
+    "organizador": "Hospital Universitário Clemente de Faria (HUCF)",
+    "linkOficial": "https://unimontes.br/hospital-da-unimontes-abre-inscricoes-para-a-4a-corrida-eles-com-elas-pela-vida/"
+  },
+  {
+    "id": 2,
+    "slug": "seminario-audiovisual-unimontes",
+    "titulo": "Seminário Audiovisual Unimontes",
+    "descricao": "Painéis sobre jornalismo, desinformação, políticas públicas para o audiovisual e educação empreendedora.",
+    "conteudo": [
+      "A Pró-Reitoria de Extensão promove o Seminário Audiovisual Unimontes, destinado aos participantes inscritos.",
+      "A programação aborda jornalismo, desinformação, restrições aplicáveis ao período eleitoral, políticas públicas para o setor audiovisual e educação empreendedora."
+    ],
+    "tipo": "Acadêmico",
+    "data": "2026-09-23",
+    "dataFim": "2026-09-24",
+    "horario": "A partir das 14h",
+    "local": "Auditório do CCH — Prédio 2, Campus Darcy Ribeiro",
+    "campus": "Montes Claros",
+    "imagem": "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=1200&q=70",
+    "origem": "manual",
+    "organizador": "Pró-Reitoria de Extensão",
+    "linkOficial": "https://unimontes.br/comunicado/comunicado-programacao-do-seminario-audiovisual-unimontes%ef%bf%bc%ef%bf%bc%ef%bf%bc%ef%bf%bc/"
+  },
+  {
+    "id": 3,
+    "slug": "2-jornada-do-gpeg",
+    "titulo": "2ª Jornada do GPEG — 20 anos de pesquisas sobre gênero e violência",
+    "descricao": "Conferência, mesas-redondas, minicursos e lançamento de livros sobre gênero e violência no sertão norte-mineiro.",
+    "conteudo": [
+      "O Grupo de Pesquisa e Estudos Gênero e Violência (GPEG), vinculado ao Programa de Pós-Graduação em História (PPGH), celebra duas décadas de atuação com a 2ª Jornada do GPEG: 20 anos de pesquisas sobre gênero e violência no sertão norte-mineiro.",
+      "No dia 5 há credenciamento, minicursos e lançamento de livros; à noite, a professora Cristina Scheibe Wolff ministra a conferência “Gênero e Mulheridades: a consolidação de um campo de estudos”.",
+      "No dia 6 acontecem as mesas-redondas “O GPEG e a formação de pesquisadoras/es” e “Impactos social e acadêmico do GPEG na Unimontes e além”, além de sessões de comunicações orais. As atividades são presenciais, com transmissão on-line da conferência e das mesas."
+    ],
+    "tipo": "Acadêmico",
+    "data": "2026-10-05",
+    "dataFim": "2026-10-06",
+    "horario": "Programação ao longo do dia",
+    "local": "Campus Darcy Ribeiro (campus-sede)",
+    "campus": "Montes Claros",
+    "imagem": "https://unimontes.br/wp-content/uploads/2026/10/Jornada-3.5eca2193507c436586ef.webp",
+    "origem": "manual",
+    "organizador": "GPEG — Programa de Pós-Graduação em História (PPGH)",
+    "linkOficial": "https://unimontes.br/2a-jornada-do-gpeg-sera-realizada-nos-dias-5-e-6-de-outubro/"
+  },
+  {
+    "id": 4,
+    "slug": "semana-municipal-de-inovacao",
+    "titulo": "Semana Municipal de Inovação",
+    "descricao": "Palestras, oficinas, painéis e a final do Hackathon InovaMoc — com a Unimontes entre as instituições parceiras.",
+    "conteudo": [
+      "Com o tema “Conectando pessoas, ideias e oportunidades para um futuro mais inovador”, a Semana Municipal de Inovação é realizada pelo Norte Valley – Ecossistema de Inovação, com a Unimontes como parceira por meio da Coordenadoria de Inovação Tecnológica (CIT).",
+      "A programação tem palestras, oficinas, painéis, experiências práticas, rodas de conversa e a grande final do Hackathon InovaMoc, em vários locais de Montes Claros e de outras cidades do Norte de Minas.",
+      "Equipes de três a cinco integrantes podem se inscrever até 7 de outubro. A abertura oficial é no dia 19, às 19h."
+    ],
+    "tipo": "Comunitário",
+    "data": "2026-10-19",
+    "dataFim": "2026-10-23",
+    "horario": "Abertura no dia 19, às 19h",
+    "local": "Vários locais de Montes Claros e do Norte de Minas",
+    "campus": "Montes Claros",
+    "imagem": "https://unimontes.br/wp-content/uploads/2026/10/IDEATHON-1-e1791291966974.jpeg",
+    "origem": "manual",
+    "organizador": "Norte Valley, com a Coordenadoria de Inovação Tecnológica (CIT)",
+    "linkOficial": "https://unimontes.br/unimontes-e-parceira-na-realizacao-da-semana-de-inovacao-conectando-pessoas-ideias-e-oportunidades/",
+    "inscricoesAbertas": true
+  },
+  {
+    "id": 5,
+    "slug": "iii-congresso-internacional-de-educacao-e-diversidade",
+    "titulo": "III Congresso Internacional de Educação e Diversidade",
+    "descricao": "Redes de apoio, direitos globais, diferenças e desigualdades — palestras, minicursos, oficinas e apresentações de trabalhos.",
+    "conteudo": [
+      "O III Congresso Internacional de Educação e Diversidade: Redes de Apoio, Direitos Globais, Diferenças e Desigualdades é uma iniciativa do Departamento de Educação da Unimontes, com apoio de diversos parceiros.",
+      "A programação reúne palestras, minicursos, oficinas, mesas-redondas e apresentações de trabalhos, com debates sobre diversidade, inclusão e formação de professores.",
+      "Junto ao congresso acontece o II Seminário do Mestrado Profissional em Educação Inclusiva em Rede Nacional (Profei – Unimontes)."
+    ],
+    "tipo": "Acadêmico",
+    "data": "2026-11-04",
+    "dataFim": "2026-11-06",
+    "horario": "Programação a divulgar",
+    "local": "Local a confirmar",
+    "campus": "Montes Claros",
+    "imagem": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=70",
+    "origem": "manual",
+    "organizador": "Departamento de Educação",
+    "linkOficial": "https://unimontes.br/comunicado/comunicado-unimontes-convida-comunidade-academica-a-contribuir-com-a-programacao-do-iii-congresso-internacional-de-educacao-e-diversidade/"
+  },
+  {
+    "id": 6,
+    "slug": "iv-forum-enfrentamento-do-cancer",
+    "titulo": "IV Fórum de Enfrentamento do Câncer e I Congresso dos NQSBS e RASB",
+    "descricao": "Edição especial do fórum Conecta Minas Macro Norte, promovida pelo Núcleo de Qualidade em Saúde Bucal do HUCF.",
+    "conteudo": [
+      "O Núcleo de Qualidade em Saúde Bucal do Hospital Universitário Clemente de Faria (NQSB/HUCF) promove o IV Fórum de Discussão e Enfrentamento do Câncer no Estado de Minas Gerais – Conecta Minas Macro Norte (Edição Especial) e o I Congresso dos Núcleos de Qualidade em Saúde Bucal (NQSBS) e Hospitais da Rede de Atenção à Saúde Bucal (RASB).",
+      "A iniciativa é destinada a profissionais, pesquisadores, docentes, estudantes, residentes e gestores de equipes de saúde bucal de hospitais de Minas Gerais. A submissão de trabalhos científicos vai até 9 de outubro."
+    ],
+    "tipo": "Acadêmico",
+    "data": "2026-11-23",
+    "dataFim": "2026-11-24",
+    "horario": "Programação nos dois dias",
+    "local": "Auditório da AMANS — Av. Major Alexandre Rodrigues, 416, Ibituruna",
+    "campus": "Montes Claros",
+    "imagem": "https://unimontes.br/wp-content/uploads/2026/10/II-Capa-padrao-Materias-3.png",
+    "origem": "manual",
+    "organizador": "Núcleo de Qualidade em Saúde Bucal do HUCF",
+    "linkOficial": "https://unimontes.br/unimontes-abre-inscricoes-para-forum-de-discussao-e-enfrentamento-do-cancer-e-congresso-do-nqsbs-e-rasb/",
+    "inscricoesAbertas": true
+  }
+]
