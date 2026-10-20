@@ -178,11 +178,18 @@ export interface Edital {
 
 /* ─────────────── Cursos ─────────────── */
 
-export type Grau = "Bacharelado" | "Licenciatura" | "Técnico" | "Tecnólogo" | "Especialização";
+export type Grau = "Bacharelado" | "Licenciatura" | "Tecnólogo";
 
 export type Modalidade = "Presencial" | "EAD" | "Híbrido";
 
-export type Turno = "Integral" | "Matutino" | "Vespertino" | "Noturno";
+export type Turno = "Integral" | "Diurno" | "Matutino" | "Vespertino" | "Noturno";
+
+/** Vagas de ingresso de um curso em um campus */
+export interface VagasCurso {
+  campus: string;
+  quantidade: number;
+  periodicidade: "semestrais" | "anuais" | null;
+}
 
 export interface MercadoItem {
   titulo: string;
@@ -190,9 +197,8 @@ export interface MercadoItem {
 }
 
 export interface CursoDocumentos {
-  matrizUrl?: string;
-  ppcUrl?: string;
-  ementasUrl?: string;
+  matrizUrl: string | null;
+  ppcUrl: string | null;
 }
 
 export interface InfoItem {
@@ -205,6 +211,47 @@ export interface CursoDocLink {
   url?: string;
   destaque?: boolean; // exibir em destaque (mais acessados)
   desc?: string; // descrição curta (usada nos cards em destaque)
+}
+
+/* ── Nível 1: modelo CRU (exatamente o que a API devolve) ── */
+
+/** Item de listagem — GET /api/cursos */
+export interface CursoResumo {
+  slug: string;
+  nome: string;
+  grau: Grau;
+  modalidade: Modalidade;
+  campi: string[]; // um curso pode ser ofertado em vários campi (sede primeiro)
+  centro: string | null; // sigla do centro de ensino
+  turnos: Turno[]; // turnos das entradas de ingressantes
+  area: string;
+  duracao: number | null; // nº de períodos (semestres)
+  imagem: string | null;
+}
+
+/** Registro completo do curso — GET /api/cursos/{slug} */
+export interface Curso extends CursoResumo {
+  vagas: VagasCurso[];
+  descricao: string[]; // parágrafos (no banco: text separado por linha em branco)
+  perfilEgresso: string[];
+  mercadoTrabalho: MercadoItem[];
+  coordenacao: {
+    coordenador: string | null;
+    email: string | null;
+    telefone: string | null;
+    localizacao: string | null;
+  };
+  documentos: CursoDocumentos;
+  regulamentoTccUrl: string | null;
+  paginaOficial: string | null; // página do curso em unimontes.br
+  documentosExtras: { label: string; url: string }[];
+}
+
+/* ── Nível 2: VIEW derivada (formatada para a UI; não persiste) ── */
+
+export interface CursoDado {
+  rotulo: string;
+  valor: string;
 }
 
 /** Aba "Estágio e TCC" — bloco de estágio */
@@ -225,56 +272,28 @@ export interface TccInfo {
   documentos: CursoDocLink[];
 }
 
-/** Aba "Coordenação" — contato da coordenação do curso */
+/** Aba "Coordenação" — contato da coordenação, com as lacunas já resolvidas */
 export interface CoordenacaoInfo {
   intro: string;
   coordenador: string;
-  email: string;
-  telefone: string;
-  localizacao: string;
+  email?: string;
+  telefone?: string;
+  localizacao?: string;
   horarioAtendimento: string;
 }
 
-/* ── Nível 1: modelo CRU (espelha a futura tabela/relações do backend) ── */
-
-/** Item de listagem — campos crus mínimos (/cursos) */
-export interface CursoResumo {
-  slug: string;
-  nome: string;
-  grau: Grau;
-  modalidade: Modalidade;
-  campus: string;
-  centro: string;
-  turno: Turno;
-  area: string;
-  duracao: number; // nº de períodos (semestres)
-  imagem: string;
-}
-
-/** Registro completo do curso — o que a API/tabela deve retornar (/courses/{slug}) */
-export interface Curso extends CursoResumo {
-  vagas: number;
-  descricao: string[]; // parágrafos (no banco: text)
-  perfilEgresso: string[];
-  mercadoTrabalho: MercadoItem[];
-  documentos: CursoDocumentos;
-  estagio: EstagioInfo;
-  tcc: TccInfo;
-  arquivos: CursoDocLink[]; // aba "Documentos": repositório de arquivos do curso
-  coordenacao: CoordenacaoInfo;
-}
-
-/* ── Nível 2: VIEW derivada (formatada para a UI; não persiste) ── */
-
-export interface CursoDado {
-  rotulo: string;
-  valor: string;
-}
-
-/** Detalhe pronto para renderizar — derivado de `Curso` no serviço */
-export interface CursoDetalheView extends Curso {
+/**
+ * Detalhe pronto para renderizar — derivado de `Curso` no serviço.
+ * Estágio, TCC e a lista de arquivos são montados no frontend a partir das
+ * regras gerais da universidade e dos links que o curso tiver cadastrados.
+ */
+export interface CursoDetalheView extends Omit<Curso, "coordenacao"> {
   eyebrow: string; // derivado de grau, ex.: "Graduação Bacharelado"
-  tipo: string; // derivado de turno
+  tipo: string; // derivado de turnos, ex.: "Matutino e Noturno"
   duracaoLabel: string; // derivado de duracao, ex.: "4 anos"
   dados: CursoDado[]; // pares rótulo/valor montados p/ exibição
+  estagio: EstagioInfo;
+  tcc: TccInfo;
+  arquivos: CursoDocLink[]; // aba "Documentos"
+  coordenacao: CoordenacaoInfo;
 }

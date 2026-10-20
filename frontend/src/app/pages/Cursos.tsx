@@ -17,25 +17,21 @@ import {
 import { PageHeader } from "../components/layout/PageHeader";
 import { Reveal } from "../components/shared/Reveal";
 import { ImageWithFallback } from "../components/shared/ImageWithFallback";
+import { ErroCarregamento } from "../components/shared/ErroCarregamento";
 import { getCursos } from "../../services/cursoService";
-import type { CursoResumo } from "../../types";
+import type { CursoResumo, Turno } from "../../types";
 
-const filters = {
-  centro: ["Todos", "CCET", "CCSA", "CCBS", "CCH"],
-  turno: ["Todos", "Integral", "Matutino", "Vespertino", "Noturno"],
-  grau: ["Todos", "Bacharelado", "Licenciatura", "Técnico", "Tecnólogo", "Especialização"],
-  area: [
-    "Todas",
-    "Ciências Agrárias",
-    "Ciências Biológicas",
-    "Ciências Sociais e Aplicadas",
-    "Exatas e da Terra",
-    "Ciências Humanas",
-    "Ciências da Saúde",
-    "Engenharias",
-    "Linguística, Letras e Artes",
-  ],
-};
+const CAMPUS_SEDE = "Montes Claros";
+
+/** Turnos na ordem do dia, não alfabética */
+const ORDEM_TURNOS: Turno[] = ["Integral", "Diurno", "Matutino", "Vespertino", "Noturno"];
+
+/** Valores distintos em ordem alfabética (pt-BR) */
+function unicos(valores: (string | null)[]) {
+  return Array.from(new Set(valores.filter((v): v is string => !!v))).sort((a, b) =>
+    a.localeCompare(b, "pt-BR"),
+  );
+}
 
 const sortOptions = [
   { id: "alfabetica", label: "Ordem Alfabética" },
@@ -51,9 +47,7 @@ const PAGE_SIZE = 8;
 const tagStyles: Record<string, string> = {
   Bacharelado: "bg-[#00B894]/12 text-[#0a7d68]",
   Licenciatura: "bg-[#6E3AFF]/12 text-[#6E3AFF]",
-  Técnico: "bg-[#2B6CFF]/12 text-[#2B6CFF]",
   Tecnólogo: "bg-[#FFB800]/18 text-[#9a7000]",
-  Especialização: "bg-[#FF5C8A]/12 text-[#d63864]",
   Presencial: "bg-[#1a1a1a]/[0.06] text-[#1a1a1a]/65",
   EAD: "bg-[#6E3AFF]/12 text-[#6E3AFF]",
   Híbrido: "bg-[#FFB800]/18 text-[#9a7000]",
@@ -74,6 +68,9 @@ function Tag({ label }: { label: string }) {
 export function Cursos() {
   const [courses, setCourses] = useState<CursoResumo[]>([]);
   const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState(false);
+  const [tentativa, setTentativa] = useState(0);
+  const [campus, setCampus] = useState("Todos");
   const [centro, setCentro] = useState("Todos");
   const [turno, setTurno] = useState("Todos");
   const [grau, setGrau] = useState("Todos");
@@ -88,13 +85,33 @@ export function Cursos() {
     let ativo = true;
     getCursos()
       .then((data) => ativo && setCourses(data))
+      .catch(() => ativo && setErro(true))
       .finally(() => ativo && setLoading(false));
     return () => {
       ativo = false;
     };
-  }, []);
+  }, [tentativa]);
 
-  const activeFilters = [centro, turno, grau, area].filter(
+  function recarregar() {
+    setErro(false);
+    setLoading(true);
+    setTentativa((t) => t + 1);
+  }
+
+  // Opções de filtro derivadas dos próprios cursos: um valor novo cadastrado
+  // no painel aparece aqui sem mexer no frontend.
+  const opcoes = useMemo(() => {
+    const outrosCampi = unicos(courses.flatMap((c) => c.campi)).filter((c) => c !== CAMPUS_SEDE);
+    return {
+      campus: ["Todos", CAMPUS_SEDE, ...outrosCampi],
+      centro: ["Todos", ...unicos(courses.map((c) => c.centro))],
+      turno: ["Todos", ...ORDEM_TURNOS.filter((t) => courses.some((c) => c.turnos.includes(t)))],
+      grau: ["Todos", ...unicos(courses.map((c) => c.grau))],
+      area: ["Todas", ...unicos(courses.map((c) => c.area))],
+    };
+  }, [courses]);
+
+  const activeFilters = [campus, centro, turno, grau, area].filter(
     (f) => f !== "Todos" && f !== "Todas",
   ).length;
 
@@ -102,19 +119,22 @@ export function Cursos() {
     const q = query.trim().toLowerCase();
     const result = courses.filter(
       (c) =>
+        (campus === "Todos" || c.campi.includes(campus)) &&
         (centro === "Todos" || c.centro === centro) &&
-        (turno === "Todos" || c.turno === turno) &&
+        (turno === "Todos" || (c.turnos as string[]).includes(turno)) &&
         (grau === "Todos" || c.grau === grau) &&
         (area === "Todas" || c.area === area) &&
         (q === "" || c.nome.toLowerCase().includes(q) || c.area.toLowerCase().includes(q)),
     );
 
+    // Cursos sem duração informada vão para o fim em qualquer ordenação por duração
     return [...result].sort((a, b) => {
-      if (sort === "duracao-asc") return a.duracao - b.duracao;
-      if (sort === "duracao-desc") return b.duracao - a.duracao;
-      return a.nome.localeCompare(b.nome, "pt-BR");
+      if (sort === "duracao-asc") return (a.duracao ?? 999) - (b.duracao ?? 999);
+      if (sort === "duracao-desc") return (b.duracao ?? -1) - (a.duracao ?? -1);
+      // Mesmo nome em graus diferentes (ex.: Bacharelado e Licenciatura) desempata pelo grau
+      return a.nome.localeCompare(b.nome, "pt-BR") || a.grau.localeCompare(b.grau, "pt-BR");
     });
-  }, [courses, centro, turno, grau, area, query, sort]);
+  }, [courses, campus, centro, turno, grau, area, query, sort]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
@@ -127,6 +147,7 @@ export function Cursos() {
   }
 
   function clearAll() {
+    setCampus("Todos");
     setCentro("Todos");
     setTurno("Todos");
     setGrau("Todos");
@@ -140,7 +161,7 @@ export function Cursos() {
       <PageHeader
         eyebrow="Cursos"
         title="Cursos da Unimontes."
-        description="Cursos de graduação presencial organizados por centros de ensino, áreas e turnos."
+        description="Cursos de graduação presenciais da Unimontes, organizados por campus, centro de ensino, área e turno."
         icon={BookOpen}
       />
 
@@ -206,21 +227,22 @@ export function Cursos() {
                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                 className="overflow-hidden"
               >
-                <div className="mt-5 grid grid-cols-1 gap-6 rounded-[10px] border border-[#e0e0e0] bg-[#fafafa] p-6 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="mt-5 grid grid-cols-1 gap-6 rounded-[10px] border border-[#e0e0e0] bg-[#fafafa] p-6 sm:grid-cols-2 lg:grid-cols-3">
                   {[
+                    { label: "Campus", value: campus, set: setCampus, opts: opcoes.campus },
                     {
                       label: "Centro de Ensino",
                       value: centro,
                       set: setCentro,
-                      opts: filters.centro,
+                      opts: opcoes.centro,
                     },
-                    { label: "Turno", value: turno, set: setTurno, opts: filters.turno },
-                    { label: "Grau", value: grau, set: setGrau, opts: filters.grau },
+                    { label: "Turno", value: turno, set: setTurno, opts: opcoes.turno },
+                    { label: "Grau", value: grau, set: setGrau, opts: opcoes.grau },
                     {
                       label: "Área do Conhecimento",
                       value: area,
                       set: setArea,
-                      opts: filters.area,
+                      opts: opcoes.area,
                     },
                   ].map((f) => (
                     <div key={f.label}>
@@ -304,6 +326,11 @@ export function Cursos() {
                 </div>
               ))}
             </div>
+          ) : erro ? (
+            <ErroCarregamento
+              titulo="Não foi possível carregar os cursos"
+              onTentarNovamente={recarregar}
+            />
           ) : paginated.length === 0 ? (
             <div className="py-24 text-center">
               <p className="text-[18px] font-bold text-[#1a1a1a]">Nenhum curso encontrado</p>
@@ -328,7 +355,7 @@ export function Cursos() {
                     >
                       <div className="relative aspect-[16/10] overflow-hidden">
                         <ImageWithFallback
-                          src={c.imagem}
+                          src={c.imagem ?? undefined}
                           alt={c.nome}
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
@@ -343,12 +370,20 @@ export function Cursos() {
                         </h3>
                         <dl className="mt-3 space-y-1 text-[12.5px] text-[#1a1a1a]/60">
                           <div className="flex gap-1.5">
-                            <dt className="font-semibold">Turno:</dt>
-                            <dd>{c.turno}</dd>
+                            <dt className="font-semibold">
+                              {c.turnos.length > 1 ? "Turnos:" : "Turno:"}
+                            </dt>
+                            <dd>{c.turnos.join(" · ")}</dd>
                           </div>
                           <div className="flex gap-1.5">
                             <dt className="font-semibold">Duração:</dt>
-                            <dd>{c.duracao} semestres</dd>
+                            <dd>{c.duracao ? `${c.duracao} semestres` : "consulte o PPC"}</dd>
+                          </div>
+                          <div className="flex gap-1.5">
+                            <dt className="font-semibold">
+                              {c.campi.length > 1 ? "Campi:" : "Campus:"}
+                            </dt>
+                            <dd className="line-clamp-1">{c.campi.join(", ")}</dd>
                           </div>
                         </dl>
                         <span className="mt-4 inline-flex items-center gap-1.5 pt-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a] transition-colors group-hover:text-[#6E3AFF]">
@@ -371,7 +406,7 @@ export function Cursos() {
                   >
                     <div className="h-24 w-32 shrink-0 overflow-hidden rounded-[12px]">
                       <ImageWithFallback
-                        src={c.imagem}
+                        src={c.imagem ?? undefined}
                         alt={c.nome}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
@@ -385,7 +420,14 @@ export function Cursos() {
                         {c.nome}
                       </h3>
                       <p className="mt-1 text-[12.5px] text-[#1a1a1a]/60">
-                        {c.centro} · {c.campus} · {c.turno} · {c.duracao} semestres
+                        {[
+                          c.centro,
+                          c.campi.join(", "),
+                          c.turnos.join("/"),
+                          c.duracao && `${c.duracao} semestres`,
+                        ]
+                          .filter(Boolean)
+                          .join(" · ")}
                       </p>
                     </div>
                     <ArrowUpRight className="hidden h-5 w-5 shrink-0 text-[#1a1a1a]/30 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#6E3AFF] sm:block" />

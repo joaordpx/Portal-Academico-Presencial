@@ -32,34 +32,72 @@ const TABS = [
 export function CursoDetalhe() {
   const { slug } = useParams();
   const [tab, setTab] = useState("sobre");
-  // Guarda o slug junto com os dados: assim "carregando" é derivado da
-  // comparação com o slug atual, sem precisar de setState dentro do efeito.
+  const [tentativa, setTentativa] = useState(0);
+  // Guarda a chave (slug + tentativa) junto com o resultado: assim "carregando"
+  // é derivado da comparação com a chave atual, sem setState dentro do efeito.
   const [carregado, setCarregado] = useState<{
-    slug: string;
+    chave: string;
     curso: CursoDetalheType | null;
+    erro: boolean;
   } | null>(null);
 
-  const slugAtual = slug ?? "direito";
+  const slugAtual = slug ?? "";
+  const chave = `${slugAtual}:${tentativa}`;
 
   useEffect(() => {
     let ativo = true;
-    getCurso(slugAtual).then((data) => {
-      if (ativo) setCarregado({ slug: slugAtual, curso: data });
-    });
+    getCurso(slugAtual)
+      .then((data) => ativo && setCarregado({ chave, curso: data, erro: false }))
+      .catch(() => ativo && setCarregado({ chave, curso: null, erro: true }));
     return () => {
       ativo = false;
     };
-  }, [slugAtual]);
+  }, [slugAtual, chave]);
 
-  const loading = carregado?.slug !== slugAtual;
+  const loading = carregado?.chave !== chave;
   const curso = carregado?.curso ?? null;
 
-  if (loading || !curso) {
+  if (loading) {
     return (
       <div className="mx-auto max-w-[1400px] px-6 py-24 lg:px-12">
         <div className="h-4 w-40 animate-pulse rounded bg-[#f0f0f0]" />
         <div className="mt-6 h-16 w-2/3 animate-pulse rounded bg-[#f0f0f0]" />
         <div className="mt-10 h-64 w-full animate-pulse rounded bg-[#f0f0f0]" />
+      </div>
+    );
+  }
+
+  if (!curso) {
+    const erro = carregado?.erro;
+    return (
+      <div className="mx-auto max-w-[1400px] px-6 py-24 text-center lg:px-12" role="alert">
+        <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#1a1a1a]/40">
+          Cursos
+        </div>
+        <h1 className="mt-4 text-[32px] font-bold tracking-[-0.025em] text-[#1a1a1a]">
+          {erro ? "Não foi possível carregar o curso" : "Curso não encontrado"}
+        </h1>
+        <p className="mx-auto mt-3 max-w-md text-[15px] text-[#1a1a1a]/60">
+          {erro
+            ? "Verifique sua conexão e tente novamente em instantes."
+            : "O endereço pode ter mudado. Confira a lista completa de cursos de graduação."}
+        </p>
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          {erro && (
+            <button
+              onClick={() => setTentativa((t) => t + 1)}
+              className="inline-flex items-center gap-2 rounded-[6px] border border-[#1a1a1a] px-5 py-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a] transition-colors hover:border-[#6E3AFF] hover:text-[#6E3AFF]"
+            >
+              Tentar novamente
+            </button>
+          )}
+          <Link
+            to="/cursos"
+            className="inline-flex items-center gap-2 rounded-[6px] bg-[#1a1a1a] px-5 py-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#6E3AFF]"
+          >
+            Ver todos os cursos
+          </Link>
+        </div>
       </div>
     );
   }
@@ -96,7 +134,7 @@ export function CursoDetalhe() {
               </motion.h1>
               <div className="mt-12 grid max-w-xl grid-cols-3 gap-0 border-y border-[#e5e5e5]">
                 {[
-                  ["Tipo", curso.tipo],
+                  [curso.turnos.length > 1 ? "Turnos" : "Turno", curso.tipo],
                   ["Duração", curso.duracaoLabel],
                   ["Grau", curso.grau],
                 ].map(([k, v], i) => (
@@ -117,7 +155,7 @@ export function CursoDetalhe() {
             <div className="lg:col-span-4">
               <div className="overflow-hidden rounded-[6px] border border-[#e5e5e5]">
                 <ImageWithFallback
-                  src={curso.imagem}
+                  src={curso.imagem ?? undefined}
                   alt={`Curso de ${curso.nome}`}
                   className="aspect-[16/10] w-full object-cover"
                 />
@@ -235,51 +273,67 @@ function Sobre({ curso }: { curso: CursoDetalheType }) {
         </div>
       </section>
 
-      {/* Perfil do egresso — seção horizontal */}
-      <section>
-        <SectionTitle eyebrow="Perfil do egresso" />
-        <ul className="mt-6 grid grid-cols-1 gap-x-12 gap-y-0 sm:grid-cols-2">
-          {curso.perfilEgresso.map((p) => (
-            <li key={p} className="flex items-start gap-4 border-b border-[#e5e5e5] py-4">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#6E3AFF]" strokeWidth={2} />
-              <span className="text-[15px] leading-[1.55] text-[#1a1a1a]/80">{p}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
+      {/* Perfil do egresso — seção horizontal (só quando o curso informar) */}
+      {curso.perfilEgresso.length > 0 && (
+        <section>
+          <SectionTitle eyebrow="Perfil do egresso" />
+          <ul className="mt-6 grid grid-cols-1 gap-x-12 gap-y-0 sm:grid-cols-2">
+            {curso.perfilEgresso.map((p) => (
+              <li key={p} className="flex items-start gap-4 border-b border-[#e5e5e5] py-4">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#6E3AFF]" strokeWidth={2} />
+                <span className="text-[15px] leading-[1.55] text-[#1a1a1a]/80">{p}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
-      {/* Mercado de trabalho — seção horizontal */}
-      <section>
-        <SectionTitle eyebrow="Mercado de trabalho" />
-        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {curso.mercadoTrabalho.map((m, i) => (
-            <Reveal key={m.titulo} delay={(i % 4) * 0.04}>
-              <div className="h-full rounded-[8px] border border-[#e5e5e5] p-5">
-                <div className="text-[15px] font-bold tracking-[-0.015em] text-[#1a1a1a]">
-                  {m.titulo}
+      {/* Mercado de trabalho — seção horizontal (só quando o curso informar) */}
+      {curso.mercadoTrabalho.length > 0 && (
+        <section>
+          <SectionTitle eyebrow="Mercado de trabalho" />
+          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {curso.mercadoTrabalho.map((m, i) => (
+              <Reveal key={m.titulo} delay={(i % 4) * 0.04}>
+                <div className="h-full rounded-[8px] border border-[#e5e5e5] p-5">
+                  <div className="text-[15px] font-bold tracking-[-0.015em] text-[#1a1a1a]">
+                    {m.titulo}
+                  </div>
+                  <p className="mt-2 text-[13px] leading-[1.55] text-[#1a1a1a]/65">{m.descricao}</p>
                 </div>
-                <p className="mt-2 text-[13px] leading-[1.55] text-[#1a1a1a]/65">{m.descricao}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
 
+/** Documentos oficiais ficam no site da Unimontes — abrem em nova aba */
+const externo = (href?: string | null) =>
+  href?.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {};
+
 function DocButton({
   icon: Icon,
   label,
-  href = "#",
+  href,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
-  href?: string;
+  href?: string | null;
 }) {
+  if (!href) {
+    return (
+      <p className="text-[13px] text-[#1a1a1a]/50">
+        Documento ainda não publicado — solicite à coordenação do curso.
+      </p>
+    );
+  }
   return (
     <a
       href={href}
+      {...externo(href)}
       className="group inline-flex items-center gap-2.5 rounded-[6px] border border-[#e5e5e5] px-4 py-2.5 text-[12px] font-bold uppercase tracking-[0.12em] text-[#1a1a1a] transition-colors hover:border-[#6E3AFF] hover:text-[#6E3AFF]"
     >
       <Icon className="h-4 w-4" />
@@ -294,8 +348,10 @@ function MatrizPPC({ curso }: { curso: CursoDetalheType }) {
       eyebrow: "Currículo",
       title: "Matriz Curricular",
       paragrafos: [
-        `A matriz curricular do curso de ${curso.nome} está organizada em ${curso.duracao} períodos semestrais, totalizando 3.700 horas, distribuídas em disciplinas obrigatórias, optativas, atividades complementares, estágio supervisionado e trabalho de conclusão de curso.`,
-        "O currículo contempla as áreas de formação fundamental, profissional e prática, garantindo uma formação sólida e completa para o exercício da profissão.",
+        curso.duracao
+          ? `A estrutura curricular do curso de ${curso.nome} está organizada em ${curso.duracao} períodos semestrais, com disciplinas, atividades complementares e, quando previstos, estágio e trabalho de conclusão de curso.`
+          : `A estrutura curricular do curso de ${curso.nome} reúne as disciplinas, os períodos e a carga horária do curso.`,
+        "Consulte o documento oficial para ver disciplinas, períodos e carga horária.",
       ],
       action: { icon: Download, label: "Ver matriz curricular", href: curso.documentos.matrizUrl },
     },
@@ -313,9 +369,9 @@ function MatrizPPC({ curso }: { curso: CursoDetalheType }) {
       title: "Ementas e Disciplinas",
       paragrafos: [
         "As ementas descrevem o conteúdo programático de cada disciplina oferecida no curso, incluindo objetivos, bibliografia básica e complementar, metodologia e sistema de avaliação.",
-        `Consulte as ementas para conhecer em detalhes os temas abordados em cada disciplina do curso de ${curso.nome}.`,
+        "As ementas integram o Projeto Pedagógico do Curso (PPC) e também podem ser solicitadas à coordenação do curso.",
       ],
-      action: { icon: BookOpen, label: "Consultar ementas", href: curso.documentos.ementasUrl },
+      action: { icon: BookOpen, label: "Consultar ementas no PPC", href: curso.documentos.ppcUrl },
     },
   ];
 
@@ -462,6 +518,7 @@ function Documentos({ curso }: { curso: CursoDetalheType }) {
               <a
                 key={a.label}
                 href={a.url ?? "#"}
+                {...externo(a.url)}
                 className="group flex h-full flex-col rounded-[10px] border border-[#e5e5e5] bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#6E3AFF]/50 hover:shadow-[0_10px_28px_rgba(110,58,255,0.12)]"
               >
                 <span className="flex h-11 w-11 items-center justify-center rounded-[8px] bg-[#6E3AFF]/10 text-[#6E3AFF]">
@@ -499,6 +556,7 @@ function Documentos({ curso }: { curso: CursoDetalheType }) {
               <a
                 key={a.label}
                 href={a.url ?? "#"}
+                {...externo(a.url)}
                 className="group flex items-center justify-between gap-3 rounded-[8px] border border-[#e5e5e5] bg-white px-4 py-3.5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#6E3AFF]/50"
               >
                 <span className="flex items-center gap-3">
@@ -519,16 +577,23 @@ function Documentos({ curso }: { curso: CursoDetalheType }) {
 
 function Coordenacao({ curso }: { curso: CursoDetalheType }) {
   const c = curso.coordenacao;
-  const linhas = [
+  // Contatos não cadastrados ficam de fora, em vez de exibir campo vazio
+  const linhas: { icon: typeof User; label: string; value: string; href?: string }[] = [
     { icon: User, label: "Coordenador(a)", value: c.coordenador },
-    { icon: Mail, label: "E-mail", value: c.email, href: `mailto:${c.email}` },
-    {
-      icon: Phone,
-      label: "Telefone",
-      value: c.telefone,
-      href: `tel:${c.telefone.replace(/[^\d+]/g, "")}`,
-    },
-    { icon: MapPin, label: "Localização", value: c.localizacao },
+    ...(c.email
+      ? [{ icon: Mail, label: "E-mail", value: c.email, href: `mailto:${c.email}` }]
+      : []),
+    ...(c.telefone
+      ? [
+          {
+            icon: Phone,
+            label: "Telefone",
+            value: c.telefone,
+            href: `tel:${c.telefone.replace(/[^\d+]/g, "")}`,
+          },
+        ]
+      : []),
+    ...(c.localizacao ? [{ icon: MapPin, label: "Localização", value: c.localizacao }] : []),
     { icon: Clock, label: "Horário de atendimento", value: c.horarioAtendimento },
   ];
 
@@ -567,12 +632,14 @@ function Coordenacao({ curso }: { curso: CursoDetalheType }) {
         </ul>
       </div>
 
-      <a
-        href={`mailto:${c.email}`}
-        className="mt-6 inline-flex items-center gap-2 rounded-[6px] bg-[#1a1a1a] px-5 py-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#6E3AFF]"
-      >
-        <Mail className="h-4 w-4" /> Falar com a coordenação
-      </a>
+      {c.email && (
+        <a
+          href={`mailto:${c.email}`}
+          className="mt-6 inline-flex items-center gap-2 rounded-[6px] bg-[#1a1a1a] px-5 py-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#6E3AFF]"
+        >
+          <Mail className="h-4 w-4" /> Falar com a coordenação
+        </a>
+      )}
     </section>
   );
 }
