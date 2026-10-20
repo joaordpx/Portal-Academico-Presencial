@@ -1,0 +1,1511 @@
+[
+  {
+    "slug": "administracao",
+    "nome": "Administração",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCSA",
+    "area": "Ciências Sociais Aplicadas",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=70",
+    "descricao": "A profissão de Administrador é regulamentada pela Lei Federal nº 4.769/65. O administrador é o profissional capacitado para o gerenciamento das atividades em empresas públicas e privadas, com o uso do planejamento, da organização, da direção e do controle.\n\nPara isso, gerencia recursos financeiros, humanos, materiais e tecnológicos, com o objetivo de atingir as metas definidas pelas organizações.",
+    "turnos": [
+      "Matutino",
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros",
+      "Brasília de Minas"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 35,
+        "periodicidade": "semestrais"
+      },
+      {
+        "campus": "Brasília de Minas",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof.ª Dr.ª Simarly Maria Soares",
+    "email": "administracao@unimontes.br",
+    "telefone": "(38) 3229-8252",
+    "localizacao": "Prédio 1 — Centro de Ciências Sociais Aplicadas (CCSA), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2024/02/Estrutura_2024-Administracao.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/administracao/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "agronomia",
+    "nome": "Agronomia",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCET",
+    "area": "Ciências Agrárias",
+    "duracao": 10,
+    "imagem": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=800&q=70",
+    "descricao": "Agronomia é a ciência que estuda a cadeia produtiva de alimentos destinados ao consumo humano e animal, o planejamento e a implantação de projetos paisagísticos e a recuperação de áreas degradadas.\n\nO engenheiro agrônomo pode atuar como profissional autônomo ou em empresas públicas e privadas, elaborando, implantando, coordenando e assessorando projetos ligados ao setor agropecuário.",
+    "turnos": [
+      "Diurno"
+    ],
+    "campi": [
+      "Janaúba"
+    ],
+    "vagas": [
+      {
+        "campus": "Janaúba",
+        "quantidade": 28,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof. Dr. Carlos Eduardo Corsato",
+    "email": "agronomia@unimontes.br",
+    "telefone": "(38) 3229-8424",
+    "localizacao": "Campus Janaúba — Av. Reinaldo Viana, 2630, Bico da Pedra, Janaúba/MG",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2019/03/agronomia.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/agronomia/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "artes-visuais",
+    "nome": "Artes Visuais",
+    "grau": "Licenciatura",
+    "modalidade": "Presencial",
+    "centro": "CCH",
+    "area": "Linguística, Letras e Artes",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=800&q=70",
+    "descricao": "As Artes Visuais se inserem no universo de imagens do mundo contemporâneo — analógicas e digitais, estáticas e em movimento — tanto como poéticas artísticas quanto como objeto de estudo, pesquisa e reflexão.\n\nA licenciatura habilita para a docência na Educação Básica e para a atuação em espaços de educação não formal, como ateliês, museus, casas de cultura, ONGs e projetos sociais.",
+    "turnos": [
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 30,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof.ª Ms. Elizabete Figueiredo Palma",
+    "email": "coord.artesvisuais@unimontes.br",
+    "telefone": "(38) 3229-8257",
+    "localizacao": "Prédio 2 — Centro de Ciências Humanas (CCH), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/ARTES-VISUAIS-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/artes-visuais/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "ciencias-biologicas-bacharelado",
+    "nome": "Ciências Biológicas",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCBS",
+    "area": "Ciências Biológicas",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O bacharel em Ciências Biológicas pela Unimontes é um profissional apto a atuar nas áreas de Meio Ambiente e Biodiversidade ou de Biotecnologia e Produção, conforme a regulamentação das atividades profissionais do biólogo.",
+    "turnos": [
+      "Diurno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 38,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof. Dr. Maurício Lopes de Faria",
+    "email": "biologica.bacharelado@unimontes.br",
+    "telefone": "(38) 3821-8287",
+    "localizacao": "Prédio 6 — Centro de Ciências Biológicas e da Saúde (CCBS), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/ESTRUTURA-CURRICULAR-ATUALIZADA-ENVIADA-A-DTI.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/ciencias-biologicas-bacharelado/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "ciencias-biologicas-licenciatura",
+    "nome": "Ciências Biológicas",
+    "grau": "Licenciatura",
+    "modalidade": "Presencial",
+    "centro": "CCBS",
+    "area": "Ciências Biológicas",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O curso forma biólogos educadores para atuar em escolas do Ensino Fundamental e Médio e em empresas das redes pública e privada da mesorregião norte-mineira, como geradores e mediadores do conhecimento.\n\nNo Campus Unaí, as disciplinas são ofertadas em organização modular.",
+    "turnos": [
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros",
+      "Unaí"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "Unaí",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof. Dr. Ronaldo Reis Junior",
+    "email": "biologia.licenciatura@unimontes.br",
+    "telefone": "(38) 3821-8287",
+    "localizacao": "Prédio 6 — Centro de Ciências Biológicas e da Saúde (CCBS), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/BIOLOGIA-LICENCIATURA-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/ciencias-biologicas-licenciatura/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "ciencias-contabeis",
+    "nome": "Ciências Contábeis",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCSA",
+    "area": "Ciências Sociais Aplicadas",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=70",
+    "descricao": "As Ciências Contábeis envolvem os conhecimentos relacionados à geração de informações econômico-financeiras voltadas à administração das entidades.\n\nO profissional acompanha os dados necessários ao controle do patrimônio, dos fluxos de produção e da renda das instituições — base para a tomada de decisão com maior segurança.",
+    "turnos": [
+      "Matutino",
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros",
+      "Salinas"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 35,
+        "periodicidade": "semestrais"
+      },
+      {
+        "campus": "Salinas",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof.ª Dr.ª Mônica Nascimento e Feitosa",
+    "email": "coord.contabeis@unimontes.br",
+    "telefone": "(38) 3229-8317",
+    "localizacao": "Prédio 1 — Centro de Ciências Sociais Aplicadas (CCSA), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/CIENCIAS-CONTABEIS-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/ciencias-contabeis/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "ciencias-da-religiao",
+    "nome": "Ciências da Religião",
+    "grau": "Licenciatura",
+    "modalidade": "Presencial",
+    "centro": "CCH",
+    "area": "Ciências Humanas",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O curso é voltado a quem se interessa pelo estudo das religiões. Qualifica professores para o ensino religioso na Educação Básica e contribui para a compreensão das diversas manifestações religiosas.",
+    "turnos": [
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof. Dr. Denilson Meireles",
+    "email": "coord.cienciasdareligiao@unimontes.br",
+    "telefone": "(38) 3229-8325",
+    "localizacao": "Prédio 2 — Centro de Ciências Humanas (CCH), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/CIENCIAS-DA-RELIGIAO-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/ciencias-da-religiao/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "ciencias-economicas",
+    "nome": "Ciências Econômicas",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCSA",
+    "area": "Ciências Sociais Aplicadas",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O curso oferece os conhecimentos históricos e teóricos necessários ao entendimento, à interpretação e à intervenção na realidade socioeconômica, com formação básica em métodos quantitativos.\n\nO economista atua em indústrias, órgãos públicos, empresas de planejamento, assessoria e consultoria de projetos e instituições financeiras.",
+    "turnos": [
+      "Matutino",
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 35,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof.ª Dr.ª Ilva Ruas Abreu",
+    "email": "coord.cienciaseconomicas@unimontes.br",
+    "telefone": "(38) 3229-8028",
+    "localizacao": "Prédio 1 — Centro de Ciências Sociais Aplicadas (CCSA), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/CIENCIAS-ECONOMICAS-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/ciencias-economicas/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "ciencias-sociais",
+    "nome": "Ciências Sociais",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCSA",
+    "area": "Ciências Humanas",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=70",
+    "descricao": "Característica marcante das Ciências Sociais é a prática científica: o aluno é estimulado a compreender o trabalho de pesquisa social, discutindo temas como trabalho, pobreza e desigualdades, cultura, questões raciais e de gênero, cidades e meio ambiente.\n\nA formação prepara para atuar como pesquisador, como docente no ensino superior ou em assessoria e consultoria.",
+    "turnos": [
+      "Matutino",
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 35,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof.ª Ms. Janikelle Bessa Oliveira",
+    "email": "ciencias.sociais@unimontes.br",
+    "telefone": "(38) 3229-8039",
+    "localizacao": "Prédio 1 — Centro de Ciências Sociais Aplicadas (CCSA), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/CIENCIAS-SOCIAIS-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/ciencias-sociais/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "cinema-e-audiovisual",
+    "nome": "Cinema e Audiovisual",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCH",
+    "area": "Linguística, Letras e Artes",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O curso oferece formação humanística, crítica, teórica e técnica para atuação na produção e realização audiovisual — cinema, vídeo, fotografia, televisão e áreas correlatas.",
+    "turnos": [
+      "Matutino"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 30,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof.ª Dr.ª Juçara de Souza Nassau",
+    "email": "coord.cinemaudiovisual@unimontes.br",
+    "telefone": null,
+    "localizacao": "Prédio 2 — Centro de Ciências Humanas (CCH), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2025/11/Estrutura-Curso-de-Cinema-e-Audiovisual_Unimontes_nov_2025.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/cinema-e-audiovisual/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "direito",
+    "nome": "Direito",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCSA",
+    "area": "Ciências Sociais Aplicadas",
+    "duracao": 10,
+    "imagem": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O Direito é a ciência das normas que disciplinam as relações dos indivíduos em sociedade.\n\nO bacharel pode advogar — em qualquer instância, juízo ou tribunal, ou em assessoria e consultoria jurídica — ou seguir carreira jurídica por concurso público, como delegado de polícia, promotor de justiça ou juiz de direito.",
+    "turnos": [
+      "Matutino",
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 60,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof.ª Janice Cláudia Freire Sant'Ana",
+    "email": "direito@unimontes.br",
+    "telefone": "(38) 3229-8261",
+    "localizacao": "Prédio 1 — Centro de Ciências Sociais Aplicadas (CCSA), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2019/06/Estutura_Curricular_Curso_de_Direito_2010.pdf",
+    "ppc_url": "https://unimontes.br/wp-content/uploads/2025/03/projeto_pedagogico_curso_direito_2025_compressed.pdf",
+    "regulamento_tcc_url": "https://unimontes.br/wp-content/uploads/2023/06/regulamento_curso_direito_monografia_atualizado_2023.pdf",
+    "pagina_oficial": "https://unimontes.br/curso/direito/",
+    "documentos_extras": [
+      {
+        "label": "Regulamento das Atividades Complementares",
+        "url": "https://unimontes.br/wp-content/uploads/2019/06/regulamento_atividades_complementares_retificado_2.pdf"
+      },
+      {
+        "label": "Perguntas frequentes do curso",
+        "url": "https://unimontes.br/wp-content/uploads/2019/06/perguntas_frequentes_retificado.pdf"
+      }
+    ]
+  },
+  {
+    "slug": "educacao-fisica-bacharelado",
+    "nome": "Educação Física",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCBS",
+    "area": "Ciências da Saúde",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O profissional de Educação Física atua na prevenção de doenças e na promoção, proteção e reabilitação da saúde, no rendimento físico-esportivo, no lazer e na gestão de empreendimentos ligados às atividades físicas e esportivas.",
+    "turnos": [
+      "Diurno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 35,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof. Dr. André Luiz Gomes Carneiro",
+    "email": "coord.educacaofisicabacharelado@unimontes.br",
+    "telefone": "(38) 3229-8291",
+    "localizacao": "Prédio 6 — Centro de Ciências Biológicas e da Saúde (CCBS), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/EstCurric-Educao_Fsica_BachareladoPPP2011.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/educacao-fisica-bacharelado/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "educacao-fisica-licenciatura",
+    "nome": "Educação Física",
+    "grau": "Licenciatura",
+    "modalidade": "Presencial",
+    "centro": "CCBS",
+    "area": "Ciências da Saúde",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=70",
+    "descricao": "A Educação Física é uma área do conhecimento ligada às práticas corporais historicamente produzidas pela humanidade — um processo pedagógico que visa à formação do indivíduo capaz de conduzir-se plenamente em suas atividades.\n\nEm Montes Claros são 70 vagas no 1º semestre e 35 no 2º semestre.",
+    "turnos": [
+      "Diurno",
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros",
+      "Januária"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 105,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "Januária",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Coordenação de Educação Física — Licenciatura",
+    "email": "coord.educacaofisicalicenciatura@unimontes.br",
+    "telefone": "(38) 3229-8291",
+    "localizacao": "Prédio 6 — Centro de Ciências Biológicas e da Saúde (CCBS), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2019/06/EstCurric-Educao_Fsica_LicenciaturaPPP2011.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/educacao-fisica-licenciatura/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "enfermagem",
+    "nome": "Enfermagem",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCBS",
+    "area": "Ciências da Saúde",
+    "duracao": 10,
+    "imagem": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O curso de Enfermagem da Unimontes, conceito 4 no MEC, destina-se a quem busca uma profissão ligada ao cuidado humano, com formação para assistir indivíduo, família e coletividade em todas as etapas do ciclo de vida.\n\nO egresso atua na atenção básica, ambulatorial e hospitalar, na saúde pública e privada, integrando equipes multidisciplinares.",
+    "turnos": [
+      "Diurno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 28,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof.ª Ms. Raquel Gusmão Soares Martins",
+    "email": "enfermagem@unimontes.br",
+    "telefone": "(38) 3229-8285",
+    "localizacao": "Prédio 6 — Centro de Ciências Biológicas e da Saúde (CCBS), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2019/06/Estrutura_Curricular_Enfermagem.pdf",
+    "ppc_url": "https://unimontes.br/wp-content/uploads/2019/03/PPC-8-DE-JULHO-2016.pdf",
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/enfermagem/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "engenharia-civil",
+    "nome": "Engenharia Civil",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCET",
+    "area": "Engenharias",
+    "duracao": 10,
+    "imagem": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O engenheiro civil é o profissional de maior influência no ambiente construído, com atuação em obras como rodovias, ferrovias, barragens, redes hidráulicas e de esgoto, edifícios e sistemas de aproveitamento energético.\n\nAtua na concepção de projetos, na supervisão e no gerenciamento de construções, na manutenção de edificações e infraestruturas, em consultoria e em fiscalização.",
+    "turnos": [
+      "Diurno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [],
+    "coordenador": "Prof. Dr. Ronaldo Dias Ferreira",
+    "email": "coord.engcivil@unimontes.br",
+    "telefone": "(38) 3229-8002",
+    "localizacao": "Prédio 3 (CCET) e Centro Tecnológico (CT), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/ENGENHARIA-CIVIL-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/engenharia-civil/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "engenharia-de-sistemas",
+    "nome": "Engenharia de Sistemas",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCET",
+    "area": "Engenharias",
+    "duracao": 10,
+    "imagem": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=70",
+    "descricao": "A Engenharia de Sistemas é um campo interdisciplinar que se concentra em como projetos complexos de engenharia devem ser concebidos e gerenciados, integrando computação, matemática, física e gestão de projetos.",
+    "turnos": [
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 28,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof. Dr. João Batista Mendes",
+    "email": "engenharia.sistemas@unimontes.br",
+    "telefone": "(38) 3229-8276",
+    "localizacao": "Prédio 3 — Centro de Ciências Exatas e Tecnológicas (CCET), Campus Darcy Ribeiro",
+    "matriz_url": null,
+    "ppc_url": "https://unimontes.br/wp-content/uploads/2019/05/201604-PPP-Engenharia-de-Sistemas.pdf",
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/engenharia-de-sistemas/",
+    "documentos_extras": [
+      {
+        "label": "Pré-requisitos das disciplinas",
+        "url": "https://unimontes.br/wp-content/uploads/2019/07/201602-Pr%C3%A9-requisitos.pdf"
+      }
+    ]
+  },
+  {
+    "slug": "engenharia-eletrica-e-eletronica",
+    "nome": "Engenharia Elétrica e Eletrônica",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCET",
+    "area": "Engenharias",
+    "duracao": 10,
+    "imagem": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=800&q=70",
+    "descricao": "A Engenharia Elétrica abrange a geração, a transmissão, a distribuição e a utilização da energia elétrica e o desenvolvimento de sistemas eletrônicos e de automação. O curso da Unimontes tem ênfase em Eletrônica.\n\nA formação combina sólida base em matemática, física e computação com disciplinas específicas da área, preparando o estudante para projetar, implementar e gerenciar sistemas e equipamentos.",
+    "turnos": [
+      "Integral"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 20,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof. Dr. Nilton Alves Maia",
+    "email": null,
+    "telefone": "(38) 3229-8000",
+    "localizacao": "Prédio 3 — Centro de Ciências Exatas e Tecnológicas (CCET), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2025/09/Estrutura-Curricular-Engenharia-Eletrica-Eletronica_unimontes_2025.pdf",
+    "ppc_url": "https://unimontes.br/wp-content/uploads/2025/09/projeto_pedagogico_engenharia_eletrica_eletronica_unimontes_2025.pdf",
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/engenharia-eletrica-e-eletronica/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "engenharia-florestal",
+    "nome": "Engenharia Florestal",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCET",
+    "area": "Ciências Agrárias",
+    "duracao": 10,
+    "imagem": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O curso forma profissionais com conhecimento científico e tecnológico na gestão de recursos florestais, com vistas à produção sustentável e à conservação dos recursos naturais, considerando aspectos políticos, econômicos, sociais e ambientais.",
+    "turnos": [
+      "Integral"
+    ],
+    "campi": [
+      "Janaúba"
+    ],
+    "vagas": [
+      {
+        "campus": "Janaúba",
+        "quantidade": 28,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof.ª Dr.ª Cristiane A. Fogaça",
+    "email": "coord.engflorestal@unimontes.br",
+    "telefone": "(38) 3229-8023",
+    "localizacao": "Campus Janaúba — Av. Reinaldo Viana, 2630, Bico da Pedra, Janaúba/MG",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2025/04/grade-curricular_eng_florestal_unimontes_2025.pdf",
+    "ppc_url": "https://unimontes.br/wp-content/uploads/2025/04/Projeto-Pedagogico_ENGENHARIA_FLORESTAL_unimontes_2025.pdf",
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/engenharia-florestal/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "farmacia",
+    "nome": "Farmácia",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCBS",
+    "area": "Ciências da Saúde",
+    "duracao": 10,
+    "imagem": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O curso forma profissionais com visão ética, humanista, crítica e reflexiva. Com abordagem generalista e multidisciplinar, capacita para atuar em fármacos, medicamentos e assistência farmacêutica, além de análises clínicas, toxicológicas, alimentos e cosméticos.",
+    "turnos": [
+      "Integral"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 40,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof.ª Dr.ª Maria Tereza Carvalho Almeida",
+    "email": "coord.farmacia@unimontes.br",
+    "telefone": "(38) 3229-8205",
+    "localizacao": "Prédio 6 — Centro de Ciências Biológicas e da Saúde (CCBS), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2025/02/Anexo_108462067_Estrutura_Curricular_do_Curso_de_Farmacia.pdf",
+    "ppc_url": "https://unimontes.br/wp-content/uploads/2025/02/Anexo_108462323_2024___RESOLUCAO_CEPEx_UNIMONTES_N_._404___PPC_de_Farmacia.pdf",
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/farmacia/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "filosofia",
+    "nome": "Filosofia",
+    "grau": "Licenciatura",
+    "modalidade": "Presencial",
+    "centro": "CCH",
+    "area": "Ciências Humanas",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O curso destina-se a quem gosta de refletir com profundidade crítica sobre a realidade e se relaciona com todas as ciências, daí seu caráter interdisciplinar.\n\nO principal campo de atuação é a docência; surgiram também novas frentes, como recursos humanos, filosofia clínica e filosofia com crianças e jovens.",
+    "turnos": [
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof.ª Dr.ª Alice Parrela Medrado",
+    "email": "coord.filosofia@unimontes.br",
+    "telefone": "(38) 3229-8237",
+    "localizacao": "Prédio 2 — Centro de Ciências Humanas (CCH), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/FILOSOFIA-PAGINA.pdf",
+    "ppc_url": "https://unimontes.br/wp-content/uploads/2019/08/PPC-DE-FILOSOFIA-2017-1.pdf",
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/filosofia/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "fisica",
+    "nome": "Física",
+    "grau": "Licenciatura",
+    "modalidade": "Presencial",
+    "centro": "CCET",
+    "area": "Ciências Exatas e da Terra",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=70",
+    "descricao": "A Licenciatura em Física forma profissionais para o magistério na Educação Básica, com base teórica e experimental que permite também atuar nas áreas clássicas da Física.",
+    "turnos": [
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 25,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof. Luiz Pedro Vieira Gomes",
+    "email": "coord.fisica@unimontes.br",
+    "telefone": "(38) 99863-5283",
+    "localizacao": "Prédio 3 — Centro de Ciências Exatas e Tecnológicas (CCET), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/12/ESTRUTURA-CURRICULAR.docx",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/fisica/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "geografia-bacharelado",
+    "nome": "Geografia",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCH",
+    "area": "Ciências Humanas",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=70",
+    "descricao": "Geografia é a ciência que estuda as características da superfície terrestre e correlaciona os fenômenos físicos com as atividades humanas.\n\nO bacharel atua em levantamento, mapeamento e pesquisa de caráter geográfico, na caracterização ecológica da paisagem e no planejamento e na preservação de recursos naturais.",
+    "turnos": [
+      "Matutino"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 28,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof. João Paulo Sena Souza",
+    "email": "coord.geografiabacharelado@unimontes.br",
+    "telefone": "(38) 3229-8326",
+    "localizacao": "Prédio 2 — Centro de Ciências Humanas (CCH), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/GEOGRAFIA-BACHARELADO-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/geografia-bacharelado/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "geografia-licenciatura",
+    "nome": "Geografia",
+    "grau": "Licenciatura",
+    "modalidade": "Presencial",
+    "centro": "CCH",
+    "area": "Ciências Humanas",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=70",
+    "descricao": "Geografia é a ciência que estuda as características da superfície terrestre e correlaciona os fenômenos físicos com as atividades humanas.\n\nAlém da docência, o licenciado pode atuar como pesquisador em levantamento, mapeamento e planejamento regional, urbano e rural.",
+    "turnos": [
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros",
+      "Pirapora"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "Pirapora",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof.ª Priscilla Caires Santana Afonso",
+    "email": "coord.geografia@unimontes.br",
+    "telefone": "(38) 3229-8326",
+    "localizacao": "Prédio 2 — Centro de Ciências Humanas (CCH), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2020/03/grade-1-periodo-2020.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/geografia-licenciatura/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "historia",
+    "nome": "História",
+    "grau": "Licenciatura",
+    "modalidade": "Presencial",
+    "centro": "CCH",
+    "area": "Ciências Humanas",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O objetivo maior da Licenciatura em História é formar professores para a Educação Básica que sejam pesquisadores com capacidade de reflexão crítica sobre os conhecimentos históricos.\n\nO licenciado pode atuar no magistério, em pesquisa e em entidades públicas e privadas, como assessor de programas culturais e na preservação do patrimônio histórico.",
+    "turnos": [
+      "Matutino",
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros",
+      "Janaúba"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 70,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "Janaúba",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof.ª Me. Jonice dos Reis Procópio",
+    "email": "coord.didaticahis@unimontes.br",
+    "telefone": "(38) 3229-8325",
+    "localizacao": "Prédio 2 — Centro de Ciências Humanas (CCH), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2026/08/Estrutura-Curricular-2023_historia_unimontes.pdf",
+    "ppc_url": "https://unimontes.br/wp-content/uploads/2026/08/PPC-2023_historia_unimontes.pdf",
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/historia/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "inteligencia-artificial",
+    "nome": "Inteligência Artificial",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCET",
+    "area": "Ciências Exatas e da Terra",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=70",
+    "descricao": "A Inteligência Artificial é um campo interdisciplinar da computação que busca desenvolver sistemas capazes de aprender, raciocinar, tomar decisões e interagir de forma inteligente.\n\nO curso forma profissionais capazes de transformar dados em conhecimento, desenvolver algoritmos de aprendizado de máquina e explorar visão computacional e processamento de linguagem natural.",
+    "turnos": [
+      "Integral"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 20,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof. Dr. Marcos Flávio Silveira Vasconcelos D'Angelo",
+    "email": "marcos.dangelo@unimontes.br",
+    "telefone": "(38) 3229-8000",
+    "localizacao": "Prédio 3 — Centro de Ciências Exatas e Tecnológicas (CCET), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2025/09/estrutura_curricular_curso_inteligencia_artificial_unimontes_2025.pdf",
+    "ppc_url": "https://unimontes.br/wp-content/uploads/2025/09/projeto_pedagogico_curso_inteligencia_artificial_unimontes_2025.pdf",
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/inteligencia-artificial/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "letras-espanhol",
+    "nome": "Letras Espanhol",
+    "grau": "Licenciatura",
+    "modalidade": "Presencial",
+    "centro": "CCH",
+    "area": "Linguística, Letras e Artes",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O curso de Letras pressupõe vínculo com o estudo da língua, da literatura e das manifestações artísticas e culturais.\n\nSua finalidade básica é formar professores de língua e literatura para o Ensino Fundamental e Médio; com especialização, o licenciado também pode atuar como tradutor, intérprete, redator e revisor.",
+    "turnos": [
+      "Vespertino"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof.ª Eleni Nogueira dos Santos",
+    "email": "coord.letrasespanhol@unimontes.br",
+    "telefone": "(38) 3229-8257",
+    "localizacao": "Prédio 2 — Centro de Ciências Humanas (CCH), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/LETRAS-ESPANHOL-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/letras-espanhol/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "letras-ingles",
+    "nome": "Letras Inglês",
+    "grau": "Licenciatura",
+    "modalidade": "Presencial",
+    "centro": "CCH",
+    "area": "Linguística, Letras e Artes",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O curso de Letras pressupõe vínculo com o estudo da língua, da literatura e das manifestações artísticas e culturais.\n\nSua finalidade básica é formar professores de língua e literatura para o Ensino Fundamental e Médio; com especialização, o licenciado também pode atuar como tradutor, intérprete, redator e revisor.",
+    "turnos": [
+      "Vespertino",
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros",
+      "Januária",
+      "Unaí"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "Januária",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "Unaí",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof. Ms. Leonardo Neves Correa",
+    "email": "coordenacao.letrasingles@unimontes.br",
+    "telefone": "(38) 3229-8232",
+    "localizacao": "Prédio 2 — Centro de Ciências Humanas (CCH), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/LETRAS-INGLES-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/letras-ingles/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "letras-portugues",
+    "nome": "Letras Português",
+    "grau": "Licenciatura",
+    "modalidade": "Presencial",
+    "centro": "CCH",
+    "area": "Linguística, Letras e Artes",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=70",
+    "descricao": "A licenciatura forma professores para o ensino de Língua Portuguesa e suas Literaturas no Ensino Fundamental II e no Ensino Médio, nas redes pública e privada.\n\nO futuro professor deve dominar o uso da língua portuguesa — estrutura, funcionamento e manifestações culturais — e refletir crítica e teoricamente sobre a linguagem.",
+    "turnos": [
+      "Vespertino",
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros",
+      "Almenara",
+      "Espinosa",
+      "Januária",
+      "Paracatu",
+      "São Francisco"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 70,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "Almenara",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "Espinosa",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "Januária",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "Paracatu",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "São Francisco",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof.ª Alba Valéria Niza Silva",
+    "email": "coord.lp@unimontes.br",
+    "telefone": "(38) 3229-8310",
+    "localizacao": "Prédio 2 — Centro de Ciências Humanas (CCH), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/LETRAS-PORTUGUES-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/letras-portugues/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "matematica",
+    "nome": "Matemática",
+    "grau": "Licenciatura",
+    "modalidade": "Presencial",
+    "centro": "CCET",
+    "area": "Ciências Exatas e da Terra",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O curso de Matemática forma professores para a Educação Básica. O licenciado pode ainda seguir na pós-graduação e atuar em empresas públicas e privadas com cálculos numéricos, pesquisas e estatística.",
+    "turnos": [
+      "Diurno",
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros",
+      "São Francisco"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 35,
+        "periodicidade": "semestrais"
+      },
+      {
+        "campus": "São Francisco",
+        "quantidade": 35,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof.ª Ms. Juliana Guimarães Cançado",
+    "email": "coordenacao.matematica@unimontes.br",
+    "telefone": "(38) 3229-8274",
+    "localizacao": "Prédio 3 — Centro de Ciências Exatas e Tecnológicas (CCET), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/MATEMATICA-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/matematica/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "medicina",
+    "nome": "Medicina",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCBS",
+    "area": "Ciências da Saúde",
+    "duracao": 12,
+    "imagem": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=70",
+    "descricao": "A medicina habilita o médico a atuar na promoção da saúde e na prevenção, no diagnóstico e no tratamento das enfermidades.\n\nSeu campo de trabalho é amplo nos setores público e privado: centros de saúde, equipes de Saúde da Família, policlínicas, clínicas, hospitais e gestão dos sistemas de saúde.",
+    "turnos": [
+      "Integral"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 40,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof.ª Dorothéa Schmidt e Prof. Mariano Fagundes",
+    "email": "medicina@unimontes.br",
+    "telefone": "(38) 3229-8205",
+    "localizacao": "Prédio 6 — Centro de Ciências Biológicas e da Saúde (CCBS), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/MEDICINA-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/medicina/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "medicina-veterinaria",
+    "nome": "Medicina Veterinária",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCET",
+    "area": "Ciências Agrárias",
+    "duracao": 10,
+    "imagem": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O curso forma um profissional generalista, humanista, crítico e reflexivo, apto a compreender e traduzir as necessidades de indivíduos, grupos sociais e comunidades no âmbito da saúde animal e dos demais campos de atuação do médico-veterinário.",
+    "turnos": [
+      "Diurno"
+    ],
+    "campi": [
+      "Janaúba"
+    ],
+    "vagas": [
+      {
+        "campus": "Janaúba",
+        "quantidade": 28,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof.ª Dr.ª Maria Dulcineia da Costa",
+    "email": "medicina.veterinaria@unimontes.br",
+    "telefone": "(38) 3229-8497",
+    "localizacao": "Campus Janaúba — Av. Reinaldo Viana, 2630, Bico da Pedra, Janaúba/MG",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/06/MEDICINA-VETERINARIA-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/medicina-veterinaria-unimontes/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "musica",
+    "nome": "Música",
+    "grau": "Licenciatura",
+    "modalidade": "Presencial",
+    "centro": "CCH",
+    "area": "Linguística, Letras e Artes",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=800&q=70",
+    "descricao": "A Licenciatura em Música forma professores de música, desenvolvendo as dimensões artístico-musical, pedagógica, humana, social, cultural, científica e tecnológica.\n\nO licenciado atua como docente na Educação Infantil e nos Ensinos Fundamental e Médio, além de conservatórios e escolas de música.",
+    "turnos": [
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 25,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof. Nelson Ruas Souza Soares",
+    "email": "musica@unimontes.br",
+    "telefone": "(38) 3229-8310",
+    "localizacao": "Prédio 2 — Centro de Ciências Humanas (CCH), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/ARTES-MUSICA-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/artes-musica/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "odontologia",
+    "nome": "Odontologia",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCBS",
+    "area": "Ciências da Saúde",
+    "duracao": 10,
+    "imagem": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=70",
+    "descricao": "A Odontologia promove a saúde bucal: o cirurgião-dentista diagnostica doenças buco-maxilo-faciais, propõe e executa tratamentos e planeja serviços de saúde comunitária.\n\nO egresso tem perfil generalista, humanista, crítico e reflexivo, apto a atuar em todos os níveis de atenção à saúde.",
+    "turnos": [
+      "Integral"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 24,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof.ª Dr.ª Renata Francine Rodrigues Lima",
+    "email": "coord.odontologia@unimontes.br",
+    "telefone": "(38) 3229-8284",
+    "localizacao": "Prédio 6 — Centro de Ciências Biológicas e da Saúde (CCBS), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2024/08/Estrutura-Curricular-2024.pdf",
+    "ppc_url": "https://unimontes.br/wp-content/uploads/2024/08/resolucao_cepex181_PPC_ODONTOLOGIA.pdf",
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/odontologia/",
+    "documentos_extras": [
+      {
+        "label": "Quadro de horários — 2º semestre de 2026",
+        "url": "https://unimontes.br/wp-content/uploads/2026/07/Quadro-de-horarios-2s2026_odontologia.pdf"
+      },
+      {
+        "label": "Pré-requisitos das disciplinas",
+        "url": "https://unimontes.br/wp-content/uploads/2024/08/pre_requisitos_odontologia_agosto_2024.pdf"
+      }
+    ]
+  },
+  {
+    "slug": "pedagogia",
+    "nome": "Pedagogia",
+    "grau": "Licenciatura",
+    "modalidade": "Presencial",
+    "centro": "CCH",
+    "area": "Ciências Humanas",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=70",
+    "descricao": "A Licenciatura em Pedagogia tem sua base na docência na Educação Básica — Educação Infantil e anos iniciais do Ensino Fundamental — e também em espaços não escolares.\n\nO pedagogo deve dominar científica e politicamente o conhecimento sobre o processo educativo, com foco no trabalho pedagógico.",
+    "turnos": [
+      "Vespertino",
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros",
+      "Almenara",
+      "Brasília de Minas",
+      "Espinosa",
+      "Janaúba",
+      "Januária",
+      "Paracatu",
+      "Pirapora"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 70,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "Almenara",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "Brasília de Minas",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "Espinosa",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "Janaúba",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "Januária",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "Paracatu",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      },
+      {
+        "campus": "Pirapora",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof.ª Ms. Maria Nadurce Silva",
+    "email": "coord.pedagogia@unimontes.br",
+    "telefone": "(38) 3229-8216",
+    "localizacao": "Prédio 2 — Centro de Ciências Humanas (CCH), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/PEDAGOGIA-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/pedagogia/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "psicologia",
+    "nome": "Psicologia",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCBS",
+    "area": "Ciências da Saúde",
+    "duracao": 10,
+    "imagem": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O curso foi concebido a partir do entendimento de que o Norte de Minas, região extensa e populosa, ainda carece de psicólogos e pesquisadores com formação crítica e engajada com os problemas regionais.\n\nOs conteúdos teóricos e práticos, com carga horária total de 4.728 horas, capacitam para a atuação nos diversos campos da Psicologia e para a pesquisa.",
+    "turnos": [
+      "Diurno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 35,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof.ª Dr.ª Vera Lúcia Mendes Trabbold",
+    "email": "coord.psicologia@unimontes.br",
+    "telefone": "(38) 3229-8282",
+    "localizacao": "Prédio 2 (CCH) e Prédio 6 (CCBS), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2024/02/estrutura_curricular_psicologia_unimontes_2024.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/psicologia/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "servico-social",
+    "nome": "Serviço Social",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCSA",
+    "area": "Ciências Sociais Aplicadas",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O curso forma assistentes sociais com capacidade teórico-metodológica, ético-política e técnico-operativa para intervir nas múltiplas manifestações da questão social.\n\nO assistente social atua nas políticas de assistência social, saúde, previdência, educação e habitação, em entidades filantrópicas e em empresas privadas.",
+    "turnos": [
+      "Matutino",
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 35,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof.ª Noêmia de Fátima Silva Lopes",
+    "email": "servico.social@unimontes.br",
+    "telefone": "(38) 3229-8268",
+    "localizacao": "Prédio 1 — Centro de Ciências Sociais Aplicadas (CCSA), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2019/08/Estrutura-curricular-1-2019-Servi%C3%A7o-Social.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/servico-social/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "sistemas-de-informacao",
+    "nome": "Sistemas de Informação",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCET",
+    "area": "Ciências Exatas e da Terra",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=70",
+    "descricao": "A informática é uma área de transformações tecnológicas e científicas aceleradas. O curso prepara o bacharel para assimilar essas mudanças e se manter atualizado ao longo da carreira.\n\nO profissional deve estar apto a desenvolver, implantar e manter sistemas, acompanhando as inovações do mercado.",
+    "turnos": [
+      "Diurno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 28,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof. Dr. Rafael Antônio Gonçalves Lima",
+    "email": "sistemas.informacao@unimontes.br",
+    "telefone": "(38) 3229-8276",
+    "localizacao": "Prédio 3 — Centro de Ciências Exatas e Tecnológicas (CCET), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/SISTEMAS-DE-INFORMACAO-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/sistemas-de-informacao/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "teatro",
+    "nome": "Teatro",
+    "grau": "Licenciatura",
+    "modalidade": "Presencial",
+    "centro": "CCH",
+    "area": "Linguística, Letras e Artes",
+    "duracao": 8,
+    "imagem": "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=800&q=70",
+    "descricao": "A Licenciatura em Teatro forma docentes da área de Artes preparados para os desafios da profissão e em constante processo de formação.\n\nAlém da docência, o licenciado pode atuar em órgãos culturais, grupos e companhias de teatro, ONGs e projetos culturais e de pesquisa.",
+    "turnos": [
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 20,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof. Carloman Soares Weliton Bomfim",
+    "email": "coord.artesteatro@unimontes.br",
+    "telefone": "(38) 3229-8232",
+    "localizacao": "Prédio 2 — Centro de Ciências Humanas (CCH), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/06/TEATRO-PAGINA.pdf",
+    "ppc_url": "https://unimontes.br/wp-content/uploads/2021/05/PPC_CURSO_DE_TEATRO_2020___Unimontes_24_09_2020.pdf",
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/artes-teatro/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "gestao-do-agronegocio",
+    "nome": "Tecnologia em Gestão do Agronegócio",
+    "grau": "Tecnólogo",
+    "modalidade": "Presencial",
+    "centro": "CCET",
+    "area": "Ciências Agrárias",
+    "duracao": null,
+    "imagem": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=800&q=70",
+    "descricao": "Com a modernização, a empresa agroindustrial passa a enfrentar desafios gerenciais próprios — a perecibilidade, a variabilidade e a sazonalidade das matérias-primas, a regulação intensa e a concorrência internacional.",
+    "turnos": [
+      "Noturno"
+    ],
+    "campi": [
+      "Janaúba"
+    ],
+    "vagas": [
+      {
+        "campus": "Janaúba",
+        "quantidade": 35,
+        "periodicidade": "anuais"
+      }
+    ],
+    "coordenador": "Prof. DSc. Luiz Henrique Arimura Figueiredo",
+    "email": "coord.gestaoagronegocio@unimontes.br",
+    "telefone": null,
+    "localizacao": "Campus Janaúba — Av. Reinaldo Viana, 2630, Bico da Pedra, Janaúba/MG",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/TECNOLOGIA-EM-GESTAO-DO-AGRONEGOCIO-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/tecnologia-em-agronegocios/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "gestao-publica",
+    "nome": "Tecnologia em Gestão Pública",
+    "grau": "Tecnólogo",
+    "modalidade": "Presencial",
+    "centro": "CCSA",
+    "area": "Ciências Sociais Aplicadas",
+    "duracao": 4,
+    "imagem": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O curso forma profissionais qualificados para atuar em todos os níveis da administração pública, estatal e não estatal, a partir de um ensino moderno, crítico e cientificamente fundamentado.",
+    "turnos": [
+      "Vespertino",
+      "Noturno"
+    ],
+    "campi": [
+      "Montes Claros"
+    ],
+    "vagas": [
+      {
+        "campus": "Montes Claros",
+        "quantidade": 35,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof.ª Françoise de Fátima Barbosa",
+    "email": "coord.gestaopublica@unimontes.br",
+    "telefone": "(38) 3229-8265",
+    "localizacao": "Prédio 1 — Centro de Ciências Sociais Aplicadas (CCSA), Campus Darcy Ribeiro",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2023/03/Estrutura-Curricular-Curso-Tecnologia-em-Gestao-Publica.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/tecnologia-em-gestao-publica/",
+    "documentos_extras": []
+  },
+  {
+    "slug": "zootecnia",
+    "nome": "Zootecnia",
+    "grau": "Bacharelado",
+    "modalidade": "Presencial",
+    "centro": "CCET",
+    "area": "Ciências Agrárias",
+    "duracao": 10,
+    "imagem": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=800&q=70",
+    "descricao": "O curso forma profissionais para atuar na produção, na pesquisa, no ensino e na extensão zootécnicas, visando ao aumento da produtividade animal de acordo com os interesses econômicos e sociais da região.\n\nO zootecnista planeja programas de melhoramento genético, atua em nutrição e alimentação animal, em projetos de construções rurais e de produção de forrageiras e na administração de propriedades rurais.",
+    "turnos": [
+      "Diurno"
+    ],
+    "campi": [
+      "Janaúba"
+    ],
+    "vagas": [
+      {
+        "campus": "Janaúba",
+        "quantidade": 28,
+        "periodicidade": "semestrais"
+      }
+    ],
+    "coordenador": "Prof.ª Julieta Maria Alencar Chamone",
+    "email": "zootecnia@unimontes.br",
+    "telefone": "(38) 3229-8423",
+    "localizacao": "Campus Janaúba — Av. Reinaldo Viana, 2630, Bico da Pedra, Janaúba/MG",
+    "matriz_url": "https://unimontes.br/wp-content/uploads/2022/04/ZOOTECNIA-PAGINA.pdf",
+    "ppc_url": null,
+    "regulamento_tcc_url": null,
+    "pagina_oficial": "https://unimontes.br/curso/zootecnia/",
+    "documentos_extras": []
+  }
+]
