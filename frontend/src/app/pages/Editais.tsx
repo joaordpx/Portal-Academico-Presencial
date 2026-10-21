@@ -11,11 +11,13 @@ import {
 import { PageHeader } from "../components/layout/PageHeader";
 import { Reveal } from "../components/shared/Reveal";
 import { SectionLayout, PanelLinks } from "../components/layout/SectionLayout";
+import { ErroCarregamento } from "../components/shared/ErroCarregamento";
 import { getEditais } from "../../services/editalService";
-import type { Edital, EditalTipo } from "../../types";
+import type { EditalTipo, EditalView } from "../../types";
 
-const HOJE = new Date();
 const PAGE_SIZE = 6;
+const CAE =
+  "https://unimontes.br/pro-reitoria-de-extensao/coordenadorias-da-pro-reitoria-de-extensao/";
 
 /* Cores por tipo de edital — variação da paleta do portal */
 const TIPO_STYLE: Record<EditalTipo, string> = {
@@ -25,12 +27,8 @@ const TIPO_STYLE: Record<EditalTipo, string> = {
   Estágio: "bg-[#FFB800]/18 text-[#9a7000]",
   Assistência: "bg-[#FF4D2E]/12 text-[#FF4D2E]",
   Mobilidade: "bg-[#FF5C8A]/12 text-[#d63864]",
+  "Pós-Graduação": "bg-[#1a1a1a]/[0.07] text-[#1a1a1a]/70",
 };
-
-function diasRestantes(prazoIso: string) {
-  const prazo = new Date(prazoIso + "T23:59:59");
-  return Math.ceil((prazo.getTime() - HOJE.getTime()) / 86_400_000);
-}
 
 function formatarData(iso: string) {
   const [a, m, d] = iso.split("-");
@@ -48,10 +46,12 @@ function Tag({ label, className }: { label: string; className: string }) {
 }
 
 function ListaEditais() {
-  const [editais, setEditais] = useState<Edital[]>([]);
+  const [editais, setEditais] = useState<EditalView[]>([]);
   const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState(false);
+  const [tentativa, setTentativa] = useState(0);
   const [status, setStatus] = useState("Todos");
-  const [curso, setCurso] = useState("Todos");
+  const [publico, setPublico] = useState("Todos");
   const [campus, setCampus] = useState("Todos");
   const [tipo, setTipo] = useState("Todos");
   const [page, setPage] = useState(1);
@@ -60,16 +60,25 @@ function ListaEditais() {
     let ativo = true;
     getEditais()
       .then((d) => ativo && setEditais(d))
+      .catch(() => ativo && setErro(true))
       .finally(() => ativo && setLoading(false));
     return () => {
       ativo = false;
     };
-  }, []);
+  }, [tentativa]);
 
+  function recarregar() {
+    setErro(false);
+    setLoading(true);
+    setTentativa((t) => t + 1);
+  }
+
+  // Opções derivadas dos próprios editais: um valor novo cadastrado no painel aparece sozinho
   const opcoes = useMemo(() => {
-    const unicos = (v: string[]) => Array.from(new Set(v));
+    const unicos = (v: string[]) =>
+      Array.from(new Set(v)).sort((a, b) => a.localeCompare(b, "pt-BR"));
     return {
-      curso: ["Todos", ...unicos(editais.map((e) => e.curso))],
+      publico: ["Todos", ...unicos(editais.map((e) => e.publico))],
       campus: ["Todos", ...unicos(editais.map((e) => e.campus))],
       tipo: ["Todos", ...unicos(editais.map((e) => e.tipo))],
     };
@@ -80,28 +89,28 @@ function ListaEditais() {
       editais.filter(
         (e) =>
           (status === "Todos" || e.status === status) &&
-          (curso === "Todos" || e.curso === curso) &&
+          (publico === "Todos" || e.publico === publico) &&
           (campus === "Todos" || e.campus === campus) &&
           (tipo === "Todos" || e.tipo === tipo),
       ),
-    [editais, status, curso, campus, tipo],
+    [editais, status, publico, campus, tipo],
   );
 
   const totalPages = Math.max(1, Math.ceil(filtrados.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const paginados = filtrados.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
-  const ativos = [status, curso, campus, tipo].filter((f) => f !== "Todos").length;
+  const ativos = [status, publico, campus, tipo].filter((f) => f !== "Todos").length;
 
   function limpar() {
     setStatus("Todos");
-    setCurso("Todos");
+    setPublico("Todos");
     setCampus("Todos");
     setTipo("Todos");
     setPage(1);
   }
 
   const selects = [
-    { label: "Curso", value: curso, set: setCurso, opts: opcoes.curso },
+    { label: "Público", value: publico, set: setPublico, opts: opcoes.publico },
     { label: "Campus", value: campus, set: setCampus, opts: opcoes.campus },
     { label: "Tipo", value: tipo, set: setTipo, opts: opcoes.tipo },
   ];
@@ -109,7 +118,7 @@ function ListaEditais() {
   return (
     <div>
       <p className="max-w-2xl text-[17px] leading-[1.6] text-[#1a1a1a]/70">
-        Consulte editais abertos, encerrados e filtre por curso, campus ou tipo.
+        Consulte editais abertos, encerrados e filtre por público, campus ou tipo.
       </p>
 
       {/* Filtros */}
@@ -186,6 +195,11 @@ function ListaEditais() {
             <div key={i} className="h-52 animate-pulse rounded-[10px] bg-[#f0f0f0]" />
           ))}
         </div>
+      ) : erro ? (
+        <ErroCarregamento
+          titulo="Não foi possível carregar os editais"
+          onTentarNovamente={recarregar}
+        />
       ) : paginados.length === 0 ? (
         <div className="py-20 text-center">
           <p className="text-[18px] font-bold text-[#1a1a1a]">Nenhum edital encontrado</p>
@@ -202,7 +216,7 @@ function ListaEditais() {
       ) : (
         <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
           {paginados.map((e, i) => {
-            const dias = diasRestantes(e.prazo);
+            const dias = e.diasRestantes;
             const aberto = e.status === "Aberto";
             const urgente = aberto && dias >= 0 && dias <= 7;
 
@@ -229,8 +243,8 @@ function ListaEditais() {
 
                     <dl className="mt-4 flex-1 space-y-1.5 text-[13px]">
                       <div className="flex gap-2">
-                        <dt className="font-bold text-[#1a1a1a]/70">Curso:</dt>
-                        <dd className="text-[#1a1a1a]/60">{e.curso}</dd>
+                        <dt className="font-bold text-[#1a1a1a]/70">Público:</dt>
+                        <dd className="text-[#1a1a1a]/60">{e.publico}</dd>
                       </div>
                       <div className="flex gap-2">
                         <dt className="font-bold text-[#1a1a1a]/70">Campus:</dt>
@@ -250,12 +264,16 @@ function ListaEditais() {
                       </div>
                     </dl>
 
-                    <a
-                      href={e.url ?? "#"}
-                      className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-[6px] border border-[#1a1a1a] px-4 py-2.5 text-[12px] font-bold uppercase tracking-[0.12em] text-[#1a1a1a] transition-colors hover:border-[#6E3AFF] hover:bg-[#6E3AFF] hover:text-white"
-                    >
-                      Ver edital <ArrowUpRight className="h-3.5 w-3.5" />
-                    </a>
+                    {e.url && (
+                      <a
+                        href={e.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-[6px] border border-[#1a1a1a] px-4 py-2.5 text-[12px] font-bold uppercase tracking-[0.12em] text-[#1a1a1a] transition-colors hover:border-[#6E3AFF] hover:bg-[#6E3AFF] hover:text-white"
+                      >
+                        Ver edital <ArrowUpRight className="h-3.5 w-3.5" />
+                      </a>
+                    )}
                   </div>
                 </motion.article>
               </Reveal>
@@ -308,13 +326,37 @@ const sections = [
     content: (
       <PanelLinks
         accent="roxo"
-        intro="Oportunidades e informações para estágio acadêmico."
+        intro="O estágio não obrigatório é intermediado pelo Balcão de Estágio da Coordenadoria de Apoio ao Estudante (CAE), que mantém convênios com empresas de Montes Claros e região. O estágio obrigatório segue o PPC de cada curso."
         links={[
-          { label: "Vagas" },
-          { label: "Documentos" },
-          { label: "Regulamentos" },
-          { label: "Convênios" },
-          { label: "Contatos" },
+          {
+            label: "Balcão de Estágio (CAE)",
+            desc: "Como funciona o estágio não obrigatório e quem pode participar.",
+            href: CAE,
+            external: true,
+          },
+          {
+            label: "Formulário de inscrição",
+            desc: "Cadastro do acadêmico no Balcão de Estágio.",
+            href: "https://docs.google.com/forms/d/1PZyxheBzT3siTWNJm5fRrd0cWtiUa-M0Fm6RJ3KHjsU/viewform",
+            external: true,
+          },
+          {
+            label: "Modelo de termo aditivo",
+            desc: "Prorrogação ou alteração do estágio.",
+            href: "https://unimontes.br/wp-content/uploads/2023/01/Modelo-Termo-Aditivo.doc",
+            external: true,
+          },
+          {
+            label: "Modelo de termo de rescisão",
+            desc: "Encerramento antecipado do estágio.",
+            href: "https://unimontes.br/wp-content/uploads/2023/01/Modelo-de-Termo-de-Rescisao.docx",
+            external: true,
+          },
+          {
+            label: "Contato da CAE",
+            desc: "Em frente à Secretaria Geral (Prédio 2) · 7h às 21h · (38) 3229-8163 · cae@unimontes.br",
+            href: "mailto:cae@unimontes.br",
+          },
         ]}
       />
     ),
@@ -327,10 +369,29 @@ const sections = [
         accent="roxo"
         intro="Acompanhe oportunidades de apoio acadêmico e participação em programas."
         links={[
-          { label: "Monitoria" },
-          { label: "Iniciação Científica" },
-          { label: "Extensão" },
-          { label: "Assistência Estudantil" },
+          {
+            label: "Monitoria",
+            desc: "Normas gerais para regulamentação da monitoria.",
+            href: "https://unimontes.br/wp-content/uploads/2022/04/Normas-Gerais-para-Regulamentacao-da-Monitoria..pdf",
+            external: true,
+          },
+          {
+            label: "Iniciação Científica",
+            desc: "Coordenadoria de Iniciação Científica da Pró-Reitoria de Pesquisa.",
+            href: "https://unimontes.br/coordenadoria-de-iniciacao-cientifica/",
+            external: true,
+          },
+          {
+            label: "Extensão",
+            desc: "Bolsas e editais da Pró-Reitoria de Extensão (PREx).",
+            href: "https://unimontes.br/pro-reitoria-de-extensao/",
+            external: true,
+          },
+          {
+            label: "Assistência Estudantil (PEAES)",
+            desc: "Auxílios moradia, alimentação, transporte, creche e inclusão.",
+            href: "/assistencia-estudantil",
+          },
         ]}
       />
     ),
@@ -342,7 +403,32 @@ const sections = [
       <PanelLinks
         accent="roxo"
         intro="Programas e projetos ligados à produção acadêmica e à atuação extensionista."
-        links={[{ label: "Programas" }, { label: "Projetos" }, { label: "Sistemas Relacionados" }]}
+        links={[
+          {
+            label: "Pró-Reitoria de Pesquisa",
+            desc: "Programas, comitês de ética e laboratórios multiusuários.",
+            href: "https://unimontes.br/pro-reitoria-de-pesquisa/",
+            external: true,
+          },
+          {
+            label: "SiGex",
+            desc: "Sistema de Gestão da Extensão — cadastro de projetos e eventos.",
+            href: "https://sigex.unimontes.br/",
+            external: true,
+          },
+          {
+            label: "Portal de Periódicos",
+            desc: "Revistas científicas editadas pela Unimontes.",
+            href: "https://www.periodicos.unimontes.br/",
+            external: true,
+          },
+          {
+            label: "Todos os editais no site oficial",
+            desc: "Lista completa, ordenada pela data de modificação.",
+            href: "https://unimontes.br/editais/",
+            external: true,
+          },
+        ]}
       />
     ),
   },
@@ -352,7 +438,7 @@ const sidebarRelated = [
   { label: "Cursos", to: "/cursos" },
   { label: "Documentos e Requerimentos", to: "/servicos-documentos" },
   { label: "Assistência Estudantil", to: "/assistencia-estudantil" },
-  { label: "Ajuda e Suporte", to: "/contato" },
+  { label: "Ajuda e Suporte", to: "/ajuda-suporte" },
   { label: "Calendário Acadêmico", to: "/vida-academica" },
 ];
 
