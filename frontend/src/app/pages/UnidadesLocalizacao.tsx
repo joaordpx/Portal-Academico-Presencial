@@ -24,13 +24,16 @@ import {
 } from "lucide-react";
 import { PageHeader } from "../components/layout/PageHeader";
 import { getLocais, getUnidades } from "../../services/localService";
-import type { Local, LocalTipo, Unidade, HorarioFuncionamento } from "../../types";
+import { ErroCarregamento } from "../components/shared/ErroCarregamento";
+import type { Acessibilidade, HorarioFuncionamento, Local, LocalTipo, Unidade } from "../../types";
 
 const TABS = ["Campus Montes Claros", "Demais Unidades", "Organograma"] as const;
 type Tab = (typeof TABS)[number];
 
-const CAMPUS_ATUAL = "Campus Montes Claros";
-const CAMPUS_COORD = { lat: -16.7183, lng: -43.867 };
+/** Slug do campus-sede na API (`?campus=`) */
+const CAMPUS_ATUAL = "montes-claros";
+const CAMPUS_BUSCA_MAPA =
+  "Unimontes Campus Universitário Professor Darcy Ribeiro, Av. Rui Braga, Montes Claros";
 
 const TIPOS: ("Todos" | LocalTipo)[] = [
   "Todos",
@@ -67,7 +70,7 @@ function Horarios({ horarios }: { horarios: HorarioFuncionamento[] }) {
       {horarios.map((h, i) => (
         <span key={i} className="block">
           {h.rotulo && <span className="font-semibold">{h.rotulo}: </span>}
-          {h.dias}, {h.horas}
+          {h.dias ? `${h.dias}, ${h.horas}` : h.horas}
         </span>
       ))}
     </>
@@ -140,16 +143,25 @@ function CampusMontesClaros() {
   const [sub, setSub] = useState<"mapa" | "contatos">("mapa");
   const [locais, setLocais] = useState<Local[]>([]);
   const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState(false);
+  const [tentativa, setTentativa] = useState(0);
 
   useEffect(() => {
     let ativo = true;
     getLocais(CAMPUS_ATUAL)
       .then((d) => ativo && setLocais(d))
+      .catch(() => ativo && setErro(true))
       .finally(() => ativo && setLoading(false));
     return () => {
       ativo = false;
     };
-  }, []);
+  }, [tentativa]);
+
+  function recarregar() {
+    setErro(false);
+    setLoading(true);
+    setTentativa((t) => t + 1);
+  }
 
   return (
     <div>
@@ -184,7 +196,12 @@ function CampusMontesClaros() {
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.2 }}
           >
-            {sub === "mapa" ? (
+            {erro ? (
+              <ErroCarregamento
+                titulo="Não foi possível carregar os locais do campus"
+                onTentarNovamente={recarregar}
+              />
+            ) : sub === "mapa" ? (
               <Mapa locais={locais} loading={loading} />
             ) : (
               <Contatos locais={locais} loading={loading} />
@@ -210,7 +227,7 @@ function Mapa({ locais, loading }: { locais: Local[]; loading: boolean }) {
         (tipo === "Todos" || l.tipo === tipo) &&
         (termo === "" ||
           l.nome.toLowerCase().includes(termo) ||
-          l.descricao.toLowerCase().includes(termo) ||
+          l.descricao?.toLowerCase().includes(termo) ||
           l.centro?.sigla.toLowerCase().includes(termo) ||
           l.centro?.nome.toLowerCase().includes(termo) ||
           l.cursosDoCentro.some((c) => c.toLowerCase().includes(termo)) ||
@@ -286,7 +303,7 @@ function Mapa({ locais, loading }: { locais: Local[]; loading: boolean }) {
                   nele. Enquanto isso, use a busca acima ou abra o mapa externo.
                 </p>
                 <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${CAMPUS_COORD.lat},${CAMPUS_COORD.lng}`}
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(CAMPUS_BUSCA_MAPA)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-5 inline-flex items-center gap-2 rounded-[6px] bg-[#1a1a1a] px-5 py-3 text-[12px] font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#6E3AFF]"
@@ -371,9 +388,11 @@ function Mapa({ locais, loading }: { locais: Local[]; loading: boolean }) {
                                 {l.tipo}
                               </span>
                             </div>
-                            <p className="mt-1 text-[13px] leading-[1.5] text-[#1a1a1a]/60">
-                              {l.descricao}
-                            </p>
+                            {l.descricao && (
+                              <p className="mt-1 text-[13px] leading-[1.5] text-[#1a1a1a]/60">
+                                {l.descricao}
+                              </p>
+                            )}
                           </button>
                         </li>
                       ))}
@@ -406,7 +425,9 @@ function DetalheLocal({ local }: { local: Local }) {
             {local.centro.sigla} — {local.centro.nome}
           </p>
         )}
-        <p className="mt-2 text-[13.5px] leading-[1.55] text-[#1a1a1a]/65">{local.descricao}</p>
+        {local.descricao && (
+          <p className="mt-2 text-[13.5px] leading-[1.55] text-[#1a1a1a]/65">{local.descricao}</p>
+        )}
       </div>
 
       <div className="space-y-5 p-5">
@@ -433,9 +454,11 @@ function DetalheLocal({ local }: { local: Local }) {
             {local.localizacao}
           </Bloco>
         )}
-        <Bloco icon={Clock} titulo="Horário de funcionamento">
-          <Horarios horarios={local.horarios} />
-        </Bloco>
+        {local.horarios.length > 0 && (
+          <Bloco icon={Clock} titulo="Horário de funcionamento">
+            <Horarios horarios={local.horarios} />
+          </Bloco>
+        )}
         {local.contato.telefone && (
           <Bloco icon={Phone} titulo="Telefone">
             <a
@@ -459,36 +482,13 @@ function DetalheLocal({ local }: { local: Local }) {
             <Accessibility className="h-4 w-4 text-[#00B894]" />
             Acessibilidade
           </div>
-          <ul className="mt-3 space-y-2">
-            {(
-              [
-                ["Rampa de acesso", local.acessibilidade.rampa],
-                ["Elevador", local.acessibilidade.elevador],
-                ["Banheiro adaptado", local.acessibilidade.banheiroAdaptado],
-                ["Piso tátil", local.acessibilidade.pisoTatil],
-                ...(local.acessibilidade.vagaEspecial !== undefined
-                  ? ([["Vaga especial", local.acessibilidade.vagaEspecial]] as [string, boolean][])
-                  : []),
-              ] as [string, boolean][]
-            ).map(([label, tem]) => (
-              <li
-                key={label}
-                className={`flex items-center gap-2 text-[12.5px] ${
-                  tem ? "text-[#1a1a1a]/80" : "text-[#1a1a1a]/40"
-                }`}
-              >
-                {tem ? (
-                  <Check className="h-4 w-4 shrink-0 text-[#00B894]" />
-                ) : (
-                  <Minus className="h-4 w-4 shrink-0 text-[#1a1a1a]/25" />
-                )}
-                <span>
-                  {label}
-                  <span className="sr-only">{tem ? " disponível" : " não disponível"}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
+          {local.acessibilidade ? (
+            <ItensAcessibilidade acessibilidade={local.acessibilidade} />
+          ) : (
+            <p className="mt-3 text-[12.5px] leading-[1.5] text-[#1a1a1a]/55">
+              Informações de acessibilidade deste local em levantamento.
+            </p>
+          )}
         </div>
 
         <a
@@ -501,6 +501,39 @@ function DetalheLocal({ local }: { local: Local }) {
         </a>
       </div>
     </div>
+  );
+}
+
+/** Lista do levantamento — só exibida depois que ele foi concluído */
+function ItensAcessibilidade({ acessibilidade: a }: { acessibilidade: Acessibilidade }) {
+  const itens: [string, boolean][] = [
+    ["Rampa de acesso", !!a.rampa],
+    ["Elevador", !!a.elevador],
+    ["Banheiro adaptado", !!a.banheiroAdaptado],
+    ["Piso tátil", !!a.pisoTatil],
+    ["Vaga especial", !!a.vagaEspecial],
+  ];
+  return (
+    <ul className="mt-3 space-y-2">
+      {itens.map(([label, tem]) => (
+        <li
+          key={label}
+          className={`flex items-center gap-2 text-[12.5px] ${
+            tem ? "text-[#1a1a1a]/80" : "text-[#1a1a1a]/40"
+          }`}
+        >
+          {tem ? (
+            <Check className="h-4 w-4 shrink-0 text-[#00B894]" />
+          ) : (
+            <Minus className="h-4 w-4 shrink-0 text-[#1a1a1a]/25" />
+          )}
+          <span>
+            {label}
+            <span className="sr-only">{tem ? " disponível" : " não disponível"}</span>
+          </span>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -591,26 +624,40 @@ function Contatos({ locais, loading }: { locais: Local[]; loading: boolean }) {
 
 function DemaisUnidades() {
   const [unidades, setUnidades] = useState<Unidade[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState(false);
+  const [tentativa, setTentativa] = useState(0);
   const [q, setQ] = useState("");
   const [regiao, setRegiao] = useState("Todas");
   const [curso, setCurso] = useState("Todos");
 
   useEffect(() => {
     let ativo = true;
-    getUnidades().then((d) => ativo && setUnidades(d));
+    getUnidades()
+      .then((d) => ativo && setUnidades(d))
+      .catch(() => ativo && setErro(true))
+      .finally(() => ativo && setLoading(false));
     return () => {
       ativo = false;
     };
-  }, []);
+  }, [tentativa]);
 
-  const regioes = ["Todas", ...Array.from(new Set(unidades.map((u) => u.regiao ?? "—")))];
-  const cursos = ["Todos", ...Array.from(new Set(unidades.flatMap((u) => u.cursos))).sort()];
+  function recarregar() {
+    setErro(false);
+    setLoading(true);
+    setTentativa((t) => t + 1);
+  }
+
+  const ordenar = (a: string, b: string) => a.localeCompare(b, "pt-BR");
+  const regiaoDe = (u: Unidade) => u.regiao ?? "—";
+  const regioes = ["Todas", ...Array.from(new Set(unidades.map(regiaoDe))).sort(ordenar)];
+  const cursos = ["Todos", ...Array.from(new Set(unidades.flatMap((u) => u.cursos))).sort(ordenar)];
 
   const filtradas = useMemo(() => {
     const termo = q.trim().toLowerCase();
     return unidades.filter(
       (u) =>
-        (regiao === "Todas" || u.regiao === regiao) &&
+        (regiao === "Todas" || regiaoDe(u) === regiao) &&
         (curso === "Todos" || u.cursos.includes(curso)) &&
         (termo === "" ||
           u.nome.toLowerCase().includes(termo) ||
@@ -669,6 +716,19 @@ function DemaisUnidades() {
 
       {/* Unidades */}
       <div className="mt-6 space-y-4">
+        {erro && (
+          <ErroCarregamento
+            titulo="Não foi possível carregar as unidades"
+            onTentarNovamente={recarregar}
+          />
+        )}
+        {loading &&
+          Array.from({ length: 3 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-48 animate-pulse rounded-[12px] border border-[#e5e5e5] bg-[#fafafa]"
+            />
+          ))}
         {filtradas.map((u) => (
           <div key={u.slug} className="rounded-[12px] border border-[#e5e5e5] bg-white p-6">
             <div className="flex flex-wrap items-start justify-between gap-3">
@@ -694,27 +754,31 @@ function DemaisUnidades() {
             </div>
 
             <div className="mt-5 grid grid-cols-1 gap-6 lg:grid-cols-3">
-              <div>
-                <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a]/60">
-                  <GraduationCap className="h-3.5 w-3.5" /> Cursos ofertados
-                </div>
-                <div className="mt-2.5 flex flex-wrap gap-1.5">
-                  {u.cursos.map((c) => (
-                    <span
-                      key={c}
-                      className="rounded-[4px] bg-[#6E3AFF]/10 px-2 py-1 text-[11.5px] font-semibold text-[#6E3AFF]"
-                    >
-                      {c}
-                    </span>
-                  ))}
-                </div>
+              <div className="space-y-5">
+                {u.cursos.length > 0 && (
+                  <div>
+                    <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a]/60">
+                      <GraduationCap className="h-3.5 w-3.5" /> Cursos de graduação presenciais
+                    </div>
+                    <div className="mt-2.5 flex flex-wrap gap-1.5">
+                      {u.cursos.map((c) => (
+                        <span
+                          key={c}
+                          className="rounded-[4px] bg-[#6E3AFF]/10 px-2 py-1 text-[11.5px] font-semibold text-[#6E3AFF]"
+                        >
+                          {c}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 {u.endereco && (
-                  <>
-                    <div className="mt-5 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a]/60">
+                  <div>
+                    <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a]/60">
                       <MapPin className="h-3.5 w-3.5" /> Localização
                     </div>
                     <p className="mt-2 text-[13px] leading-[1.5] text-[#1a1a1a]/70">{u.endereco}</p>
-                  </>
+                  </div>
                 )}
               </div>
 
@@ -745,32 +809,38 @@ function DemaisUnidades() {
                   )}
                 </dl>
 
-                <div className="mt-5 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a]/60">
-                  <Clock className="h-3.5 w-3.5" /> Horário
-                </div>
-                <p className="mt-2 text-[13px] leading-[1.5] text-[#1a1a1a]/70">
-                  <Horarios horarios={u.horarios} />
-                </p>
+                {u.horarios.length > 0 && (
+                  <>
+                    <div className="mt-5 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a]/60">
+                      <Clock className="h-3.5 w-3.5" /> Horário
+                    </div>
+                    <p className="mt-2 text-[13px] leading-[1.5] text-[#1a1a1a]/70">
+                      <Horarios horarios={u.horarios} />
+                    </p>
+                  </>
+                )}
               </div>
 
-              <div>
-                <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a]/60">
-                  <Sparkles className="h-3.5 w-3.5" /> Serviços disponíveis
+              {u.servicos.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a]/60">
+                    <Sparkles className="h-3.5 w-3.5" /> Estrutura
+                  </div>
+                  <ul className="mt-2.5 space-y-1 text-[13px] text-[#1a1a1a]/70">
+                    {u.servicos.map((s) => (
+                      <li key={s} className="flex items-start gap-2">
+                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[#1a1a1a]/30" />
+                        {s}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="mt-2.5 space-y-1 text-[13px] text-[#1a1a1a]/70">
-                  {u.servicos.map((s) => (
-                    <li key={s} className="flex items-start gap-2">
-                      <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[#1a1a1a]/30" />
-                      {s}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              )}
             </div>
           </div>
         ))}
 
-        {filtradas.length === 0 && (
+        {!loading && !erro && filtradas.length === 0 && (
           <p className="py-16 text-center text-[14px] text-[#1a1a1a]/55">
             Nenhuma unidade encontrada com esses filtros.
           </p>
@@ -814,16 +884,20 @@ function DemaisUnidades() {
 
 /* ───────────── Organograma ───────────── */
 
+/** Páginas oficiais da estrutura da universidade em unimontes.br */
 const ESTRUTURA = [
-  "Conselhos Superiores",
-  "Reitoria e Vice-Reitoria",
-  "Assessorias e órgãos de apoio",
-  "Pró-Reitorias",
-  "Centros de Ensino",
-  "Diretorias",
-  "Setores administrativos",
-  "Setores acadêmicos",
+  { label: "Conselhos Superiores", href: "https://unimontes.br/apresentacao/conselhos/" },
+  { label: "Reitoria e Pró-Reitorias", href: "https://unimontes.br/apresentacao/organograma/" },
+  { label: "Unidades acadêmicas e campi", href: "https://unimontes.br/unidades-academicas/" },
+  { label: "Regimento Geral e PDI", href: "https://unimontes.br/regimento-geral-e-pdi/" },
+  { label: "Secretaria Geral", href: "https://unimontes.br/unidades/secretaria-geral/" },
+  { label: "Biblioteca Universitária", href: "https://unimontes.br/unidades/biblioteca/" },
+  { label: "Tecnologia da Informação (DTI)", href: "https://unimontes.br/dti/" },
+  { label: "Catálogo telefônico", href: "https://unimontes.br/catalogo-telefonico/" },
 ];
+
+const ORGANOGRAMA_PAGINA = "https://unimontes.br/apresentacao/organograma/";
+const ORGANOGRAMA_PDF = "https://unimontes.br/wp-content/uploads/2018/11/organograma_unimontes.pdf";
 
 function Organograma() {
   return (
@@ -844,11 +918,13 @@ function Organograma() {
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {ESTRUTURA.map((item) => (
             <a
-              key={item}
-              href="#"
+              key={item.label}
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
               className="group flex items-center justify-center rounded-[8px] border border-[#e5e5e5] bg-white px-4 py-4 text-center text-[13.5px] font-semibold text-[#1a1a1a] transition-all hover:-translate-y-0.5 hover:border-[#6E3AFF]/50 hover:shadow-[0_8px_22px_rgba(26,26,26,0.08)]"
             >
-              {item}
+              {item.label}
             </a>
           ))}
         </div>
@@ -883,16 +959,20 @@ function Organograma() {
 
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           <a
-            href="#"
+            href={ORGANOGRAMA_PAGINA}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 rounded-[6px] bg-[#1a1a1a] px-5 py-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#6E3AFF]"
           >
-            Ver organograma completo
+            Quem é quem na Unimontes
           </a>
           <a
-            href="#"
+            href={ORGANOGRAMA_PDF}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 rounded-[6px] border border-[#1a1a1a] px-5 py-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a] transition-colors hover:border-[#6E3AFF] hover:bg-[#6E3AFF] hover:text-white"
           >
-            <Download className="h-4 w-4" /> Baixar PDF
+            <Download className="h-4 w-4" /> Organograma (PDF)
           </a>
         </div>
       </div>
@@ -908,7 +988,7 @@ function Organograma() {
             { label: "Coordenações", to: "/cursos" },
             { label: "Serviços e Documentos", to: "/servicos-documentos" },
             { label: "Assistência Estudantil", to: "/assistencia-estudantil" },
-            { label: "Ajuda e Suporte", to: "/contato" },
+            { label: "Ajuda e Suporte", to: "/ajuda-suporte" },
           ].map((l) => (
             <Link
               key={l.label}
