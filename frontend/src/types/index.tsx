@@ -54,41 +54,44 @@ export interface CentroEnsino {
 
 /** Faixa de horário de funcionamento — vários registros p/ RU, biblioteca etc. */
 export interface HorarioFuncionamento {
-  dias: string; // "Segunda a sexta"
+  dias?: string; // "Segunda a sexta" — ausente quando a fonte não informa
   horas: string; // "08h às 18h"
   rotulo?: string; // "Almoço", "Jantar", "Café da manhã"
 }
 
+/** Só traz as chaves cadastradas (a API omite as vazias) */
 export interface Contato {
   telefone?: string;
   email?: string;
   ramal?: string;
 }
 
-/** Outro campus da universidade */
+/** Campus ou núcleo da universidade — GET /api/campi */
 export interface Unidade {
   slug: string;
-  nome: string;
+  nome: string; // "Campus Montes Claros"
   cidade: string;
-  regiao?: string;
-  endereco?: string;
+  regiao: string | null;
+  sede: boolean; // campus-sede (Montes Claros) — vem primeiro na lista
+  endereco: string | null;
   contato: Contato;
   horarios: HorarioFuncionamento[];
-  cursos: string[];
+  cursos: string[]; // nomes dos cursos ofertados no campus
   servicos: string[];
-  mapsUrl?: string;
+  mapsUrl: string | null;
 }
 
+/** Itens do levantamento; uma chave ausente equivale a "não possui" */
 export interface Acessibilidade {
-  rampa: boolean;
-  elevador: boolean;
-  banheiroAdaptado: boolean;
-  pisoTatil: boolean;
+  rampa?: boolean;
+  elevador?: boolean;
+  banheiroAdaptado?: boolean;
+  pisoTatil?: boolean;
   vagaEspecial?: boolean;
 }
 
 /**
- * Local do campus (prédio, setor, serviço...).
+ * Local do campus (prédio, setor, serviço...) — GET /api/locais.
  *
  * `svgId` amarra o registro ao <path> correspondente na planta do campus —
  * quando o SVG existir, o mapa vira apenas uma camada de apresentação sobre
@@ -98,12 +101,12 @@ export interface Local {
   id: number;
   slug: string;
   nome: string; // ex.: "Prédio 1"
-  numero?: number; // prédios são numerados (1 a 13)
+  numero: number | null; // prédios são numerados (1 a 13)
   tipo: LocalTipo;
-  campus: string; // preparado para multi-campus
-  descricao: string;
+  campus: string; // nome do campus, ex.: "Campus Montes Claros"
+  descricao: string | null;
   /** Centro de ensino sediado no prédio — vínculo estável */
-  centro?: CentroEnsino;
+  centro: CentroEnsino | null;
   /**
    * Cursos vinculados ao centro. NÃO indica onde as aulas acontecem:
    * turmas mudam de prédio a cada semestre. Serve para o estudante
@@ -114,14 +117,14 @@ export interface Local {
   setores: string[];
   /** Serviços disponíveis (biblioteca, cantina, laboratórios...) */
   servicos: string[];
-  acessibilidade: Acessibilidade;
   /** Localização interna, ex.: "Prédio 7 · Sala 101" */
-  localizacao?: string;
+  localizacao: string | null;
   contato: Contato;
   horarios: HorarioFuncionamento[];
-  coordenadas?: { lat: number; lng: number };
-  svgId?: string; // id do <path> na planta do campus
-  foto?: string;
+  coordenadas: { lat: number; lng: number } | null;
+  svgId: string | null; // id do <path> na planta do campus
+  /** Nulo enquanto o levantamento de acessibilidade do local não for concluído */
+  acessibilidade: Acessibilidade | null;
 }
 
 /* ─────────────── Eventos ─────────────── */
