@@ -1,99 +1,29 @@
-import type { Edital } from "../types";
+import { fetchApi } from "./api";
+import { diasAte } from "../utils/data";
+import type { Edital, EditalView } from "../types";
 
 /**
- * Serviço de Editais e Oportunidades.
+ * Serviço de Editais e Oportunidades — consome a API pública do backend.
  *
- * Mock temporário — para integrar, importe `fetchApi` de "./api", descomente a chamada `fetchApi` e remova o mock.
- * Backend previsto (Laravel): GET /editais.
+ * O status NÃO é guardado no banco: é derivado do prazo em `toEditalView`,
+ * para nunca exibir como "Aberto" um edital que já venceu.
  */
 
-const editais: Edital[] = [
-  {
-    id: 1,
-    titulo: "Edital de Monitoria 2026/1",
-    status: "Aberto",
-    tipo: "Monitoria",
-    curso: "Diversos cursos",
-    campus: "Montes Claros",
-    prazo: "2026-08-20",
-  },
-  {
-    id: 2,
-    titulo: "Edital de Extensão — Projeto Comunidade",
-    status: "Aberto",
-    tipo: "Extensão",
-    curso: "Todos os cursos",
-    campus: "Montes Claros",
-    prazo: "2026-08-25",
-  },
-  {
-    id: 3,
-    titulo: "Edital de Iniciação Científica PIBIC 2026",
-    status: "Encerrado",
-    tipo: "Pesquisa",
-    curso: "Todos os cursos",
-    campus: "Todos",
-    prazo: "2026-07-15",
-  },
-  {
-    id: 4,
-    titulo: "Edital de Estágio em Empresas Parceiras",
-    status: "Aberto",
-    tipo: "Estágio",
-    curso: "Administração",
-    campus: "Vários campi",
-    prazo: "2026-08-06",
-  },
-  {
-    id: 5,
-    titulo: "Programa de Bolsa Permanência 2026",
-    status: "Aberto",
-    tipo: "Assistência",
-    curso: "Todos os cursos",
-    campus: "Todos",
-    prazo: "2026-08-10",
-  },
-  {
-    id: 6,
-    titulo: "Edital de Mobilidade Acadêmica Internacional",
-    status: "Encerrado",
-    tipo: "Mobilidade",
-    curso: "Todos os cursos",
-    campus: "Todos",
-    prazo: "2026-07-01",
-  },
-  {
-    id: 7,
-    titulo: "Edital de Apoio a Eventos Estudantis",
-    status: "Aberto",
-    tipo: "Extensão",
-    curso: "Todos os cursos",
-    campus: "Montes Claros",
-    prazo: "2026-09-12",
-  },
-  {
-    id: 8,
-    titulo: "Edital de Monitoria Voluntária 2026/2",
-    status: "Aberto",
-    tipo: "Monitoria",
-    curso: "Diversos cursos",
-    campus: "Januária",
-    prazo: "2026-09-30",
-  },
-];
-
-/** Lista de editais (aba "Editais") */
-export async function getEditais(): Promise<Edital[]> {
-  // return fetchApi<Edital[]>("/editais");
-  return editais;
+/** Editais com status derivado: abertos primeiro (prazo mais próximo), depois encerrados (mais recentes) */
+export async function getEditais(hoje = new Date()): Promise<EditalView[]> {
+  const editais = await fetchApi<Edital[]>("/editais");
+  const views = editais.map((e) => toEditalView(e, hoje));
+  const abertos = views
+    .filter((e) => e.status === "Aberto")
+    .sort((a, b) => a.prazo.localeCompare(b.prazo));
+  const encerrados = views
+    .filter((e) => e.status === "Encerrado")
+    .sort((a, b) => b.prazo.localeCompare(a.prazo));
+  return [...abertos, ...encerrados];
 }
 
-/** Opções de filtro derivadas dos dados (viram endpoints/enums no backend) */
-export async function getEditaisFiltros() {
-  const unicos = (vals: string[]) => Array.from(new Set(vals));
-  return {
-    curso: ["Todos", ...unicos(editais.map((e) => e.curso))],
-    campus: ["Todos", ...unicos(editais.map((e) => e.campus))],
-    tipo: ["Todos", ...unicos(editais.map((e) => e.tipo))],
-  };
+/** O prazo é o último dia de inscrição: o edital segue aberto durante todo esse dia */
+export function toEditalView(e: Edital, hoje = new Date()): EditalView {
+  const diasRestantes = diasAte(e.prazo, hoje);
+  return { ...e, status: diasRestantes >= 0 ? "Aberto" : "Encerrado", diasRestantes };
 }

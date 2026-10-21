@@ -165,18 +165,33 @@ export interface Evento {
 export type EditalStatus = "Aberto" | "Encerrado";
 
 export type EditalTipo =
-  "Monitoria" | "Extensão" | "Pesquisa" | "Estágio" | "Assistência" | "Mobilidade";
+  | "Monitoria"
+  | "Extensão"
+  | "Pesquisa"
+  | "Estágio"
+  | "Assistência"
+  | "Mobilidade"
+  | "Pós-Graduação";
 
-/** Registro cru de um edital (espelha a futura tabela) */
+/**
+ * Registro cru de um edital — GET /api/editais.
+ * Não traz status: ele é derivado do prazo, para nunca exibir como "Aberto"
+ * um edital que já venceu.
+ */
 export interface Edital {
   id: number;
   titulo: string;
-  status: EditalStatus;
   tipo: EditalTipo;
-  curso: string;
-  campus: string;
-  prazo: string; // ISO (YYYY-MM-DD) — formatação fica na view
-  url?: string;
+  publico: string; // ex.: "Todos os cursos", "Graduados"
+  campus: string; // ex.: "Montes Claros", "Todos os campi"
+  prazo: string; // ISO (YYYY-MM-DD) — último dia de inscrição
+  url: string | null; // edital ou notícia no site oficial
+}
+
+/** Edital pronto para exibir — derivado de `Edital` no serviço */
+export interface EditalView extends Edital {
+  status: EditalStatus;
+  diasRestantes: number; // dias de calendário até o prazo (0 = último dia, negativo = vencido)
 }
 
 /* ─────────────── Cursos ─────────────── */
