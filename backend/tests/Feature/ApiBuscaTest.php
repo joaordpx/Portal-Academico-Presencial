@@ -18,14 +18,14 @@ class ApiBuscaTest extends TestCase
         $this->postJson('/api/buscas', [
             'termo' => '  Matrícula   ',
             'resultados' => 4,
-            'tipoClicado' => 'pagina',
+            'tipoClicado' => 'link',
             'posicao' => 2,
         ])->assertNoContent();
 
         $busca = Busca::sole();
         $this->assertSame('matricula', $busca->termo);
         $this->assertSame(4, $busca->resultados);
-        $this->assertSame(TipoResultadoBusca::Pagina, $busca->tipo_clicado);
+        $this->assertSame(TipoResultadoBusca::Link, $busca->tipo_clicado);
         $this->assertSame(2, $busca->posicao_clicada);
     }
 

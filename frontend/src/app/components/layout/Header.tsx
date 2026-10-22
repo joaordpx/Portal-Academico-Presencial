@@ -3,6 +3,8 @@ import { NavLink } from "react-router";
 import { motion } from "motion/react";
 import { Search, Menu, X } from "lucide-react";
 import { SearchDialog } from "../shared/SearchDialog";
+import { EVENTO_ABRIR_BUSCA } from "../shared/abrirBusca";
+import { preCarregarBusca } from "../../../services/buscaService";
 
 const NAV = [
   { to: "/", label: "Início", end: true },
@@ -16,7 +18,8 @@ const NAV = [
 ];
 
 export function Header() {
-  const [searchOpen, setSearchOpen] = useState(false);
+  // `chave` remonta a janela quando ela é reaberta com outro termo
+  const [busca, setBusca] = useState({ aberta: false, termo: "", chave: 0 });
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -31,12 +34,23 @@ export function Header() {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        setSearchOpen((v) => !v);
+        setBusca((b) => ({ aberta: !b.aberta, termo: "", chave: b.chave + 1 }));
       }
     };
+    // Caixas de busca e sugestões das páginas abrem a busca global já com o termo
+    const onAbrir = (e: Event) => {
+      const termo = (e as CustomEvent<string>).detail ?? "";
+      setBusca((b) => ({ aberta: true, termo, chave: b.chave + 1 }));
+    };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener(EVENTO_ABRIR_BUSCA, onAbrir);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener(EVENTO_ABRIR_BUSCA, onAbrir);
+    };
   }, []);
+
+  const abrirBusca = () => setBusca((b) => ({ aberta: true, termo: "", chave: b.chave + 1 }));
 
   return (
     <>
@@ -63,7 +77,9 @@ export function Header() {
 
           <div className="flex items-center gap-2.5">
             <motion.button
-              onClick={() => setSearchOpen(true)}
+              onClick={abrirBusca}
+              onMouseEnter={preCarregarBusca}
+              onFocus={preCarregarBusca}
               whileTap={{ scale: 0.97 }}
               className="hidden items-center gap-3 rounded-[4px] border border-[#e5e5e5] bg-white px-3.5 py-2.5 text-[12px] font-medium text-[#1a1a1a]/60 transition-colors hover:border-[#1a1a1a] hover:text-[#1a1a1a] sm:flex"
             >
@@ -143,7 +159,7 @@ export function Header() {
               <button
                 onClick={() => {
                   setMobileOpen(false);
-                  setSearchOpen(true);
+                  abrirBusca();
                 }}
                 className="mt-2 flex items-center justify-center gap-2 rounded-[4px] border border-[#e5e5e5] px-4 py-3 text-sm font-semibold text-[#1a1a1a]"
               >
@@ -154,7 +170,13 @@ export function Header() {
         )}
       </header>
 
-      <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
+      {busca.aberta && (
+        <SearchDialog
+          key={busca.chave}
+          termoInicial={busca.termo}
+          onClose={() => setBusca((b) => ({ ...b, aberta: false }))}
+        />
+      )}
     </>
   );
 }
