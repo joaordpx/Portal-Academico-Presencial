@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
 import {
   MapPin,
@@ -29,6 +29,32 @@ import type { Acessibilidade, HorarioFuncionamento, Local, LocalTipo, Unidade } 
 
 const TABS = ["Campus Montes Claros", "Demais Unidades", "Organograma"] as const;
 type Tab = (typeof TABS)[number];
+
+/**
+ * O que está aberto vem do endereço, para links (e a busca) levarem direto:
+ * #predio-3 abre o prédio no mapa, #contatos a lista de contatos,
+ * #campus-januaria o campus em Demais Unidades e #organograma a última aba.
+ */
+const HASH_DA_ABA: Record<Tab, string> = {
+  "Campus Montes Claros": "",
+  "Demais Unidades": "demais-unidades",
+  Organograma: "organograma",
+};
+
+function abaDoHash(hash: string): Tab {
+  if (hash === "organograma") return "Organograma";
+  if (hash === "demais-unidades" || hash.startsWith("campus-")) return "Demais Unidades";
+  return "Campus Montes Claros";
+}
+
+/** Rola até o elemento se ele estiver fora da área visível (abaixo do cabeçalho fixo) */
+function mostrar(el: HTMLElement | null) {
+  if (!el) return;
+  const { top } = el.getBoundingClientRect();
+  if (top < 200 || top > window.innerHeight * 0.7) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
 
 /** Slug do campus-sede na API (`?campus=`) */
 const CAMPUS_ATUAL = "montes-claros";
@@ -78,7 +104,12 @@ function Horarios({ horarios }: { horarios: HorarioFuncionamento[] }) {
 }
 
 export function UnidadesLocalizacao() {
-  const [tab, setTab] = useState<Tab>("Campus Montes Claros");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const hash = decodeURIComponent(location.hash.slice(1));
+  const tab = abaDoHash(hash);
+  const irPara = (novo: string) =>
+    navigate({ hash: novo }, { replace: true, preventScrollReset: true });
 
   return (
     <>
@@ -95,7 +126,8 @@ export function UnidadesLocalizacao() {
             {TABS.map((t) => (
               <button
                 key={t}
-                onClick={() => setTab(t)}
+                onClick={() => irPara(HASH_DA_ABA[t])}
+                aria-current={tab === t ? "true" : undefined}
                 className={`relative shrink-0 cursor-pointer whitespace-nowrap rounded-full px-5 py-2.5 text-[12.5px] font-bold uppercase tracking-[0.1em] transition-colors ${
                   tab === t
                     ? "text-white"
@@ -126,8 +158,8 @@ export function UnidadesLocalizacao() {
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.25 }}
             >
-              {tab === "Campus Montes Claros" && <CampusMontesClaros />}
-              {tab === "Demais Unidades" && <DemaisUnidades />}
+              {tab === "Campus Montes Claros" && <CampusMontesClaros hash={hash} irPara={irPara} />}
+              {tab === "Demais Unidades" && <DemaisUnidades hash={hash} />}
               {tab === "Organograma" && <Organograma />}
             </motion.div>
           </AnimatePresence>
@@ -139,8 +171,8 @@ export function UnidadesLocalizacao() {
 
 /* ───────────── Campus Montes Claros: Mapa | Contatos ───────────── */
 
-function CampusMontesClaros() {
-  const [sub, setSub] = useState<"mapa" | "contatos">("mapa");
+function CampusMontesClaros({ hash, irPara }: { hash: string; irPara: (h: string) => void }) {
+  const sub = hash === "contatos" ? "contatos" : "mapa";
   const [locais, setLocais] = useState<Local[]>([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(false);
@@ -170,7 +202,7 @@ function CampusMontesClaros() {
         {(["mapa", "contatos"] as const).map((s) => (
           <button
             key={s}
-            onClick={() => setSub(s)}
+            onClick={() => irPara(s === "contatos" ? "contatos" : "")}
             className={`relative cursor-pointer rounded-[6px] px-4 py-2 text-[13px] font-bold transition-colors ${
               sub === s ? "text-white" : "text-[#1a1a1a]/60 hover:text-[#1a1a1a]"
             }`}
@@ -202,7 +234,12 @@ function CampusMontesClaros() {
                 onTentarNovamente={recarregar}
               />
             ) : sub === "mapa" ? (
-              <Mapa locais={locais} loading={loading} />
+              <Mapa
+                locais={locais}
+                loading={loading}
+                selecionado={hash}
+                onSelecionar={(slug) => irPara(slug ?? "")}
+              />
             ) : (
               <Contatos locais={locais} loading={loading} />
             )}
@@ -215,10 +252,21 @@ function CampusMontesClaros() {
 
 /* ───────────── Mapa + busca + legenda ───────────── */
 
-function Mapa({ locais, loading }: { locais: Local[]; loading: boolean }) {
+function Mapa({
+  locais,
+  loading,
+  selecionado,
+  onSelecionar,
+}: {
+  locais: Local[];
+  loading: boolean;
+  /** Slug do local aberto (vem do endereço: /unidades-localizacao#predio-3) */
+  selecionado: string;
+  onSelecionar: (slug: string | null) => void;
+}) {
   const [q, setQ] = useState("");
   const [tipo, setTipo] = useState<"Todos" | LocalTipo>("Todos");
-  const [selecionado, setSelecionado] = useState<string | null>(null);
+  const detalhe = useRef<HTMLDivElement>(null);
 
   const filtrados = useMemo(() => {
     const termo = q.trim().toLowerCase();
@@ -237,6 +285,11 @@ function Mapa({ locais, loading }: { locais: Local[]; loading: boolean }) {
   }, [locais, q, tipo]);
 
   const atual = locais.find((l) => l.slug === selecionado) ?? null;
+
+  // Chegando por um link para o prédio (ex.: da busca), leva o detalhe para a tela
+  useEffect(() => {
+    if (atual) mostrar(detalhe.current);
+  }, [atual]);
 
   return (
     <div>
@@ -323,7 +376,7 @@ function Mapa({ locais, loading }: { locais: Local[]; loading: boolean }) {
 
         {/* Lista ou detalhe */}
         <div className="lg:col-span-5">
-          <div>
+          <div ref={detalhe} className="scroll-mt-48">
             <AnimatePresence mode="wait">
               {atual ? (
                 <motion.div
@@ -335,7 +388,7 @@ function Mapa({ locais, loading }: { locais: Local[]; loading: boolean }) {
                   aria-live="polite"
                 >
                   <button
-                    onClick={() => setSelecionado(null)}
+                    onClick={() => onSelecionar(null)}
                     className="mb-3 inline-flex cursor-pointer items-center gap-2 text-[12px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a]/60 transition-colors hover:text-[#6E3AFF]"
                   >
                     <ArrowLeft className="h-4 w-4" /> Todos os locais
@@ -370,7 +423,7 @@ function Mapa({ locais, loading }: { locais: Local[]; loading: boolean }) {
                       {filtrados.map((l) => (
                         <li key={l.slug}>
                           <button
-                            onClick={() => setSelecionado(l.slug)}
+                            onClick={() => onSelecionar(l.slug)}
                             className="w-full cursor-pointer rounded-[10px] border border-[#e5e5e5] bg-white p-4 text-left transition-all hover:border-[#6E3AFF]/50 hover:bg-[#fafafa]"
                           >
                             <div className="flex items-start justify-between gap-3">
@@ -622,7 +675,7 @@ function Contatos({ locais, loading }: { locais: Local[]; loading: boolean }) {
 
 /* ───────────── Demais Unidades ───────────── */
 
-function DemaisUnidades() {
+function DemaisUnidades({ hash }: { hash: string }) {
   const [unidades, setUnidades] = useState<Unidade[]>([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(false);
@@ -730,7 +783,16 @@ function DemaisUnidades() {
             />
           ))}
         {filtradas.map((u) => (
-          <div key={u.slug} className="rounded-[12px] border border-[#e5e5e5] bg-white p-6">
+          <div
+            key={u.slug}
+            id={`campus-${u.slug}`}
+            ref={hash === `campus-${u.slug}` ? mostrar : undefined}
+            className={`scroll-mt-48 rounded-[12px] border bg-white p-6 transition-colors ${
+              hash === `campus-${u.slug}`
+                ? "border-[#6E3AFF] ring-2 ring-[#6E3AFF]/20"
+                : "border-[#e5e5e5]"
+            }`}
+          >
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h3 className="text-[19px] font-bold tracking-[-0.02em] text-[#1a1a1a]">
