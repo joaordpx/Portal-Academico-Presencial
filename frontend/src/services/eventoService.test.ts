@@ -1,56 +1,88 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { getEventos, getEvento } from "./eventoService";
+import type { Evento } from "../types";
+
+/** Data local fixa (meio-dia evita qualquer efeito de fuso) */
+const HOJE = new Date(2026, 9, 20, 12); // 20/10/2026
+
+/** Evento no formato exato devolvido por GET /api/eventos */
+function evento(overrides: Partial<Evento> = {}): Evento {
+  return {
+    id: 1,
+    slug: "semana-academica",
+    titulo: "Semana Acadêmica",
+    descricao: "Resumo do evento.",
+    conteudo: ["Primeiro parágrafo."],
+    tipo: "Acadêmico",
+    data: "2026-10-25",
+    dataFim: null,
+    horario: "19h",
+    local: "Auditório do CCH",
+    campus: "Montes Claros",
+    imagem: null,
+    origem: "manual",
+    organizador: null,
+    linkOficial: null,
+    inscricoesAbertas: false,
+    ...overrides,
+  };
+}
+
+function respostaApi(status: number, corpo: unknown = {}) {
+  const fetchMock = vi.fn().mockResolvedValue(
+    new Response(JSON.stringify(corpo), {
+      status,
+      headers: { "Content-Type": "application/json" },
+    }),
+  );
+  vi.stubGlobal("fetch", fetchMock);
+  return fetchMock;
+}
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
 
 describe("getEventos", () => {
-  it("retorna a lista de eventos", async () => {
-    const eventos = await getEventos();
-    expect(eventos.length).toBeGreaterThan(0);
+  it("busca na API e deriva os dias até cada evento", async () => {
+    const fetchMock = respostaApi(200, [
+      evento({ id: 1, data: "2026-10-25" }),
+      evento({ id: 2, data: "2026-10-10" }),
+    ]);
+
+    const eventos = await getEventos(HOJE);
+
+    expect(fetchMock.mock.calls[0][0]).toMatch(/\/eventos$/);
+    expect(eventos.map((e) => e.dias)).toEqual([5, -10]);
   });
 
-  it("não repete slugs — eles são usados como rota", async () => {
-    const eventos = await getEventos();
-    const slugs = eventos.map((e) => e.slug);
-    expect(new Set(slugs).size).toBe(slugs.length);
+  it("evento de vários dias em andamento conta como hoje (0)", async () => {
+    respostaApi(200, [evento({ data: "2026-10-18", dataFim: "2026-10-22" })]);
+    const [e] = await getEventos(HOJE);
+    expect(e.dias).toBe(0);
   });
 
-  it("usa datas em formato ISO, exigidas pela ordenação e pelos filtros", async () => {
-    const eventos = await getEventos();
-    for (const e of eventos) {
-      expect(e.data).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-      if (e.dataFim) expect(e.dataFim).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-    }
-  });
-
-  it("nunca termina antes de começar", async () => {
-    const eventos = await getEventos();
-    for (const e of eventos) {
-      if (e.dataFim) expect(e.dataFim >= e.data).toBe(true);
-    }
-  });
-
-  it("separa local e campus — a listagem os exibe em linhas distintas", async () => {
-    const eventos = await getEventos();
-    for (const e of eventos) {
-      expect(e.local).toBeTruthy();
-      expect(e.campus).toBeTruthy();
-    }
+  it("propaga a falha para a página exibir o erro", async () => {
+    respostaApi(500);
+    await expect(getEventos(HOJE)).rejects.toThrow();
   });
 });
 
 describe("getEvento", () => {
-  it("encontra o evento pelo slug", async () => {
-    const evento = await getEvento("semana-do-direito-2026");
-    expect(evento?.titulo).toBe("Semana do Direito 2026");
+  it("busca o evento pelo slug", async () => {
+    const fetchMock = respostaApi(200, evento());
+    const e = await getEvento("semana-academica", HOJE);
+    expect(e?.titulo).toBe("Semana Acadêmica");
+    expect(fetchMock.mock.calls[0][0]).toMatch(/\/eventos\/semana-academica$/);
   });
 
-  it("retorna null para slug inexistente", async () => {
-    expect(await getEvento("nao-existe")).toBeNull();
+  it("devolve null quando o evento não existe (404)", async () => {
+    respostaApi(404);
+    await expect(getEvento("nao-existe", HOJE)).resolves.toBeNull();
   });
 
-  it("todo evento sem conteúdo próprio oferece link externo", async () => {
-    // Cadastros de encaminhamento precisam ter para onde encaminhar
-    const eventos = await getEventos();
-    const semSaida = eventos.filter((e) => !e.conteudo?.length && !e.linkOficial);
-    expect(semSaida.map((e) => e.slug)).toEqual([]);
+  it("propaga erros que não são 404", async () => {
+    respostaApi(500);
+    await expect(getEvento("semana-academica", HOJE)).rejects.toThrow();
   });
 });
