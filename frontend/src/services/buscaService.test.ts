@@ -70,6 +70,34 @@ const API: Record<string, unknown> = {
       url: "https://unimontes.br/edital/monitoria",
     },
   ],
+  "/campi": [
+    {
+      slug: "montes-claros",
+      nome: "Campus Montes Claros",
+      cidade: "Montes Claros",
+      regiao: "Norte de Minas",
+      sede: true,
+      endereco: null,
+      contato: {},
+      horarios: [],
+      cursos: [],
+      servicos: [],
+      mapsUrl: null,
+    },
+    {
+      slug: "januaria",
+      nome: "Campus Januária",
+      cidade: "Januária",
+      regiao: "Norte de Minas",
+      sede: false,
+      endereco: null,
+      contato: {},
+      horarios: [],
+      cursos: ["Pedagogia"],
+      servicos: ["Biblioteca"],
+      mapsUrl: null,
+    },
+  ],
   "/eventos": [
     {
       id: 1,
@@ -178,6 +206,16 @@ describe("buscar", () => {
 
   it("leva cada tipo ao destino certo", async () => {
     const ix = await indice();
+    expect(buscar(ix, "predio 2")[0]).toMatchObject({
+      tipo: "local",
+      to: "/unidades-localizacao#predio-2",
+    });
+    // Só os outros campi entram; o campus-sede tem aba própria
+    expect(buscar(ix, "campus januaria")[0]).toMatchObject({
+      tipo: "campus",
+      to: "/unidades-localizacao#campus-januaria",
+    });
+    expect(buscar(ix, "campus").map((i) => i.id)).not.toContain("campus-montes-claros");
     expect(buscar(ix, "monitoria 2026")[0]).toMatchObject({
       tipo: "edital",
       url: "https://unimontes.br/edital/monitoria",
@@ -199,7 +237,7 @@ describe("getIndiceBusca", () => {
     const fetchMock = respostas();
     await getIndiceBusca(HOJE);
     await getIndiceBusca(HOJE);
-    expect(fetchMock).toHaveBeenCalledTimes(4);
+    expect(fetchMock).toHaveBeenCalledTimes(5);
   });
 
   it("segue com o conteúdo das páginas e o que carregou quando parte da API falha", async () => {
@@ -214,7 +252,7 @@ describe("getIndiceBusca", () => {
     const fetchMock = respostas(["/cursos"]);
     await getIndiceBusca(HOJE);
     await getIndiceBusca(HOJE);
-    expect(fetchMock).toHaveBeenCalledTimes(8);
+    expect(fetchMock).toHaveBeenCalledTimes(10);
   });
 });
 

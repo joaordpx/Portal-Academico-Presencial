@@ -8,6 +8,7 @@ import {
   CircleHelp,
   FileText,
   Link2,
+  MapPin,
   ScrollText,
   Search,
   Sparkles,
@@ -30,6 +31,7 @@ const ICONE_TIPO: Record<TipoBusca, typeof Search> = {
   sigla: Tag,
   curso: BookOpen,
   local: Building2,
+  campus: MapPin,
   edital: ScrollText,
   evento: CalendarDays,
 };
