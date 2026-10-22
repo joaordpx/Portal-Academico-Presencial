@@ -26,5 +26,8 @@ export async function fetchApi<T>(endpoint: string, options?: RequestInit): Prom
     throw new ApiError(response.status, `Erro na requisição (${response.status}): ${endpoint}`);
   }
 
+  // 204 No Content (ex.: registro de estatísticas) não tem corpo para ler
+  if (response.status === 204) return undefined as T;
+
   return response.json();
 }

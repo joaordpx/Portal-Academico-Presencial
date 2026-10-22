@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Filament\Widgets\Busca;
+
+use App\Filament\Widgets\Busca\Concerns\EstatisticaDaBusca;
+use App\Support\EstatisticasBusca;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+use Filament\Widgets\TableWidget;
+
+class TermosMaisBuscados extends TableWidget
+{
+    use EstatisticaDaBusca;
+
+    protected static bool $isDiscovered = false;
+
+    protected static bool $isLazy = false;
+
+    protected static ?int $sort = 7;
+
+    protected int|string|array $columnSpan = 'full';
+
+    public function table(Table $table): Table
+    {
+        return $table
+            ->heading('Termos mais buscados')
+            ->description('Ordene por "Abriram um resultado" para achar termos populares em que a busca não está ajudando.')
+            ->query(fn () => EstatisticasBusca::termos($this->dias()))
+            ->columns([
+                TextColumn::make('termo')->searchable()->weight('medium'),
+                TextColumn::make('vezes')->label('Buscas')->numeric()->sortable(),
+                TextColumn::make('taxa_clique')
+                    ->label('Abriram um resultado')
+                    ->suffix('%')
+                    ->sortable()
+                    ->color(fn ($state) => match (true) {
+                        $state >= 60 => 'success',
+                        $state >= 30 => 'warning',
+                        default => 'danger',
+                    }),
+                TextColumn::make('ultima_vez')->label('Última busca')->dateTime('d/m/Y H:i')->sortable(),
+            ])
+            // Sem a ordenação extra pela chave: com GROUP BY, o MySQL a rejeitaria
+            ->defaultKeySort(false)
+            ->defaultSort('vezes', 'desc')
+            ->paginated([10, 25, 50])
+            ->emptyStateHeading('Nenhuma busca no período')
+            ->emptyStateIcon(Heroicon::OutlinedMagnifyingGlass);
+    }
+}
