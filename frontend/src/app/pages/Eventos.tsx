@@ -19,9 +19,10 @@ import {
 import { PageHeader } from "../components/layout/PageHeader";
 import { Reveal } from "../components/shared/Reveal";
 import { ImageWithFallback } from "../components/shared/ImageWithFallback";
+import { ErroCarregamento } from "../components/shared/ErroCarregamento";
 import { getEventos } from "../../services/eventoService";
-import { formatarDataSemana, mesAbreviado, partesData, diasAte } from "../../utils/data";
-import type { Evento, EventoTipo } from "../../types";
+import { formatarDataSemana, mesAbreviado, partesData } from "../../utils/data";
+import type { EventoTipo, EventoView } from "../../types";
 
 const PAGE_SIZE = 9;
 
@@ -77,8 +78,10 @@ function SeloPrazo({ dias }: { dias: number }) {
 }
 
 export function Eventos() {
-  const [eventos, setEventos] = useState<Evento[]>([]);
+  const [eventos, setEventos] = useState<EventoView[]>([]);
   const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState(false);
+  const [tentativa, setTentativa] = useState(0);
   const [tipo, setTipo] = useState("Todos");
   const [campus, setCampus] = useState("Todos");
   const [periodo, setPeriodo] = useState("Todos");
@@ -92,16 +95,28 @@ export function Eventos() {
     let ativo = true;
     getEventos()
       .then((d) => ativo && setEventos(d))
+      .catch(() => ativo && setErro(true))
       .finally(() => ativo && setLoading(false));
     return () => {
       ativo = false;
     };
-  }, []);
+  }, [tentativa]);
+
+  function recarregar() {
+    setErro(false);
+    setLoading(true);
+    setTentativa((t) => t + 1);
+  }
 
   const filtros = useMemo(
     () => ({
       tipo: ["Todos", "Acadêmico", "Cultural", "Comunitário"],
-      campus: ["Todos", ...Array.from(new Set(eventos.map((e) => e.campus)))],
+      campus: [
+        "Todos",
+        ...Array.from(new Set(eventos.flatMap((e) => (e.campus ? [e.campus] : [])))).sort((a, b) =>
+          a.localeCompare(b, "pt-BR"),
+        ),
+      ],
       periodo: ["Todos", "Próximos 7 dias", "Próximos 30 dias", "Já realizados"],
     }),
     [eventos],
@@ -112,7 +127,7 @@ export function Eventos() {
   const filtrados = useMemo(() => {
     const termo = q.trim().toLowerCase();
     const resultado = eventos.filter((e) => {
-      const dias = diasAte(e.data);
+      const dias = e.dias;
       const casaPeriodo =
         periodo === "Todos" ||
         (periodo === "Próximos 7 dias" && dias >= 0 && dias <= 7) ||
@@ -126,7 +141,7 @@ export function Eventos() {
         (termo === "" ||
           e.titulo.toLowerCase().includes(termo) ||
           e.descricao.toLowerCase().includes(termo) ||
-          e.local.toLowerCase().includes(termo))
+          e.local?.toLowerCase().includes(termo))
       );
     });
 
@@ -321,6 +336,11 @@ export function Eventos() {
                 </div>
               ))}
             </div>
+          ) : erro ? (
+            <ErroCarregamento
+              titulo="Não foi possível carregar os eventos"
+              onTentarNovamente={recarregar}
+            />
           ) : paginados.length === 0 ? (
             <div className="py-24 text-center">
               <p className="text-[18px] font-bold text-[#1a1a1a]">Nenhum evento encontrado</p>
@@ -346,7 +366,7 @@ export function Eventos() {
                     >
                       <div className="relative aspect-[16/9] overflow-hidden">
                         <ImageWithFallback
-                          src={e.imagem}
+                          src={e.imagem ?? undefined}
                           alt={e.titulo}
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
@@ -362,7 +382,7 @@ export function Eventos() {
                           >
                             {e.tipo}
                           </span>
-                          <SeloPrazo dias={diasAte(e.data)} />
+                          <SeloPrazo dias={e.dias} />
                         </div>
 
                         <h3 className="mt-2.5 text-balance text-[16px] font-bold leading-[1.3] tracking-[-0.015em] text-[#1a1a1a]">
@@ -377,17 +397,23 @@ export function Eventos() {
                             <Calendar className="h-3.5 w-3.5 shrink-0 text-[#6E3AFF]" />
                             <dd>{formatarDataSemana(e.data)}</dd>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <Clock className="h-3.5 w-3.5 shrink-0 text-[#6E3AFF]" />
-                            <dd>{e.horario}</dd>
-                          </div>
-                          <div className="flex items-start gap-2">
-                            <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#6E3AFF]" />
-                            <dd>
-                              {e.local}
-                              <span className="block text-[#1a1a1a]/50">{e.campus}</span>
-                            </dd>
-                          </div>
+                          {e.horario && (
+                            <div className="flex items-center gap-2">
+                              <Clock className="h-3.5 w-3.5 shrink-0 text-[#6E3AFF]" />
+                              <dd>{e.horario}</dd>
+                            </div>
+                          )}
+                          {(e.local || e.campus) && (
+                            <div className="flex items-start gap-2">
+                              <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#6E3AFF]" />
+                              <dd>
+                                {e.local ?? e.campus}
+                                {e.local && e.campus && (
+                                  <span className="block text-[#1a1a1a]/50">{e.campus}</span>
+                                )}
+                              </dd>
+                            </div>
+                          )}
                         </dl>
                       </div>
                     </Link>
@@ -406,7 +432,7 @@ export function Eventos() {
                   >
                     <div className="relative h-[112px] w-[160px] shrink-0 overflow-hidden rounded-[12px]">
                       <ImageWithFallback
-                        src={e.imagem}
+                        src={e.imagem ?? undefined}
                         alt={e.titulo}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
@@ -422,7 +448,7 @@ export function Eventos() {
                         >
                           {e.tipo}
                         </span>
-                        <SeloPrazo dias={diasAte(e.data)} />
+                        <SeloPrazo dias={e.dias} />
                       </div>
                       <h3 className="truncate text-[17px] font-bold tracking-[-0.015em] text-[#1a1a1a]">
                         {e.titulo}
@@ -432,14 +458,18 @@ export function Eventos() {
                           <Calendar className="h-3.5 w-3.5 shrink-0 text-[#6E3AFF]" />
                           {formatarDataSemana(e.data)}
                         </span>
-                        <span className="flex items-center gap-1.5">
-                          <Clock className="h-3.5 w-3.5 shrink-0 text-[#6E3AFF]" />
-                          {e.horario}
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                          <MapPin className="h-3.5 w-3.5 shrink-0 text-[#6E3AFF]" />
-                          {e.local} · {e.campus}
-                        </span>
+                        {e.horario && (
+                          <span className="flex items-center gap-1.5">
+                            <Clock className="h-3.5 w-3.5 shrink-0 text-[#6E3AFF]" />
+                            {e.horario}
+                          </span>
+                        )}
+                        {(e.local || e.campus) && (
+                          <span className="flex items-center gap-1.5">
+                            <MapPin className="h-3.5 w-3.5 shrink-0 text-[#6E3AFF]" />
+                            {[e.local, e.campus].filter(Boolean).join(" · ")}
+                          </span>
+                        )}
                       </div>
                     </div>
                   </Link>

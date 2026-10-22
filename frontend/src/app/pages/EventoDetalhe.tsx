@@ -14,8 +14,8 @@ import {
 } from "lucide-react";
 import { ImageWithFallback } from "../components/shared/ImageWithFallback";
 import { getEvento } from "../../services/eventoService";
-import { formatarDataExtenso, formatarPeriodo, diasAte } from "../../utils/data";
-import type { Evento, EventoTipo } from "../../types";
+import { formatarDataExtenso, formatarPeriodo } from "../../utils/data";
+import type { EventoTipo, EventoView } from "../../types";
 
 const TIPO: Record<EventoTipo, { tag: string; hex: string }> = {
   Acadêmico: { tag: "bg-[#6E3AFF]/12 text-[#6E3AFF]", hex: "#6E3AFF" },
@@ -25,23 +25,29 @@ const TIPO: Record<EventoTipo, { tag: string; hex: string }> = {
 
 export function EventoDetalhe() {
   const { slug } = useParams();
-  // Guarda o slug junto com os dados: "carregando" passa a ser derivado,
-  // evitando setState síncrono dentro do efeito.
-  const [carregado, setCarregado] = useState<{ slug: string; evento: Evento | null } | null>(null);
+  const [tentativa, setTentativa] = useState(0);
+  // Guarda a chave (slug + tentativa) junto com o resultado: "carregando" passa
+  // a ser derivado, evitando setState síncrono dentro do efeito.
+  const [carregado, setCarregado] = useState<{
+    chave: string;
+    evento: EventoView | null;
+    erro: boolean;
+  } | null>(null);
 
   const slugAtual = slug ?? "";
+  const chave = `${slugAtual}:${tentativa}`;
 
   useEffect(() => {
     let ativo = true;
-    getEvento(slugAtual).then((d) => {
-      if (ativo) setCarregado({ slug: slugAtual, evento: d });
-    });
+    getEvento(slugAtual)
+      .then((d) => ativo && setCarregado({ chave, evento: d, erro: false }))
+      .catch(() => ativo && setCarregado({ chave, evento: null, erro: true }));
     return () => {
       ativo = false;
     };
-  }, [slugAtual]);
+  }, [slugAtual, chave]);
 
-  const loading = carregado?.slug !== slugAtual;
+  const loading = carregado?.chave !== chave;
   const evento = carregado?.evento ?? null;
 
   if (loading) {
@@ -56,22 +62,36 @@ export function EventoDetalhe() {
 
   if (!evento) {
     return (
-      <div className="mx-auto max-w-[1400px] px-6 py-28 text-center lg:px-12">
-        <p className="text-[24px] font-bold text-[#1a1a1a]">Evento não encontrado</p>
-        <p className="mt-2 text-[15px] text-[#1a1a1a]/60">
-          O evento que você procura não existe ou foi removido.
+      <div className="mx-auto max-w-[1400px] px-6 py-28 text-center lg:px-12" role="alert">
+        <p className="text-[24px] font-bold text-[#1a1a1a]">
+          {carregado?.erro ? "Não foi possível carregar o evento" : "Evento não encontrado"}
         </p>
-        <Link
-          to="/eventos"
-          className="mt-8 inline-flex items-center gap-2 rounded-[6px] bg-[#1a1a1a] px-5 py-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#6E3AFF]"
-        >
-          <ArrowLeft className="h-4 w-4" /> Ver todos os eventos
-        </Link>
+        <p className="mt-2 text-[15px] text-[#1a1a1a]/60">
+          {carregado?.erro
+            ? "Verifique sua conexão e tente novamente em instantes."
+            : "O evento que você procura não existe ou foi removido."}
+        </p>
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          {carregado?.erro && (
+            <button
+              onClick={() => setTentativa((t) => t + 1)}
+              className="inline-flex items-center gap-2 rounded-[6px] border border-[#1a1a1a] px-5 py-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a] transition-colors hover:border-[#6E3AFF] hover:text-[#6E3AFF]"
+            >
+              Tentar novamente
+            </button>
+          )}
+          <Link
+            to="/eventos"
+            className="inline-flex items-center gap-2 rounded-[6px] bg-[#1a1a1a] px-5 py-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#6E3AFF]"
+          >
+            <ArrowLeft className="h-4 w-4" /> Ver todos os eventos
+          </Link>
+        </div>
       </div>
     );
   }
 
-  const dias = diasAte(evento.data);
+  const dias = evento.dias;
   const jaOcorreu = dias < 0;
   const emBreve = dias >= 0 && dias <= 7;
 
@@ -83,8 +103,16 @@ export function EventoDetalhe() {
         ? formatarPeriodo(evento.data, evento.dataFim)
         : formatarDataExtenso(evento.data),
     },
-    { icon: Clock, label: "Horário", value: evento.horario },
-    { icon: MapPin, label: "Local", value: `${evento.local} — ${evento.campus}` },
+    ...(evento.horario ? [{ icon: Clock, label: "Horário", value: evento.horario }] : []),
+    ...(evento.local || evento.campus
+      ? [
+          {
+            icon: MapPin,
+            label: "Local",
+            value: [evento.local, evento.campus].filter(Boolean).join(" — "),
+          },
+        ]
+      : []),
     ...(evento.organizador
       ? [{ icon: Users, label: "Organização", value: evento.organizador }]
       : []),
@@ -147,7 +175,7 @@ export function EventoDetalhe() {
             <div className="lg:col-span-5">
               <div className="overflow-hidden rounded-[10px] border border-[#e5e5e5]">
                 <ImageWithFallback
-                  src={evento.imagem}
+                  src={evento.imagem ?? undefined}
                   alt={evento.titulo}
                   className="aspect-[16/10] w-full object-cover"
                 />

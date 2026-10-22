@@ -46,7 +46,7 @@ export function formatarDataExtenso(iso: string) {
 }
 
 /** Período de um evento: "16 a 20/08/2026" ou "16/08/2026" */
-export function formatarPeriodo(inicio: string, fim?: string) {
+export function formatarPeriodo(inicio: string, fim?: string | null) {
   if (!fim || fim === inicio) return formatarData(inicio);
   const [, mesI, diaI] = inicio.split("-");
   const [, mesF] = fim.split("-");
@@ -104,4 +104,15 @@ export function diasAte(iso: string, hoje = new Date()) {
   const alvo = new Date(ano, mes - 1, dia);
   const base = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
   return Math.round((alvo.getTime() - base.getTime()) / 86_400_000);
+}
+
+/**
+ * Dias até um evento de um ou mais dias: 0 enquanto ele estiver acontecendo,
+ * negativo só depois do último dia (dias desde o encerramento).
+ */
+export function diasAteEvento(inicio: string, fim?: string | null, hoje = new Date()) {
+  const ini = diasAte(inicio, hoje);
+  if (ini >= 0) return ini;
+  const ultimo = diasAte(fim ?? inicio, hoje);
+  return ultimo >= 0 ? 0 : ultimo;
 }

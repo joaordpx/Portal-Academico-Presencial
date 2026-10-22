@@ -7,6 +7,7 @@ import {
   formatarPeriodo,
   mesAbreviado,
   diasAte,
+  diasAteEvento,
 } from "./data";
 
 describe("partesData", () => {
@@ -76,5 +77,25 @@ describe("diasAte", () => {
 
   it("retorna negativo para datas passadas", () => {
     expect(diasAte("2026-08-01", hoje)).toBeLessThan(0);
+  });
+});
+
+describe("diasAteEvento", () => {
+  const hoje = new Date("2026-08-10T12:00:00");
+
+  it("conta os dias até o início de um evento futuro", () => {
+    expect(diasAteEvento("2026-08-16", "2026-08-20", hoje)).toBe(6);
+  });
+
+  it("retorna zero enquanto o evento de vários dias acontece", () => {
+    expect(diasAteEvento("2026-08-08", "2026-08-12", hoje)).toBe(0);
+  });
+
+  it("depois do último dia, conta os dias desde o encerramento", () => {
+    expect(diasAteEvento("2026-08-01", "2026-08-05", hoje)).toBe(-5);
+  });
+
+  it("sem data de fim, o evento é de um dia só", () => {
+    expect(diasAteEvento("2026-08-09", null, hoje)).toBe(-1);
   });
 });

@@ -139,25 +139,35 @@ export type EventoTipo = "Cultural" | "Acadêmico" | "Comunitário";
  */
 export type EventoOrigem = "externo" | "manual";
 
-/** Registro cru de um evento (espelha a futura tabela) */
+/**
+ * Registro cru de um evento — GET /api/eventos.
+ * Um cadastro pode ser só de encaminhamento (sem `conteudo`), exibindo o
+ * botão para a página oficial.
+ */
 export interface Evento {
   id: number;
   slug: string; // rota /eventos/:slug
   titulo: string;
   descricao: string; // resumo exibido no card
-  conteudo?: string[]; // texto completo da página de detalhe (opcional)
+  conteudo: string[] | null; // parágrafos da página de detalhe
   tipo: EventoTipo;
   data: string; // ISO (YYYY-MM-DD)
-  dataFim?: string; // ISO — eventos de vários dias
-  horario: string; // ex.: "19:30 - 21:30"
-  local: string; // ex.: "Auditório CCH — Prédio 2"
-  campus: string; // ex.: "Campus Montes Claros"
-  imagem: string;
+  dataFim: string | null; // ISO — eventos de vários dias
+  horario: string | null; // ex.: "19:30 - 21:30"
+  local: string | null; // ex.: "Auditório CCH — Prédio 2"
+  campus: string | null; // ex.: "Montes Claros"
+  imagem: string | null;
   origem: EventoOrigem;
-  organizador?: string;
+  organizador: string | null;
   /** Página oficial do evento (inscrição). Pode ser o único conteúdo, em cadastros de encaminhamento. */
-  linkOficial?: string;
-  inscricoesAbertas?: boolean;
+  linkOficial: string | null;
+  inscricoesAbertas: boolean;
+}
+
+/** Evento pronto para exibir — derivado de `Evento` no serviço */
+export interface EventoView extends Evento {
+  /** Dias até o evento: 0 enquanto acontece, negativo depois do último dia */
+  dias: number;
 }
 
 /* ─────────────── Editais e Oportunidades ─────────────── */
