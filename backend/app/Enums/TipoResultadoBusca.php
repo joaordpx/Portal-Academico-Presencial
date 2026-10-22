@@ -11,6 +11,7 @@ enum TipoResultadoBusca: string implements HasLabel
     case Secao = 'secao';
     case Pergunta = 'pergunta';
     case Sigla = 'sigla';
+    case Contato = 'contato';
     case Curso = 'curso';
     case Local = 'local';
     case Campus = 'campus';
@@ -24,6 +25,7 @@ enum TipoResultadoBusca: string implements HasLabel
             self::Secao => 'Seções do portal',
             self::Pergunta => 'Perguntas frequentes',
             self::Sigla => 'Siglas',
+            self::Contato => 'Telefones',
             self::Curso => 'Cursos',
             self::Local => 'Locais',
             self::Campus => 'Campi',
