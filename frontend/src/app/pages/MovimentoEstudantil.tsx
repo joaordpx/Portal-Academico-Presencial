@@ -1,20 +1,26 @@
-import { Megaphone, Instagram } from "lucide-react";
+import { Megaphone } from "lucide-react";
 import { PageHeader } from "../components/layout/PageHeader";
 import {
   SectionLayout,
+  PanelInfo,
   PanelLinks,
   PanelRelated,
   PanelNote,
 } from "../components/layout/SectionLayout";
 
+/* Fontes oficiais (unimontes.br) */
+const CEU = "https://unimontes.br/pro-reitoria-de-extensao/ceu/";
+const NAE = "https://unimontes.br/pro-reitoria-de-extensao/nae/";
+const JOGOS_ATLETICAS =
+  "https://unimontes.br/edital/bolsas-extensao-organizacao-jogos-atleticas-10-2026/";
+
 const popular = [
-  { label: "DCE" },
-  { label: "Centros Acadêmicos" },
-  { label: "Esporte e Lazer" },
-  { label: "Reserva de Espaços" },
+  { label: "Centro Esportivo (CEU)", href: CEU },
+  { label: "Jogos das Atléticas", href: JOGOS_ATLETICAS },
+  { label: "Esporte, Cultura e Lazer (NAE)", href: NAE },
 ];
 
-const tags = ["DCE", "centro acadêmico", "esporte", "reserva de quadra", "centro esportivo"];
+const tags = ["DCE", "centro acadêmico", "esporte", "piscina", "centro esportivo"];
 
 const sections = [
   {
@@ -23,14 +29,26 @@ const sections = [
     content: (
       <>
         <PanelLinks
-          intro="Consulte informações sobre o Diretório Central dos Estudantes, canais oficiais de contato e formas de participação estudantil."
+          intro="O Diretório Central dos Estudantes (DCE) representa os acadêmicos da Unimontes. Fica no campus-sede, entre os prédios 1 e 2, perto da CAE e em frente à Secretaria Geral."
           links={[
             {
-              label: "Sobre o DCE",
-              desc: "O que é o Diretório Central dos Estudantes e como atua.",
+              label: "Notícias do DCE",
+              desc: "Ações, debates e conferências promovidas pelo DCE com a universidade.",
+              href: "https://unimontes.br/?s=DCE",
+              external: true,
             },
-            { label: "Contatos e canais oficiais", desc: "Onde falar com a gestão do DCE." },
-            { label: "Formas de participação", desc: "Como participar das ações e da gestão." },
+            {
+              label: "Representação estudantil no SAVA",
+              desc: "O DCE integra o sistema de acolhimento a vítimas de assédio e discriminação da universidade.",
+              href: "https://unimontes.br/unimontes-cria-servico-de-acolhimento-de-vitimas-de-denuncias-de-assedio-e-preconceito-sava-foi-instituido-por-meio-de-portaria/",
+              external: true,
+            },
+            {
+              label: "Esporte, Cultura e Lazer (NAE)",
+              desc: "Setor que elabora, com as representações estudantis, editais de fomento a atividades culturais e esportivas.",
+              href: NAE,
+              external: true,
+            },
           ]}
         />
         <PanelRelated
@@ -38,17 +56,9 @@ const sections = [
             { label: "Centros Acadêmicos", to: "/movimento-estudantil-lazer" },
             { label: "Esporte e Lazer", to: "/movimento-estudantil-lazer" },
             { label: "Assistência Estudantil", to: "/assistencia-estudantil" },
-            { label: "Ajuda e Suporte", to: "/contato" },
+            { label: "Ajuda e Suporte", to: "/ajuda-suporte" },
           ]}
         />
-        <a
-          href="#"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-8 inline-flex items-center gap-2 rounded-[6px] bg-[#1a1a1a] px-5 py-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#6E3AFF]"
-        >
-          <Instagram className="h-4 w-4" /> Redes sociais do DCE
-        </a>
       </>
     ),
   },
@@ -58,21 +68,20 @@ const sections = [
     content: (
       <>
         <PanelLinks
-          intro="Conheça os Centros Acadêmicos dos cursos, contatos e formas de participação estudantil."
+          intro="Cada curso tem seu Centro Acadêmico. Para encontrar o CA do seu curso, fale com a coordenação — os contatos estão na página de cada curso."
           links={[
             {
-              label: "Centros Acadêmicos dos cursos",
-              desc: "Lista dos CAs por curso e centro de ensino.",
+              label: "Coordenações dos cursos",
+              desc: "E-mail, telefone e localização da coordenação de cada um dos 41 cursos.",
+              href: "/cursos",
             },
-            { label: "Contatos", desc: "Canais de contato de cada Centro Acadêmico." },
-            { label: "Formas de participação", desc: "Como se envolver com o CA do seu curso." },
           ]}
         />
         <PanelRelated
           links={[
             { label: "DCE", to: "/movimento-estudantil-lazer" },
             { label: "Cursos", to: "/cursos" },
-            { label: "Ajuda e Suporte", to: "/contato" },
+            { label: "Ajuda e Suporte", to: "/ajuda-suporte" },
           ]}
         />
       </>
@@ -83,23 +92,50 @@ const sections = [
     label: "Esporte e Lazer",
     content: (
       <>
+        <PanelInfo
+          intro="O Centro Esportivo Universitário Reitor João Valle Maurício (CEU) recebe as aulas de Educação Física, a comunidade acadêmica e a comunidade em geral, com projetos de futebol, natação, hidroginástica e tênis."
+          itens={[
+            { rotulo: "Quadras poliesportivas", valor: "3" },
+            { rotulo: "Pista de atletismo", valor: "1" },
+            { rotulo: "Quadras de tênis", valor: "2" },
+            { rotulo: "Campos de futebol", valor: "2", detalhe: "Um campo e um society." },
+            { rotulo: "Piscina olímpica", valor: "1" },
+            { rotulo: "Academia", valor: "1" },
+          ]}
+        />
         <PanelLinks
-          intro="Acesse informações sobre atividades esportivas, atléticas, lazer, programação e centro esportivo."
           links={[
             {
-              label: "Atividades esportivas",
-              desc: "Modalidades e treinos abertos aos estudantes.",
+              label: "Centro Esportivo (CEU)",
+              desc: "(38) 3229-8054 · ceu@unimontes.br · das 7h às 19h.",
+              href: CEU,
+              external: true,
             },
-            { label: "Lazer e programação", desc: "Agenda de atividades de convivência e lazer." },
-            { label: "Centro esportivo", desc: "Estrutura esportiva e horários de uso." },
-            { label: "Atléticas", desc: "Associações atléticas dos cursos." },
+            {
+              label: "Projetos e serviços do CEU",
+              desc: "Escola de Futebol Unimontes, natação, hidroginástica e tênis.",
+              href: "https://unimontes.br/projetos-e-servicos/ceu/",
+              external: true,
+            },
+            {
+              label: "Jogos das Associações Atléticas",
+              desc: "Edital PREx 10/2026 de bolsas para a organização dos jogos.",
+              href: JOGOS_ATLETICAS,
+              external: true,
+            },
+            {
+              label: "Unicopa",
+              desc: "Edital de bolsas de extensão para a organização da Unicopa.",
+              href: "https://unimontes.br/edital/bolsas-de-extensao-unicopa/",
+              external: true,
+            },
           ]}
         />
         <PanelRelated
           links={[
             { label: "Reserva de Espaços", to: "/movimento-estudantil-lazer" },
-            { label: "Cursos", to: "/cursos" },
-            { label: "Ajuda e Suporte", to: "/contato" },
+            { label: "Eventos", to: "/eventos" },
+            { label: "Ajuda e Suporte", to: "/ajuda-suporte" },
           ]}
         />
       </>
@@ -111,23 +147,30 @@ const sections = [
     content: (
       <>
         <PanelNote>
-          <strong className="font-bold">Importante:</strong> a disponibilidade de espaços está
-          sujeita à validação institucional e à disponibilidade do calendário.
+          <strong className="font-bold">Quadras, pista e piscina:</strong> o uso é combinado com a
+          coordenação do CEU — (38) 3229-8054 · ceu@unimontes.br, das 7h às 19h. Para auditórios e
+          salas, procure o setor responsável pelo prédio.
         </PanelNote>
         <PanelLinks
-          intro="Solicite reserva de quadras, piscina, auditórios e outros espaços da universidade."
           links={[
-            { label: "Reserva de quadras", desc: "Quadras poliesportivas do campus." },
-            { label: "Piscina", desc: "Uso da piscina e horários disponíveis." },
-            { label: "Auditórios", desc: "Auditórios para eventos e atividades acadêmicas." },
-            { label: "Outros espaços", desc: "Salas, laboratórios e áreas de convivência." },
+            {
+              label: "Centro Esportivo (CEU)",
+              desc: "Quadras poliesportivas e de tênis, pista de atletismo, campos e piscina olímpica.",
+              href: CEU,
+              external: true,
+            },
+            {
+              label: "Contatos dos prédios e setores",
+              desc: "Direções dos centros de ensino e demais setores do campus.",
+              href: "/unidades-localizacao",
+            },
           ]}
         />
         <PanelRelated
           links={[
             { label: "Esporte e Lazer", to: "/movimento-estudantil-lazer" },
             { label: "Unidades e Localização", to: "/unidades-localizacao" },
-            { label: "Ajuda e Suporte", to: "/contato" },
+            { label: "Ajuda e Suporte", to: "/ajuda-suporte" },
           ]}
         />
       </>

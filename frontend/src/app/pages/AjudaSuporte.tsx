@@ -1,41 +1,49 @@
 import { useState } from "react";
-import { LifeBuoy, Send, Loader2 } from "lucide-react";
+import { LifeBuoy, Send } from "lucide-react";
 import { toast } from "sonner";
 import { PageHeader } from "../components/layout/PageHeader";
 import {
   SectionLayout,
   PanelAccordion,
+  PanelLinks,
   PanelRelated,
   PanelNote,
 } from "../components/layout/SectionLayout";
 
+/* Canal oficial "Fale com a Unimontes" (unimontes.br/falecom) */
+const FALECOM_EMAIL = "falecom@unimontes.br";
+
 const popular = [
-  { label: "FAQ" },
-  { label: "Problemas de Acesso" },
-  { label: "Glossário de Siglas" },
-  { label: "Fale com a Unimontes" },
-  { label: "Como Usar o Portal" },
+  { label: "Fale com a Unimontes", href: "https://unimontes.br/falecom/" },
+  { label: "WebGiz", href: "http://www.webgiz.unimontes.br/" },
+  { label: "Secretaria Geral", href: "https://unimontes.br/unidades/secretaria-geral/" },
+  { label: "Suporte de TI (DTI)", href: "https://unimontes.br/dti/" },
 ];
 
 const tags = ["recuperar senha", "declaração de matrícula", "edital", "WebGiz", "Wi-Fi", "PPC"];
 
 /* ───────────── Formulário de contato ───────────── */
 
+/**
+ * O portal ainda não tem backend para receber mensagens: em vez de simular
+ * um envio, o formulário abre o aplicativo de e-mail do estudante com a
+ * mensagem pronta para o canal oficial Fale com a Unimontes.
+ */
 function FormularioContato() {
-  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ nome: "", email: "", assunto: "", mensagem: "" });
 
-  const submit = async (e: React.FormEvent) => {
+  const submit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.nome || !form.email || !form.mensagem) {
       toast.error("Preencha os campos obrigatórios.");
       return;
     }
-    setLoading(true);
-    await new Promise((r) => setTimeout(r, 1000));
-    setLoading(false);
-    toast.success("Mensagem enviada", { description: "Retornaremos em até 5 dias úteis." });
-    setForm({ nome: "", email: "", assunto: "", mensagem: "" });
+    const assunto = form.assunto || "Contato pelo Portal Acadêmico";
+    const corpo = `${form.mensagem}\n\n— ${form.nome} (${form.email})`;
+    window.location.href = `mailto:${FALECOM_EMAIL}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
+    toast.success("Abrimos o seu aplicativo de e-mail", {
+      description: `A mensagem está pronta para envio a ${FALECOM_EMAIL}.`,
+    });
   };
 
   const campo =
@@ -43,6 +51,10 @@ function FormularioContato() {
 
   return (
     <form onSubmit={submit} className="space-y-4">
+      <p className="text-[13px] leading-[1.5] text-[#1a1a1a]/60">
+        Ao enviar, seu aplicativo de e-mail abre com a mensagem pronta para{" "}
+        <span className="font-semibold text-[#1a1a1a]/80">{FALECOM_EMAIL}</span>.
+      </p>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <label className="block">
           <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#1a1a1a]/50">
@@ -96,18 +108,9 @@ function FormularioContato() {
 
       <button
         type="submit"
-        disabled={loading}
-        className="inline-flex cursor-pointer items-center gap-2 rounded-[6px] bg-[#1a1a1a] px-6 py-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#6E3AFF] disabled:opacity-60"
+        className="inline-flex cursor-pointer items-center gap-2 rounded-[6px] bg-[#1a1a1a] px-6 py-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#6E3AFF]"
       >
-        {loading ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" /> Enviando...
-          </>
-        ) : (
-          <>
-            <Send className="h-4 w-4" /> Enviar mensagem
-          </>
-        )}
+        <Send className="h-4 w-4" /> Enviar por e-mail
       </button>
     </form>
   );
@@ -118,19 +121,40 @@ function FormularioContato() {
 const SIGLAS = [
   { sigla: "AACC", significado: "Atividades Acadêmico-Científico-Culturais" },
   { sigla: "AIEX", significado: "Atividades de Interação Ensino-Extensão" },
-  { sigla: "CCBS", significado: "Centro de Ciências Biológicas e da Saúde" },
-  { sigla: "CCET", significado: "Centro de Ciências Exatas e Tecnológicas" },
-  { sigla: "CCH", significado: "Centro de Ciências Humanas" },
-  { sigla: "CCSA", significado: "Centro de Ciências Sociais Aplicadas" },
+  {
+    sigla: "CAE",
+    significado: "Coordenadoria de Apoio ao Estudante — estágio não obrigatório e Unicalourada",
+  },
+  { sigla: "CCBS", significado: "Centro de Ciências Biológicas e da Saúde (Prédio 6)" },
+  { sigla: "CCET", significado: "Centro de Ciências Exatas e Tecnológicas (Prédio 3)" },
+  { sigla: "CCH", significado: "Centro de Ciências Humanas (Prédio 2)" },
+  { sigla: "CCSA", significado: "Centro de Ciências Sociais Aplicadas (Prédio 1)" },
+  { sigla: "CEAD", significado: "Centro de Educação a Distância" },
   { sigla: "CEPEx", significado: "Conselho de Ensino, Pesquisa e Extensão" },
+  { sigla: "CEPT", significado: "Centro de Educação Profissional e Tecnológica" },
+  { sigla: "CEU", significado: "Centro Esportivo Universitário Reitor João Valle Maurício" },
   { sigla: "CONSU", significado: "Conselho Universitário" },
+  {
+    sigla: "COTEPS",
+    significado: "Coordenação Técnica de Processos Seletivos — vestibular e PAES",
+  },
+  { sigla: "DBU", significado: "Diretoria de Biblioteca Universitária" },
   { sigla: "DCE", significado: "Diretório Central dos Estudantes" },
+  { sigla: "DTI", significado: "Diretoria de Tecnologia da Informação — WebGiz e Wi-Fi" },
+  { sigla: "HUCF", significado: "Hospital Universitário Clemente de Faria" },
+  { sigla: "NAE", significado: "Núcleo de Assistência Estudantil — auxílios de permanência" },
   { sigla: "NUSI", significado: "Núcleo de Sociedade Inclusiva" },
+  { sigla: "PAES", significado: "Programa de Avaliação Seriada para o acesso ao Ensino Superior" },
+  { sigla: "PAPPO", significado: "Programa de Apoio Psicológico, Psicopedagógico e Orientacional" },
   { sigla: "PEAES", significado: "Programa Estadual de Assistência Estudantil" },
   { sigla: "PIBIC", significado: "Programa Institucional de Bolsas de Iniciação Científica" },
+  { sigla: "PIBID", significado: "Programa Institucional de Bolsa de Iniciação à Docência" },
   { sigla: "PPC", significado: "Projeto Pedagógico do Curso" },
-  { sigla: "RU", significado: "Restaurante Universitário" },
-  { sigla: "SIGEx", significado: "Sistema de Gestão da Extensão" },
+  { sigla: "PREx", significado: "Pró-Reitoria de Extensão" },
+  { sigla: "RU", significado: "Restaurante Universitário (Prédio 10)" },
+  { sigla: "SAVA", significado: "Sistema de Acolhimento às Vítimas de Assédio" },
+  { sigla: "SiGex", significado: "Sistema de Gestão da Extensão" },
+  { sigla: "Sisu", significado: "Sistema de Seleção Unificada" },
   { sigla: "TCC", significado: "Trabalho de Conclusão de Curso" },
   { sigla: "WebGiz", significado: "Sistema acadêmico de notas, frequência e matrícula" },
 ];
@@ -193,12 +217,12 @@ const sections = [
             {
               titulo: "Como encontrar informações do meu curso",
               conteudo:
-                "Acesse a seção Cursos, use a busca ou os filtros por centro, turno e área do conhecimento. Na página do curso você encontra matriz curricular, PPC, ementas, estágio, TCC, documentos e contato da coordenação.",
+                "Acesse a seção Cursos e use a busca ou os filtros por campus, centro, turno, grau e área do conhecimento. Na página do curso você encontra vagas, turnos, estrutura curricular, PPC, documentos e o contato da coordenação.",
             },
             {
               titulo: "Como usar a busca do portal",
               conteudo:
-                "A busca no topo da página procura por páginas, serviços e documentos. Digite o que você precisa em linguagem natural — por exemplo, “declaração de matrícula” ou “onde fica a secretaria”.",
+                "A busca no topo da página (atalho Ctrl + K) leva direto às seções e serviços do portal. Experimente termos como “WebGiz”, “RU” ou “biblioteca”.",
             },
             {
               titulo: "O que encontro em cada seção",
@@ -208,7 +232,7 @@ const sections = [
             {
               titulo: "Recursos de acessibilidade",
               conteudo:
-                "O portal oferece alto contraste, ajuste de fonte e leitura assistida na barra superior. As páginas também são navegáveis por teclado e compatíveis com leitores de tela.",
+                "As páginas podem ser navegadas pelo teclado, e o zoom do navegador (Ctrl + e Ctrl −) ajusta o tamanho do texto. Para apoio a necessidades educacionais específicas, procure o NUSI, no Prédio 2 (CCH).",
             },
           ]}
         />
@@ -238,17 +262,27 @@ const sections = [
             {
               titulo: "Como emito minha declaração de matrícula?",
               conteudo:
-                "A emissão é feita online pelo WebGiz. Se precisar de um documento assinado, procure a Secretaria Geral.",
+                "Envie e-mail ao responsável pelo seu curso na Secretaria Geral com o título “DECLARAÇÃO”, informando nome completo, matrícula, curso e campus. Para a versão impressa, escreva para secretaria.recepcao@unimontes.br e retire na recepção da Secretaria Geral.",
             },
             {
               titulo: "Onde vejo o calendário acadêmico?",
               conteudo:
-                "O calendário oficial fica no site da universidade e é atualizado a cada semestre. O acesso direto está em Vida Acadêmica › Calendário Acadêmico.",
+                "O Calendário Letivo 2026 (Resolução CEPEx nº 983/2025) fica no site oficial da universidade. O acesso direto está em Vida Acadêmica › Calendário Acadêmico.",
+            },
+            {
+              titulo: "Onde fica a Secretaria Geral?",
+              conteudo:
+                "No térreo do Prédio 2 (CCH), no Campus Darcy Ribeiro. Telefone (38) 3229-8040. Muitas solicitações podem ser feitas por e-mail, sem ir ao local.",
+            },
+            {
+              titulo: "Quanto custa a refeição no Restaurante Universitário?",
+              conteudo:
+                "R$ 2,50 para acadêmicos. O RU fica no Prédio 10 e serve almoço das 10h30 às 13h30 e jantar das 17h30 às 20h.",
             },
             {
               titulo: "Como solicito segunda chamada de prova?",
               conteudo:
-                "A solicitação é feita por requerimento, com justificativa e documentação comprobatória, dentro do prazo previsto nas normas acadêmicas.",
+                "As regras estão nas Normas para Regulamentação do Ensino nos Cursos de Graduação. Procure a coordenação do seu curso dentro do prazo previsto.",
             },
             {
               titulo: "Como consulto minhas notas e frequência?",
@@ -283,27 +317,27 @@ const sections = [
             {
               titulo: "Esqueci minha senha do WebGiz",
               conteudo:
-                "Use a opção de recuperação de senha na tela de login do WebGiz. Se o e-mail cadastrado estiver desatualizado, procure a Secretaria Geral para atualizá-lo.",
+                "O login é o número de matrícula completo e a senha inicial é a data de nascimento com 8 dígitos (ex.: 28041983). Na tela de login, use “esqueci a senha”. Se ainda não conseguir, envie e-mail ao responsável pelo seu curso na Secretaria Geral.",
             },
             {
-              titulo: "Não consigo acessar meu e-mail institucional",
+              titulo: "Não consigo renovar a matrícula",
               conteudo:
-                "Confirme se está usando o endereço institucional completo. Persistindo o problema, entre em contato com o suporte técnico.",
+                "A renovação só abre no prazo do calendário acadêmico. Matrícula trancada não renova pelo sistema: solicite por e-mail ao responsável pelo seu curso na Secretaria Geral.",
             },
             {
               titulo: "Não consigo conectar no Wi-Fi do campus",
               conteudo:
-                "Verifique se está selecionando a rede oficial da universidade e usando suas credenciais institucionais. Em caso de falha, procure o suporte técnico.",
+                "A rede Wi-Fi Unimontes é gratuita para acadêmicos, servidores e colaboradores. Em caso de falha, procure a DTI: Prédio 5, 2º andar, sala 206 · (38) 3229-8125 · dti@unimontes.br.",
             },
             {
               titulo: "O portal não carrega ou está lento",
               conteudo:
-                "Tente atualizar a página, limpar o cache do navegador ou acessar por outro dispositivo. Se o problema continuar, relate pelo formulário de contato.",
+                "Tente atualizar a página, limpar o cache do navegador ou acessar por outro dispositivo. Se o problema continuar, relate pelo Fale com a Unimontes.",
             },
             {
               titulo: "Minha matrícula não aparece no sistema",
               conteudo:
-                "Isso pode ocorrer se a matrícula ainda não foi efetivada. Verifique sua situação com a Secretaria Geral.",
+                "Isso pode ocorrer se a matrícula ainda não foi efetivada. Verifique sua situação com a Secretaria Geral: (38) 3229-8040 ou secretaria.recepcao@unimontes.br.",
             },
           ]}
         />
@@ -339,17 +373,24 @@ const sections = [
     content: (
       <>
         <PanelAccordion
-          intro="Entre em contato por formulário, telefone ou e-mail, e consulte os setores responsáveis e os prazos de resposta."
+          intro="O Fale com a Unimontes é o canal oficial para dúvidas, elogios, sugestões e reclamações. Aqui também estão os telefones e e-mails dos principais setores."
           itens={[
-            { titulo: "Formulário de contato", conteudo: <FormularioContato /> },
+            { titulo: "Escrever para o Fale com a Unimontes", conteudo: <FormularioContato /> },
+            {
+              titulo: "Atendimento presencial",
+              conteudo:
+                "Quiosque do Fale com a Unimontes, entre os prédios 1 e 2 do campus-sede, em frente à Secretaria Geral — de segunda a sexta, das 7h às 16h. Telefone (38) 3229-8229.",
+            },
             {
               titulo: "Telefones",
               conteudo: (
                 <ul className="space-y-1.5">
-                  <li>Telefone principal: (38) 3229-8000</li>
-                  <li>Secretaria Geral: (38) 3229-8000</li>
-                  <li>Biblioteca Central: (38) 3229-8300</li>
-                  <li>Restaurante Universitário: (38) 3229-8400</li>
+                  <li>Unimontes (geral): (38) 3229-8000</li>
+                  <li>Fale com a Unimontes: (38) 3229-8229</li>
+                  <li>Secretaria Geral: (38) 3229-8040</li>
+                  <li>Biblioteca Central: (38) 3229-8212</li>
+                  <li>Estágio (CAE): (38) 3229-8163</li>
+                  <li>Suporte de TI (DTI): (38) 3229-8125</li>
                 </ul>
               ),
             },
@@ -357,31 +398,44 @@ const sections = [
               titulo: "E-mails",
               conteudo: (
                 <ul className="space-y-1.5">
-                  <li>Geral: contato@unimontes.br</li>
-                  <li>Secretaria Geral: secretaria@unimontes.br</li>
-                  <li>Biblioteca: biblioteca@unimontes.br</li>
-                  <li>NUSI: nusi@unimontes.br</li>
+                  <li>Fale com a Unimontes: falecom@unimontes.br</li>
+                  <li>Secretaria Geral (recepção): secretaria.recepcao@unimontes.br</li>
+                  <li>Biblioteca Central: biblioteca.central@unimontes.br</li>
+                  <li>Estágio (CAE): cae@unimontes.br</li>
+                  <li>Suporte de TI (DTI): dti@unimontes.br</li>
                 </ul>
               ),
             },
             {
               titulo: "Setores responsáveis",
               conteudo:
-                "Documentos e matrícula: Secretaria Geral. Dúvidas do curso: coordenação do curso. Auxílios e permanência: Assistência Estudantil. Acessibilidade: NUSI. Problemas técnicos: suporte de tecnologia da informação.",
-            },
-            {
-              titulo: "Prazos de resposta",
-              conteudo:
-                "Mensagens enviadas pelo formulário são respondidas em até 5 dias úteis. Requerimentos protocolados seguem o prazo previsto para cada tipo de solicitação.",
+                "Documentos e matrícula: Secretaria Geral. Dúvidas do curso: coordenação do curso. Auxílios (PEAES): Núcleo de Assistência Estudantil. Estágio não obrigatório: CAE. Acessibilidade: NUSI. Wi-Fi e sistemas: DTI. Elogios, sugestões e reclamações: Fale com a Unimontes.",
             },
           ]}
         />
 
         <PanelNote>
-          <strong className="font-bold">Informações importantes:</strong> telefone principal (38)
-          3229-8000 · e-mail geral contato@unimontes.br · atendimento de segunda a sexta, 08h às 18h
-          · prazo de resposta de até 5 dias úteis.
+          <strong className="font-bold">Campus Universitário Professor Darcy Ribeiro:</strong> Av.
+          Rui Braga, s/nº, Vila Mauricéia, Montes Claros/MG · CEP 39401-089 · (38) 3229-8000 ·
+          funcionamento das 8h às 18h, atendimento ao público das 8h às 17h.
         </PanelNote>
+
+        <PanelLinks
+          links={[
+            {
+              label: "Sistema Fale com a Unimontes",
+              desc: "Registre elogio, sugestão, pedido de providência, reclamação ou denúncia.",
+              href: "https://www.sistemafalecom.unimontes.br/",
+              external: true,
+            },
+            {
+              label: "Ouvidoria-Geral do Estado",
+              desc: "Disque-Ouvidoria 162.",
+              href: "https://ouvidoriageral.mg.gov.br/",
+              external: true,
+            },
+          ]}
+        />
 
         <PanelRelated
           links={[
