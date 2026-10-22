@@ -140,16 +140,40 @@ describe("buscar", () => {
   });
 
   it("dá mais peso ao título do que ao restante", async () => {
-    // "Prédio 2" casa no título do local; o curso só cita o número em lugar nenhum
+    // "Prédio 2" casa no título do local; nas seções do portal só aparece no texto
     expect(buscar(await indice(), "predio 2")[0]?.id).toBe("local-predio-2");
-    // Empate fora do título: páginas vêm antes de locais
-    const r = buscar(await indice(), "secretaria");
-    expect(r.map((i) => i.id)).toEqual(["pagina-servicos", "local-predio-2"]);
   });
 
-  it("acha páginas por sinônimos cadastrados", async () => {
+  it("leva direto ao conteúdo das páginas, não à página genérica", async () => {
+    const r = buscar(await indice(), "calendario");
+    // O primeiro resultado abre o calendário em si; a seção vem logo depois
+    expect(r[0]).toMatchObject({ tipo: "link" });
+    expect(r[0]?.url).toMatch(/^https:\/\/unimontes\.br\//);
+    expect(r.find((i) => i.tipo === "secao")).toMatchObject({
+      titulo: "Calendário Acadêmico",
+      to: "/vida-academica#calendario",
+    });
+  });
+
+  it("encontra perguntas frequentes pela pergunta", async () => {
+    const r = buscar(await indice(), "esqueci senha webgiz");
+    expect(r[0]).toMatchObject({ tipo: "pergunta", to: "/ajuda-suporte#problemas-acesso" });
+  });
+
+  it("acha seções pelos sinônimos de buscaPor", async () => {
     const r = buscar(await indice(), "bandejao");
-    expect(r[0]?.id).toBe("pagina-assistencia");
+    expect(r[0]).toMatchObject({ tipo: "secao", to: "/assistencia-estudantil#ru" });
+  });
+
+  it("explica siglas do glossário", async () => {
+    const r = buscar(await indice(), "peaes");
+    expect(r.find((i) => i.tipo === "sigla")?.detalhe).toBe(
+      "Programa Estadual de Assistência Estudantil",
+    );
+  });
+
+  it('acha "Wi-Fi" digitado como "wifi"', async () => {
+    expect(buscar(await indice(), "wifi")[0]?.titulo).toMatch(/Wi-Fi/);
   });
 
   it("leva cada tipo ao destino certo", async () => {
@@ -178,12 +202,12 @@ describe("getIndiceBusca", () => {
     expect(fetchMock).toHaveBeenCalledTimes(4);
   });
 
-  it("segue com as páginas e o que carregou quando parte da API falha", async () => {
+  it("segue com o conteúdo das páginas e o que carregou quando parte da API falha", async () => {
     respostas(["/cursos"]);
     const ix = await getIndiceBusca(HOJE);
     expect(ix.falhas).toBe(1);
     expect(buscar(ix, "pedagogia").map((i) => i.tipo)).not.toContain("curso");
-    expect(buscar(ix, "webgiz")[0]?.id).toBe("atalho-webgiz");
+    expect(buscar(ix, "webgiz").length).toBeGreaterThan(0);
   });
 
   it("tenta de novo na próxima abertura se algo falhou", async () => {

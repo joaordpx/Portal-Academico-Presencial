@@ -8,28 +8,29 @@ import { formatarData, formatarPeriodo } from "../utils/data";
 /**
  * Busca global do portal (⌘K).
  *
- * A busca roda no navegador: o volume é pequeno (dezenas de registros) e
- * assim não depende de nenhum serviço extra no servidor. O índice junta as
- * páginas fixas do portal com cursos, locais, editais e eventos da API, e é
- * montado uma vez por visita, na primeira abertura da busca.
+ * A busca roda no navegador: o volume é pequeno (algumas centenas de itens)
+ * e assim não depende de nenhum serviço extra no servidor. O índice junta o
+ * conteúdo das páginas de seção (seções, links e documentos, perguntas
+ * frequentes e siglas — ver app/pages/conteudo) com cursos, locais, editais
+ * e eventos da API. Cada resultado leva direto ao conteúdo, não à página
+ * genérica. O índice é montado uma vez por visita.
  *
  * Se um dia o volume crescer (documentos, por exemplo), basta trocar
  * `getIndiceBusca`/`buscar` por uma chamada ao backend — a tela não muda.
  */
 
-export type TipoBusca = "pagina" | "atalho" | "curso" | "local" | "edital" | "evento";
+export type TipoBusca =
+  "link" | "secao" | "pergunta" | "sigla" | "curso" | "local" | "edital" | "evento";
 
 export interface ItemBusca {
   id: string;
   tipo: TipoBusca;
   titulo: string;
   detalhe: string;
-  /** Página do portal */
+  /** Página do portal (pode ter #seção) */
   to?: string;
   /** Fonte oficial (abre em nova aba) */
   url?: string;
-  /** Nome do ícone na tela de busca (só para páginas e atalhos) */
-  icone?: string;
   /** Palavras do título, já normalizadas */
   palavrasTitulo: string[];
   /** Todas as palavras pesquisáveis, já normalizadas */
@@ -38,16 +39,27 @@ export interface ItemBusca {
 
 export interface IndiceBusca {
   itens: ItemBusca[];
-  /** Fontes da API que falharam; a busca segue com o que carregou */
+  /** Fontes que falharam; a busca segue com o que carregou */
   falhas: number;
 }
 
-/** Ordem dos grupos na tela e no desempate */
-export const ORDEM_TIPOS: TipoBusca[] = ["pagina", "atalho", "curso", "local", "edital", "evento"];
+/** Desempate entre tipos: o destino mais específico (o link) vem antes da seção */
+export const ORDEM_TIPOS: TipoBusca[] = [
+  "link",
+  "secao",
+  "pergunta",
+  "sigla",
+  "curso",
+  "local",
+  "edital",
+  "evento",
+];
 
 export const ROTULO_TIPO: Record<TipoBusca, string> = {
-  pagina: "Páginas",
-  atalho: "Ações rápidas",
+  link: "Links e documentos",
+  secao: "No portal",
+  pergunta: "Perguntas frequentes",
+  sigla: "Siglas",
   curso: "Cursos",
   local: "Locais",
   edital: "Editais",
@@ -67,11 +79,14 @@ export function normalizar(texto: string) {
 }
 
 function palavrasDe(...textos: (string | null | undefined)[]) {
-  const todas = textos
-    .filter(Boolean)
-    .flatMap((t) => normalizar(t as string).split(/[^\p{L}\p{N}]+/u))
-    .filter(Boolean);
-  return Array.from(new Set(todas));
+  const todas = textos.filter(Boolean).flatMap((t) => {
+    const n = normalizar(t as string);
+    // "Wi-Fi" vira "wi", "fi" e também "wifi", que é como muita gente digita
+    const unidas =
+      n.match(/[\p{L}\p{N}]+(?:-[\p{L}\p{N}]+)+/gu)?.map((p) => p.replace(/-/g, "")) ?? [];
+    return [...n.split(/[^\p{L}\p{N}]+/u), ...unidas];
+  });
+  return Array.from(new Set(todas.filter(Boolean)));
 }
 
 type ItemSemPalavras = Omit<ItemBusca, "palavrasTitulo" | "palavras"> & { extras?: string[] };
@@ -84,109 +99,7 @@ function item({ extras = [], ...i }: ItemSemPalavras): ItemBusca {
   };
 }
 
-/** Seções e atalhos do portal — sempre presentes, mesmo com a API fora do ar */
-export const ITENS_FIXOS: ItemBusca[] = [
-  item({
-    id: "pagina-vida-academica",
-    tipo: "pagina",
-    titulo: "Vida Acadêmica",
-    detalhe: "Calendário · Matrícula · Biblioteca",
-    to: "/vida-academica",
-    icone: "graduacao",
-    extras: ["calendário acadêmico", "rematrícula", "tutoriais", "trancamento"],
-  }),
-  item({
-    id: "pagina-cursos",
-    tipo: "pagina",
-    titulo: "Cursos",
-    detalhe: "Graduação · Centros · Turnos",
-    to: "/cursos",
-    icone: "livro",
-    extras: ["graduação", "bacharelado", "licenciatura"],
-  }),
-  item({
-    id: "pagina-servicos",
-    tipo: "pagina",
-    titulo: "Serviços e Documentos",
-    detalhe: "WebGiz · Declarações · Requerimentos",
-    to: "/servicos-documentos",
-    icone: "documento",
-    extras: ["declaração", "histórico escolar", "requerimento", "diploma", "secretaria geral"],
-  }),
-  item({
-    id: "pagina-editais",
-    tipo: "pagina",
-    titulo: "Editais e Oportunidades",
-    detalhe: "Editais · Estágios · Bolsas",
-    to: "/editais-oportunidades",
-    icone: "prancheta",
-    extras: ["estágio", "bolsa", "monitoria", "iniciação científica", "extensão"],
-  }),
-  item({
-    id: "pagina-eventos",
-    tipo: "pagina",
-    titulo: "Eventos",
-    detalhe: "Cultural · Acadêmico · Comunitário",
-    to: "/eventos",
-    icone: "calendario",
-  }),
-  item({
-    id: "pagina-assistencia",
-    tipo: "pagina",
-    titulo: "Assistência Estudantil",
-    detalhe: "Auxílios · RU · Saúde",
-    to: "/assistencia-estudantil",
-    icone: "apoio",
-    extras: ["peaes", "restaurante universitário", "bandejão", "moradia", "transporte", "creche"],
-  }),
-  item({
-    id: "pagina-movimento",
-    tipo: "pagina",
-    titulo: "Movimento Estudantil e Lazer",
-    detalhe: "DCE · Atléticas · Esporte",
-    to: "/movimento-estudantil-lazer",
-    icone: "megafone",
-    extras: ["centro acadêmico", "diretório central"],
-  }),
-  item({
-    id: "pagina-unidades",
-    tipo: "pagina",
-    titulo: "Unidades e Localização",
-    detalhe: "Mapa · Prédios · Setores · Campi",
-    to: "/unidades-localizacao",
-    icone: "mapa",
-    extras: ["onde fica", "campus", "prédio"],
-  }),
-  item({
-    id: "pagina-ajuda",
-    tipo: "pagina",
-    titulo: "Ajuda e Suporte",
-    detalhe: "Dúvidas frequentes · Contato",
-    to: "/ajuda-suporte",
-    icone: "telefone",
-    extras: ["fale conosco", "contato", "telefone", "email", "ouvidoria"],
-  }),
-  item({
-    id: "atalho-webgiz",
-    tipo: "atalho",
-    titulo: "WebGiz",
-    detalhe: "Notas, frequência e matrícula",
-    to: "/servicos-documentos",
-    icone: "monitor",
-    extras: ["sistema acadêmico", "notas", "frequência", "boletim"],
-  }),
-  item({
-    id: "atalho-carteirinha",
-    tipo: "atalho",
-    titulo: "Carteirinha estudantil",
-    detalhe: "Como emitir",
-    to: "/servicos-documentos",
-    icone: "carteirinha",
-    extras: ["identidade estudantil", "meia entrada"],
-  }),
-];
-
-/** Uma montagem por visita; uma falha total permite tentar de novo na próxima abertura */
+/** Uma montagem por visita; uma falha permite tentar de novo na próxima abertura */
 let indiceEmCache: Promise<IndiceBusca> | null = null;
 
 export function getIndiceBusca(hoje = new Date()): Promise<IndiceBusca> {
@@ -197,21 +110,32 @@ export function getIndiceBusca(hoje = new Date()): Promise<IndiceBusca> {
   return indiceEmCache;
 }
 
+/** Começa a montar o índice antes de a busca abrir (ex.: mouse sobre o botão) */
+export function preCarregarBusca() {
+  void getIndiceBusca();
+}
+
 /** Só para testes */
 export function limparCacheBusca() {
   indiceEmCache = null;
 }
 
 async function montarIndice(hoje: Date): Promise<IndiceBusca> {
-  const [cursos, locais, editais, eventos] = await Promise.allSettled([
+  const [conteudo, cursos, locais, editais, eventos] = await Promise.allSettled([
+    // Carregado sob demanda: só quem usa a busca baixa o conteúdo das páginas
+    import("../app/pages/conteudo").then((m) => m.indexarConteudo()),
     getCursos(),
     getLocais(),
     getEditais(hoje),
     getEventos(hoje),
   ]);
 
-  const itens = [...ITENS_FIXOS];
+  const itens: ItemBusca[] = [];
   let falhas = 0;
+
+  if (conteudo.status === "fulfilled") {
+    for (const c of conteudo.value) itens.push(item(c));
+  } else falhas++;
 
   if (cursos.status === "fulfilled") {
     for (const c of cursos.value) {
