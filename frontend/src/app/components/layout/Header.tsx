@@ -12,7 +12,6 @@ const NAV = [
   { to: "/editais-oportunidades", label: "Editais e Oportunidades", end: false },
   { to: "/eventos", label: "Eventos", end: false },
   { to: "/assistencia-estudantil", label: "Assistência Estudantil", end: false },
-  { to: "/movimento-estudantil-lazer", label: "Movimento Estudantil e Lazer", end: false },
   { to: "/unidades-localizacao", label: "Unidades e Localização", end: false },
 ];
 
@@ -47,10 +46,18 @@ export function Header() {
         }`}
       >
         <div className="mx-auto flex h-20 max-w-[1400px] items-center justify-between gap-6 px-6 lg:px-12">
-          <NavLink to="/" className="flex items-baseline gap-3 shrink-0">
-            <span className="text-xl font-bold tracking-[-0.04em] text-[#1a1a1a]">UNIMONTES</span>
-            <span className="hidden border-l border-[#1a1a1a]/15 pl-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1a1a1a]/50 xl:inline">
-              Portal Acadêmico
+          <NavLink to="/" className="flex shrink-0 items-center gap-3">
+            <img
+              src="/figurativa-unimontes.svg"
+              alt=""
+              aria-hidden="true"
+              className="h-[22px] w-auto"
+            />
+            <span className="flex items-baseline gap-3">
+              <span className="text-xl font-bold tracking-[-0.04em] text-[#1a1a1a]">UNIMONTES</span>
+              <span className="hidden border-l border-[#1a1a1a]/15 pl-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1a1a1a]/50 xl:inline">
+                Portal Acadêmico
+              </span>
             </span>
           </NavLink>
 
@@ -78,14 +85,15 @@ export function Header() {
 
         {/* Secondary nav row — full menu inline on desktop */}
         <nav className="hidden border-t border-[#e5e5e5] bg-white lg:block">
-          <div className="mx-auto flex max-w-[1400px] items-center gap-7 overflow-x-auto px-6 py-3 lg:px-12">
+          {/* Tipografia compacta em lg para caber em 1024px sem rolagem; barra oculta como salvaguarda */}
+          <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-3.5 overflow-x-auto px-6 py-3 [scrollbar-width:none] lg:px-12 xl:gap-6 [&::-webkit-scrollbar]:hidden">
             {NAV.map((item) => (
               <NavLink
                 key={item.label}
                 to={item.to}
                 end={item.end}
                 className={({ isActive }) =>
-                  `relative whitespace-nowrap text-[12px] font-semibold uppercase tracking-[0.1em] transition-colors ${
+                  `relative whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.02em] transition-colors xl:text-[12px] xl:tracking-[0.08em] ${
                     isActive ? "text-[#1a1a1a]" : "text-[#1a1a1a]/55 hover:text-[#1a1a1a]"
                   }`
                 }
