@@ -1,13 +1,5 @@
-import {
-  Instagram,
-  Facebook,
-  Youtube,
-  Linkedin,
-  ArrowUpRight,
-  Phone,
-  Clock,
-  Shield,
-} from "lucide-react";
+import { Link } from "react-router";
+import { Instagram, Facebook, Youtube, Linkedin, ArrowUpRight, Phone, Shield } from "lucide-react";
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
@@ -17,18 +9,32 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
-const sitemap = [
+/** Cada item aponta para a página do portal (`to`) ou para a fonte oficial (`href`) */
+type ItemMapa = { label: string; to?: string; href?: string };
+
+const pagina = (to: string, labels: string[]): ItemMapa[] => labels.map((label) => ({ label, to }));
+
+const sitemap: { title: string; links: ItemMapa[] }[] = [
   {
     title: "Estude na Unimontes",
-    links: ["Como ingressar", "Cursos Ofertados", "Editais de Ingresso", "Cursos gratuitos"],
+    links: [
+      { label: "Como ingressar", href: "https://unimontes.br/formas-de-ingresso-na-unimontes/" },
+      { label: "Cursos Ofertados", to: "/cursos" },
+      { label: "Processos seletivos (COTEPS)", href: "https://www.coteps.unimontes.br/" },
+      { label: "Sisu Unimontes", href: "http://www.sisu.unimontes.br/" },
+    ],
   },
   {
     title: "Sou Calouro",
-    links: ["Manual do Calouro", "Primeiros Passos", "Acesso aos Sistemas", "Mapa do Campus"],
+    links: [
+      { label: "Primeiros Passos", to: "/vida-academica" },
+      { label: "Acesso aos Sistemas", to: "/servicos-documentos" },
+      { label: "Mapa do Campus", to: "/unidades-localizacao" },
+    ],
   },
   {
     title: "Vida Acadêmica",
-    links: [
+    links: pagina("/vida-academica", [
       "Calendário Acadêmico",
       "Matrícula e Rematrícula",
       "Biblioteca",
@@ -36,61 +42,82 @@ const sitemap = [
       "Recursos Tecnológicos",
       "Normas Acadêmicas",
       "Tutoriais",
-    ],
+    ]),
   },
   {
     title: "Cursos",
-    links: ["Centros de Ensino", "Catálogo de cursos", "Coordenações"],
+    links: [
+      { label: "Catálogo de cursos", to: "/cursos" },
+      { label: "Centros de Ensino", to: "/unidades-localizacao" },
+      { label: "Coordenações", to: "/cursos" },
+    ],
   },
   {
     title: "Serviços e Documentos",
-    links: [
+    links: pagina("/servicos-documentos", [
       "Documentos acadêmicos",
       "Requerimentos",
       "Formulários",
       "Protocolos e Prazos",
       "Sistemas Acadêmicos",
-    ],
+    ]),
   },
   {
     title: "Editais e Oportunidades",
     links: [
-      "Editais",
-      "Estágios",
-      "Bolsas e Monitorias",
-      "Eventos e Cursos",
-      "Pesquisa e Extensão",
+      ...pagina("/editais-oportunidades", [
+        "Editais",
+        "Estágios",
+        "Bolsas e Monitorias",
+        "Pesquisa e Extensão",
+      ]),
+      { label: "Eventos", to: "/eventos" },
     ],
   },
   {
     title: "Assistência Estudantil",
-    links: ["Auxílios", "Saúde e Bem-estar", "Acessibilidade e Inclusão", "Direitos do Estudante"],
+    links: pagina("/assistencia-estudantil", [
+      "Auxílios (PEAES)",
+      "Restaurante Universitário",
+      "Saúde e Bem-estar",
+      "Acessibilidade e Inclusão",
+      "Direitos do Estudante",
+    ]),
   },
   {
     title: "Movimento Estudantil e Lazer",
-    links: [
+    links: pagina("/movimento-estudantil-lazer", [
       "DCE",
       "Centros Acadêmicos",
       "Atléticas",
-      "Eventos",
       "Esporte e Lazer",
-      "Reserva de Espaços",
-    ],
+    ]),
   },
   {
     title: "Unidades e Localização",
-    links: ["Campus Montes Claros", "Demais Unidades"],
+    links: pagina("/unidades-localizacao", [
+      "Campus Montes Claros",
+      "Demais Unidades",
+      "Organograma",
+    ]),
   },
   {
     title: "Ajuda e Suporte",
-    links: [
+    links: pagina("/ajuda-suporte", [
       "Como usar o portal",
       "Perguntas Frequentes (FAQ)",
       "Problemas de Acesso",
       "Glossário de Siglas",
-      "Fale com a UNIMONTES",
-    ],
+      "Fale com a Unimontes",
+    ]),
   },
+];
+
+const REDES = [
+  { icon: Instagram, label: "Instagram", href: "https://www.instagram.com/unimontesmg/" },
+  { icon: Facebook, label: "Facebook", href: "https://www.facebook.com/Unimontesmg/" },
+  { icon: Youtube, label: "YouTube", href: "https://www.youtube.com/unimontesmg" },
+  { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/school/unimontesmg/" },
 ];
 
 export function Footer() {
@@ -114,8 +141,7 @@ export function Footer() {
           <div className="lg:col-span-5">
             <ul className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
               {[
-                { icon: Clock, k: "Atendimento", v: "Seg–sex · 08h às 17h" },
-                { icon: WhatsAppIcon, k: "WhatsApp", v: "(31) 3915-0500" },
+                { icon: WhatsAppIcon, k: "WhatsApp", v: "(31) 3915-2022" },
                 { icon: Phone, k: "Disque-Ouvidoria", v: "162" },
                 { icon: Shield, k: "Disque-Saúde", v: "136" },
               ].map((c) => {
@@ -139,7 +165,9 @@ export function Footer() {
 
           <div className="lg:col-span-3 lg:text-right">
             <a
-              href="#"
+              href="https://ouvidoriageral.mg.gov.br/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 rounded-[6px] bg-[#1a1a1a] px-5 py-3.5 text-[11px] font-bold uppercase tracking-[0.16em] text-white transition-colors hover:bg-[#6E3AFF]"
             >
               Acessar site da Ouvidoria
@@ -158,16 +186,28 @@ export function Footer() {
                 {col.title}
               </div>
               <ul className="space-y-2">
-                {col.links.map((l) => (
-                  <li key={l}>
-                    <a
-                      href="#"
-                      className="text-[13px] leading-[1.5] text-[#2563EB] transition-colors hover:text-[#1d4ed8] hover:underline"
-                    >
-                      {l}
-                    </a>
-                  </li>
-                ))}
+                {col.links.map((l) => {
+                  const estilo =
+                    "text-[13px] leading-[1.5] text-[#2563EB] transition-colors hover:text-[#1d4ed8] hover:underline";
+                  return (
+                    <li key={l.label}>
+                      {l.to ? (
+                        <Link to={l.to} className={estilo}>
+                          {l.label}
+                        </Link>
+                      ) : (
+                        <a
+                          href={l.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={estilo}
+                        >
+                          {l.label}
+                        </a>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
@@ -182,9 +222,11 @@ export function Footer() {
               Endereço
             </div>
             <div className="mt-2">
-              Av. Prof. Rui Braga, s/n
+              Campus Universitário Prof. Darcy Ribeiro
               <br />
-              Vila Mauricéia · Montes Claros/MG
+              Av. Rui Braga, s/nº · Vila Mauricéia
+              <br />
+              Montes Claros/MG · CEP 39401-089
             </div>
           </div>
           <div>
@@ -194,7 +236,7 @@ export function Footer() {
             <div className="mt-2">
               (38) 3229-8000
               <br />
-              secretaria@unimontes.br
+              falecom@unimontes.br
             </div>
           </div>
           <div>
@@ -202,9 +244,9 @@ export function Footer() {
               Atendimento
             </div>
             <div className="mt-2">
-              Segunda a sexta
+              Funcionamento: 8h às 18h
               <br />
-              8h às 18h
+              Atendimento ao público: 8h às 17h
             </div>
           </div>
           <div>
@@ -212,10 +254,13 @@ export function Footer() {
               Redes
             </div>
             <div className="mt-3 flex gap-2">
-              {[Instagram, Facebook, Youtube, Linkedin].map((Icon, i) => (
+              {REDES.map(({ icon: Icon, label, href }) => (
                 <a
-                  key={i}
-                  href="#"
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Unimontes no ${label}`}
                   className="flex h-10 w-10 items-center justify-center rounded-[4px] border border-[#e5e5e5] text-[#1a1a1a] transition-colors hover:border-[#6E3AFF] hover:bg-[#6E3AFF] hover:text-white"
                 >
                   <Icon className="h-4 w-4" />
@@ -229,15 +274,25 @@ export function Footer() {
           <div className="font-bold text-[#1a1a1a]">UNIMONTES · Portal Acadêmico</div>
           <div>© 2026 — Universidade Estadual de Montes Claros</div>
           <div className="flex gap-5">
-            <a href="#" className="hover:text-[#6E3AFF]">
+            <a
+              href="https://unimontes.br/politica-de-privacidade/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#6E3AFF]"
+            >
               Privacidade
             </a>
-            <a href="#" className="hover:text-[#6E3AFF]">
-              Termos
+            <a
+              href="https://unimontes.br/lgpd/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#6E3AFF]"
+            >
+              LGPD
             </a>
-            <a href="#" className="hover:text-[#6E3AFF]">
+            <Link to="/ajuda-suporte" className="hover:text-[#6E3AFF]">
               Acessibilidade
-            </a>
+            </Link>
           </div>
         </div>
       </div>
