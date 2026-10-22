@@ -1,13 +1,17 @@
-import { useState, type ReactNode } from "react";
-import { Link } from "react-router";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowUpRight, ChevronDown, ExternalLink, Image as ImageIcon, Info } from "lucide-react";
 import { Reveal } from "../shared/Reveal";
+import { abrirBusca } from "../shared/abrirBusca";
 
-type Section = {
+/** Uma seção de página. O `id` vira o endereço dela: /vida-academica#calendario */
+export type Section = {
   id: string;
   label: string;
   content: ReactNode;
+  /** Outras palavras que levam a esta seção na busca global (ex.: "bandejão" → RU) */
+  buscaPor?: string[];
 };
 
 /** Cor de acento da página (paleta do portal) */
@@ -39,9 +43,34 @@ export function SectionLayout({
   sidebarRelated?: { label: string; to?: string; href?: string }[];
   accent?: Accent;
 }) {
-  const [active, setActive] = useState(sections[0]?.id);
+  // A seção aberta vem do endereço (#id), para a busca e os links levarem direto a ela
+  const location = useLocation();
+  const navigate = useNavigate();
+  const idDoEndereco = decodeURIComponent(location.hash.slice(1));
+  const active = sections.some((s) => s.id === idDoEndereco) ? idDoEndereco : sections[0]?.id;
+  const conteudo = useRef<HTMLDivElement>(null);
   const ac = ACCENT[accent];
   const hasSearch = Boolean(popular?.length || searchPlaceholder);
+
+  function abrirSecao(id: string) {
+    navigate({ hash: id }, { replace: true, preventScrollReset: true });
+  }
+
+  // Chegando por um link com #seção, rola até o conteúdo se ele estiver fora da tela
+  useEffect(() => {
+    const el = conteudo.current;
+    if (!idDoEndereco || !el) return;
+    const topo = el.getBoundingClientRect().top;
+    if (topo < 140 || topo > window.innerHeight * 0.6) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [idDoEndereco]);
+
+  function buscarNoPortal(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const termo = new FormData(e.currentTarget).get("termo");
+    abrirBusca(typeof termo === "string" ? termo : "");
+  }
 
   return (
     <>
@@ -67,12 +96,16 @@ export function SectionLayout({
               ))}
             </div>
 
+            {/* Usa a busca global do portal, que já encontra o conteúdo desta página */}
             <form
-              onSubmit={(e) => e.preventDefault()}
-              className="mt-10 flex items-center rounded-[4px] border border-[#e5e5e5] bg-white focus-within:border-[#6E3AFF] cursor: cursor-pointer"
+              onSubmit={buscarNoPortal}
+              role="search"
+              className="mt-10 flex items-center rounded-[4px] border border-[#e5e5e5] bg-white focus-within:border-[#6E3AFF]"
             >
               <input
-                type="text"
+                type="search"
+                name="termo"
+                aria-label="Buscar no portal"
                 placeholder={searchPlaceholder}
                 className="flex-1 bg-transparent px-5 py-4 text-[14px] text-[#1a1a1a] placeholder:text-[#1a1a1a]/40 focus:outline-none"
               />
@@ -90,6 +123,8 @@ export function SectionLayout({
               {tags?.map((t) => (
                 <button
                   key={t}
+                  type="button"
+                  onClick={() => abrirBusca(t)}
                   className="text-[12px] text-[#1a1a1a]/60 transition-colors hover:text-[#6E3AFF]"
                 >
                   {t}
@@ -112,7 +147,8 @@ export function SectionLayout({
                 {sections.map((s) => (
                   <button
                     key={s.id}
-                    onClick={() => setActive(s.id)}
+                    onClick={() => abrirSecao(s.id)}
+                    aria-current={active === s.id ? "true" : undefined}
                     className={`group relative flex items-center rounded-[8px] px-4 py-3 text-left text-[14px] transition-colors ${
                       active === s.id
                         ? `font-bold ${ac.text}`
@@ -162,7 +198,7 @@ export function SectionLayout({
             </div>
           </aside>
 
-          <div className="lg:col-span-9">
+          <div ref={conteudo} className="scroll-mt-40 lg:col-span-9">
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
