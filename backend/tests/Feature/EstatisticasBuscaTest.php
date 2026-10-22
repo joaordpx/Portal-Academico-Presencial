@@ -52,7 +52,7 @@ class EstatisticasBuscaTest extends TestCase
         $this->buscaEm('2026-10-20 13:00', 'edital', 4);
         $this->buscaEm('2026-10-16 08:00', 'predio 3', 1, 'local', 7);
         // Período anterior (09/10 a 15/10)
-        $this->buscaEm('2026-10-15 08:00', 'ru', 1, 'pagina', 1);
+        $this->buscaEm('2026-10-15 08:00', 'ru', 1, 'secao', 1);
         $this->buscaEm('2026-10-10 08:00', 'xyz', 0);
     }
 
