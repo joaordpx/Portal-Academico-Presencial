@@ -13,6 +13,7 @@ enum TipoResultadoBusca: string implements HasLabel
     case Sigla = 'sigla';
     case Curso = 'curso';
     case Local = 'local';
+    case Campus = 'campus';
     case Edital = 'edital';
     case Evento = 'evento';
 
@@ -25,6 +26,7 @@ enum TipoResultadoBusca: string implements HasLabel
             self::Sigla => 'Siglas',
             self::Curso => 'Cursos',
             self::Local => 'Locais',
+            self::Campus => 'Campi',
             self::Edital => 'Editais',
             self::Evento => 'Eventos',
         };
