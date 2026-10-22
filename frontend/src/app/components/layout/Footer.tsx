@@ -237,6 +237,10 @@ export function Footer() {
               (38) 3229-8000
               <br />
               falecom@unimontes.br
+              <br />
+              <Link to="/contatos" className="font-semibold text-[#2563EB] hover:underline">
+                Catálogo telefônico
+              </Link>
             </div>
           </div>
           <div>

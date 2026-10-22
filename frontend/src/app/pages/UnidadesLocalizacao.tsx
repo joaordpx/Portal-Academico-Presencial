@@ -601,7 +601,11 @@ function Contatos({ locais, loading }: { locais: Local[]; loading: boolean }) {
         Contatos — Campus Montes Claros
       </h2>
       <p className="mt-2 max-w-2xl text-[15px] leading-[1.6] text-[#1a1a1a]/65">
-        Entre em contato com os principais setores e serviços do campus.
+        Entre em contato com os principais setores e serviços do campus. Procurando outro setor?{" "}
+        <Link to="/contatos" className="font-semibold text-[#2563EB] hover:underline">
+          Veja o catálogo telefônico completo
+        </Link>
+        .
       </p>
 
       {loading ? (
@@ -955,7 +959,7 @@ const ESTRUTURA = [
   { label: "Secretaria Geral", href: "https://unimontes.br/unidades/secretaria-geral/" },
   { label: "Biblioteca Universitária", href: "https://unimontes.br/unidades/biblioteca/" },
   { label: "Tecnologia da Informação (DTI)", href: "https://unimontes.br/dti/" },
-  { label: "Catálogo telefônico", href: "https://unimontes.br/catalogo-telefonico/" },
+  { label: "Catálogo telefônico", href: "/contatos" },
 ];
 
 const ORGANOGRAMA_PAGINA = "https://unimontes.br/apresentacao/organograma/";
@@ -978,17 +982,26 @@ function Organograma() {
           Estrutura geral da Universidade
         </h3>
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {ESTRUTURA.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-center justify-center rounded-[8px] border border-[#e5e5e5] bg-white px-4 py-4 text-center text-[13.5px] font-semibold text-[#1a1a1a] transition-all hover:-translate-y-0.5 hover:border-[#6E3AFF]/50 hover:shadow-[0_8px_22px_rgba(26,26,26,0.08)]"
-            >
-              {item.label}
-            </a>
-          ))}
+          {ESTRUTURA.map((item) => {
+            const classe =
+              "group flex items-center justify-center rounded-[8px] border border-[#e5e5e5] bg-white px-4 py-4 text-center text-[13.5px] font-semibold text-[#1a1a1a] transition-all hover:-translate-y-0.5 hover:border-[#6E3AFF]/50 hover:shadow-[0_8px_22px_rgba(26,26,26,0.08)]";
+            // Páginas do próprio portal abrem aqui; as do site oficial, em nova aba
+            return item.href.startsWith("/") ? (
+              <Link key={item.label} to={item.href} className={classe}>
+                {item.label}
+              </Link>
+            ) : (
+              <a
+                key={item.label}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={classe}
+              >
+                {item.label}
+              </a>
+            );
+          })}
         </div>
       </div>
 

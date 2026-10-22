@@ -287,6 +287,11 @@ const secoes: Section[] = [
         <PanelLinks
           links={[
             {
+              label: "Catálogo telefônico",
+              desc: "Telefones de todos os setores da Unimontes, com busca por setor ou número.",
+              href: "/contatos",
+            },
+            {
               label: "Sistema Fale com a Unimontes",
               desc: "Registre elogio, sugestão, pedido de providência, reclamação ou denúncia.",
               href: "https://www.sistemafalecom.unimontes.br/",
