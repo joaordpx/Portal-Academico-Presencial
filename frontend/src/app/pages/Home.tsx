@@ -22,8 +22,8 @@ import { Reveal } from "../components/shared/Reveal";
 import { ImageWithFallback } from "../components/shared/ImageWithFallback";
 import campusPredio1 from "../../assets/campus-predio-1.jpg";
 
-// Importando Tipos e Serviços
-import { Comunicado, Oportunidade, Noticia, DestaqueHero } from "../../types";
+import { ErroCarregamento } from "../components/shared/ErroCarregamento";
+import type { Comunicado, Oportunidade, Noticia, DestaqueHero } from "../../types";
 import {
   getComunicados,
   getOportunidades,
@@ -34,37 +34,43 @@ import {
 export function Home() {
   const [comunicados, setComunicados] = useState<Comunicado[]>([]);
   const [oportunidades, setOportunidades] = useState<Oportunidade[]>([]);
+  const [erroOportunidades, setErroOportunidades] = useState(false);
   const [noticias, setNoticias] = useState<Noticia[]>([]);
   const [loading, setLoading] = useState(true);
   const [destaque, setDestaque] = useState<DestaqueHero | null>(null);
+  const [tentativa, setTentativa] = useState(0);
 
+  // Cada seção carrega por conta própria: uma falha na API não derruba a Home inteira
   useEffect(() => {
-    async function carregarDados() {
-      try {
-        const [comunicadosData, opData, noticiasData, destaqueData] = await Promise.all([
-          getComunicados(),
-          getOportunidades(),
-          getNoticias(),
-          getDestaqueHero(),
-        ]);
+    let ativo = true;
+    Promise.allSettled([
+      getComunicados(),
+      getOportunidades(),
+      getNoticias(),
+      getDestaqueHero(),
+    ]).then(([com, op, not, dest]) => {
+      if (!ativo) return;
+      if (com.status === "fulfilled") setComunicados(com.value);
+      if (op.status === "fulfilled") setOportunidades(op.value);
+      else setErroOportunidades(true);
+      if (not.status === "fulfilled") setNoticias(not.value);
+      // Sem destaque, o hero só não mostra o selo
+      if (dest.status === "fulfilled") setDestaque(dest.value);
+      setLoading(false);
+    });
+    return () => {
+      ativo = false;
+    };
+  }, [tentativa]);
 
-        setComunicados(comunicadosData);
-        setOportunidades(opData);
-        setNoticias(noticiasData);
-        setDestaque(destaqueData);
-      } catch (error) {
-        console.error("Erro ao carregar dados:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    carregarDados();
-  }, []);
+  function recarregar() {
+    setErroOportunidades(false);
+    setLoading(true);
+    setTentativa((t) => t + 1);
+  }
 
   return (
     <>
-      {/* Passando a variável de destaque para o componente */}
       <HeroIntro destaque={destaque} />
       <AtalhosRapidos />
 
@@ -75,12 +81,42 @@ export function Home() {
       ) : (
         <>
           <Comunicados data={comunicados} />
-          <PrazosOportunidades data={oportunidades} />
+          <PrazosOportunidades
+            data={oportunidades}
+            erro={erroOportunidades}
+            onTentarNovamente={recarregar}
+          />
           <EstudeNaUnimontes />
           <Noticias data={noticias} />
         </>
       )}
     </>
+  );
+}
+
+/** Página do portal (`to`) ou fonte oficial em nova aba (`href`) */
+function LinkDestino({
+  to,
+  href,
+  className,
+  children,
+}: {
+  to?: string;
+  href?: string;
+  className: string;
+  children: React.ReactNode;
+}) {
+  if (to) {
+    return (
+      <Link to={to} className={className}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+      {children}
+    </a>
   );
 }
 
@@ -160,15 +196,16 @@ function HeroIntro({ destaque }: { destaque: DestaqueHero | null }) {
                   className="aspect-[4/5] w-full object-cover"
                 />
 
-                {/* AQUI ESTÁ A MÁGICA: Só renderiza se estiver ativo e usa a cor/texto do backend */}
-                {destaque?.ativo && (
-                  <div
-                    className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-white"
+                {/* Selo derivado dos eventos: só aparece com evento hoje ou nos próximos 7 dias */}
+                {destaque && (
+                  <Link
+                    to={destaque.to ?? "/eventos"}
+                    className="absolute left-4 right-4 top-4 inline-flex max-w-max items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-white transition-opacity hover:opacity-90"
                     style={{ backgroundColor: destaque.corFundo }}
                   >
-                    <span className="h-1.5 w-1.5 rounded-full bg-white" />
-                    {destaque.texto}
-                  </div>
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-white" />
+                    <span className="truncate">{destaque.texto}</span>
+                  </Link>
                 )}
               </div>
             </motion.div>
@@ -187,7 +224,7 @@ function HeroIntro({ destaque }: { destaque: DestaqueHero | null }) {
               tag: "Calouros",
               title: "Sou calouro",
               desc: "Inicie sua jornada acadêmica com um roteiro simples — do primeiro acesso ao mapa do campus.",
-              cta: "Acessar manual",
+              cta: "Primeiros passos",
               to: "/vida-academica",
               accent: "#6E3AFF",
               img: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900",
@@ -321,22 +358,37 @@ function AtalhosRapidos() {
 }
 
 function EstudeNaUnimontes() {
-  const items = [
+  // `to` = página do portal; `href` = fonte oficial (abre em nova aba)
+  const items: {
+    icon: typeof GraduationCap;
+    title: string;
+    desc: string;
+    to?: string;
+    href?: string;
+  }[] = [
     {
       icon: GraduationCap,
       title: "Como ingressar",
-      desc: "SISU, vestibular e demais formas de entrada.",
+      desc: "Vestibular próprio (80% das vagas) e Sisu (20%), com dois processos seletivos por ano.",
+      href: "https://unimontes.br/formas-de-ingresso-na-unimontes/",
     },
-    { icon: BookOpen, title: "Cursos ofertados", desc: "Mais de 47 graduações e diversas pós." },
+    {
+      icon: BookOpen,
+      title: "Cursos ofertados",
+      desc: "41 graduações presenciais em 11 campi, além de programas de pós-graduação.",
+      to: "/cursos",
+    },
     {
       icon: ClipboardList,
       title: "Editais de ingresso",
-      desc: "Calendários, vagas e processos seletivos.",
+      desc: "Vestibular, PAES e vagas remanescentes — editais publicados pela COTEPS.",
+      href: "https://www.coteps.unimontes.br/",
     },
     {
       icon: HelpCircle,
       title: "Dúvidas frequentes",
       desc: "Tire as principais dúvidas de novos estudantes.",
+      to: "/ajuda-suporte",
     },
   ];
   return (
@@ -358,8 +410,8 @@ function EstudeNaUnimontes() {
               </p>
               <div className="mt-10 overflow-hidden rounded-[4px] border border-white/15">
                 <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900"
-                  alt="Formandos celebrando"
+                  src="https://unimontes.br/wp-content/uploads/2026/10/DJI_0010-scaled.jpg"
+                  alt="Vista aérea do campus-sede da Unimontes, em Montes Claros"
                   className="aspect-[4/3] w-full object-cover"
                 />
               </div>
@@ -377,24 +429,29 @@ function EstudeNaUnimontes() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
                     transition={{ delay: i * 0.1, duration: 0.5 }}
-                    className="group grid grid-cols-12 items-start gap-6 py-10 transition-colors hover:bg-white/[0.03]"
                   >
-                    <div className="col-span-2 text-[40px] font-bold leading-none tracking-[-0.04em] text-white/15 transition-colors group-hover:text-[#FFB800] lg:text-[56px]">
-                      {n}
-                    </div>
-                    <div className="col-span-9">
-                      <div className="flex items-center gap-3">
-                        <Icon className="h-4 w-4 text-[#FFB800]" />
-                        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/50">
-                          Tópico {n}
-                        </span>
+                    <LinkDestino
+                      to={it.to}
+                      href={it.href}
+                      className="group grid grid-cols-12 items-start gap-6 py-10 transition-colors hover:bg-white/[0.03]"
+                    >
+                      <div className="col-span-2 text-[40px] font-bold leading-none tracking-[-0.04em] text-white/15 transition-colors group-hover:text-[#FFB800] lg:text-[56px]">
+                        {n}
                       </div>
-                      <h3 className="mt-4 text-balance text-[26px] font-bold leading-[1.05] tracking-[-0.025em] text-white lg:text-[32px]">
-                        {it.title}
-                      </h3>
-                      <p className="mt-3 text-[16px] leading-[1.6] text-white/65">{it.desc}</p>
-                    </div>
-                    <ArrowUpRight className="col-span-1 mt-2 h-5 w-5 text-white/30 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#FFB800]" />
+                      <div className="col-span-9">
+                        <div className="flex items-center gap-3">
+                          <Icon className="h-4 w-4 text-[#FFB800]" />
+                          <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/50">
+                            Tópico {n}
+                          </span>
+                        </div>
+                        <h3 className="mt-4 text-balance text-[26px] font-bold leading-[1.05] tracking-[-0.025em] text-white lg:text-[32px]">
+                          {it.title}
+                        </h3>
+                        <p className="mt-3 text-[16px] leading-[1.6] text-white/65">{it.desc}</p>
+                      </div>
+                      <ArrowUpRight className="col-span-1 mt-2 h-5 w-5 text-white/30 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#FFB800]" />
+                    </LinkDestino>
                   </motion.li>
                 );
               })}
@@ -428,7 +485,9 @@ function Comunicados({ data }: { data: Comunicado[] }) {
               </h2>
             </div>
             <a
-              href="#"
+              href="https://unimontes.br/comunicacao/comunicados/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a] hover:text-[#FF4D2E]"
             >
               Ver todos os comunicados
@@ -467,12 +526,16 @@ function Comunicados({ data }: { data: Comunicado[] }) {
                   </div>
                 </div>
                 <div className="col-span-12 flex items-start justify-end lg:col-span-3">
-                  <a
-                    href="#"
-                    className="inline-flex items-center gap-2 border-b border-[#1a1a1a] pb-1 text-[12px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a] transition-colors group-hover:border-[#FF4D2E] group-hover:text-[#FF4D2E]"
-                  >
-                    Ler comunicado <ArrowUpRight className="h-3.5 w-3.5" />
-                  </a>
+                  {c.url && (
+                    <a
+                      href={c.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 border-b border-[#1a1a1a] pb-1 text-[12px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a] transition-colors group-hover:border-[#FF4D2E] group-hover:text-[#FF4D2E]"
+                    >
+                      Ler comunicado <ArrowUpRight className="h-3.5 w-3.5" />
+                    </a>
+                  )}
                 </div>
               </motion.article>
             </Reveal>
@@ -483,8 +546,17 @@ function Comunicados({ data }: { data: Comunicado[] }) {
   );
 }
 
-function PrazosOportunidades({ data }: { data: Oportunidade[] }) {
-  if (data.length === 0) return null;
+function PrazosOportunidades({
+  data,
+  erro,
+  onTentarNovamente,
+}: {
+  data: Oportunidade[];
+  erro: boolean;
+  onTentarNovamente: () => void;
+}) {
+  // Sem nada aberto, a seção some; com erro, ela avisa
+  if (data.length === 0 && !erro) return null;
 
   return (
     <section className="bg-white py-24 lg:py-32">
@@ -500,15 +572,22 @@ function PrazosOportunidades({ data }: { data: Oportunidade[] }) {
                 Inscrições <em className="font-light italic">abertas</em> agora.
               </h2>
             </div>
-            <a
-              href="#"
+            <Link
+              to="/editais-oportunidades"
               className="group inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a] hover:text-[#00B894]"
             >
               Ver mais oportunidades
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </a>
+            </Link>
           </div>
         </Reveal>
+
+        {erro && (
+          <ErroCarregamento
+            titulo="Não foi possível carregar as oportunidades"
+            onTentarNovamente={onTentarNovamente}
+          />
+        )}
 
         <div className="grid grid-cols-1 gap-0 sm:grid-cols-2 lg:grid-cols-4">
           {data.map((it, i) => (
@@ -527,12 +606,14 @@ function PrazosOportunidades({ data }: { data: Oportunidade[] }) {
                 </div>
                 <div className="mt-8">
                   <dl className="space-y-2.5 border-t border-[#e5e5e5] pt-5 text-[12px]">
-                    {[
-                      ["Tipo", it.tipo],
-                      ["Prazo", it.prazo],
-                      ["Público", it.publico],
-                      ["Campus", it.campus],
-                    ].map(([k, v]) => (
+                    {(
+                      [
+                        ["Tipo", it.tipo],
+                        [it.rotuloData, it.data],
+                        ["Público", it.publico],
+                        ["Campus", it.campus],
+                      ].filter(([, v]) => v) as [string, string][]
+                    ).map(([k, v]) => (
                       <div key={k} className="flex items-baseline justify-between gap-3">
                         <dt className="font-bold uppercase tracking-[0.14em] text-[#1a1a1a]/40">
                           {k}
@@ -541,13 +622,16 @@ function PrazosOportunidades({ data }: { data: Oportunidade[] }) {
                       </div>
                     ))}
                   </dl>
-                  <a
-                    href="#"
-                    className="mt-6 inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-[#00B894]"
-                  >
-                    Ver detalhes{" "}
-                    <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </a>
+                  {(it.to || it.url) && (
+                    <LinkDestino
+                      to={it.to}
+                      href={it.url}
+                      className="mt-6 inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-[#00B894]"
+                    >
+                      Ver detalhes{" "}
+                      <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </LinkDestino>
+                  )}
                 </div>
               </motion.div>
             </Reveal>
@@ -576,7 +660,9 @@ function Noticias({ data }: { data: Noticia[] }) {
               </h2>
             </div>
             <a
-              href="#"
+              href="https://unimontes.br/noticias/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a] hover:text-[#6E3AFF]"
             >
               Ver mais notícias{" "}
@@ -611,13 +697,17 @@ function Noticias({ data }: { data: Noticia[] }) {
                   {n.title}
                 </h3>
                 <p className="mt-3 flex-1 text-[15px] leading-[1.55] text-[#1a1a1a]/65">{n.desc}</p>
-                <a
-                  href="#"
-                  className="mt-5 inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-[#1a1a1a] transition-colors group-hover:text-[#6E3AFF]"
-                >
-                  Ler notícia{" "}
-                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </a>
+                {n.url && (
+                  <a
+                    href={n.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-5 inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-[#1a1a1a] transition-colors group-hover:text-[#6E3AFF]"
+                  >
+                    Ler notícia{" "}
+                    <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </a>
+                )}
               </motion.article>
             </Reveal>
           ))}
@@ -637,7 +727,7 @@ function Noticias({ data }: { data: Noticia[] }) {
               </div>
             </div>
             <Link
-              to="/contato"
+              to="/ajuda-suporte"
               className="inline-flex items-center gap-2 rounded-[4px] bg-white px-6 py-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a] transition-colors hover:bg-[#FFB800]"
             >
               Abrir contato <ArrowUpRight className="h-4 w-4" />

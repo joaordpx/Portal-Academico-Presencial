@@ -1,3 +1,5 @@
+/* ── Home: dados de exibição (comunicados e notícias ainda locais; ver homeService) ── */
+
 export interface Comunicado {
   id: number;
   tag: string;
@@ -7,15 +9,23 @@ export interface Comunicado {
   publico: string;
   campus: string;
   data: string;
+  url?: string; // página oficial do comunicado
 }
 
+/**
+ * Card de "Prazos & oportunidades" — derivado no serviço a partir dos editais
+ * abertos e dos eventos com inscrição aberta.
+ */
 export interface Oportunidade {
-  id: number;
+  id: string; // "edital-3" | "evento-5": único entre as duas origens
   title: string;
-  tipo: string;
-  prazo: string;
-  publico: string;
-  campus: string;
+  tipo: string; // tipo do edital ou "Evento"
+  rotuloData: "Prazo" | "Data"; // edital tem prazo de inscrição; evento, data de realização
+  data: string; // já formatada, ex.: "30/10/2026"
+  publico?: string;
+  campus?: string;
+  url?: string; // página oficial (abre em nova aba)
+  to?: string; // página do próprio portal
 }
 
 export interface Noticia {
@@ -27,12 +37,14 @@ export interface Noticia {
   title: string;
   desc: string;
   date: string;
+  url?: string; // matéria completa no site oficial
 }
 
+/** Selo sobre a foto do hero — derivado do evento em andamento ou do próximo */
 export interface DestaqueHero {
   texto: string;
   corFundo: string;
-  ativo: boolean;
+  to?: string;
 }
 
 /* ─────────────── Unidades e Localização ─────────────── */
