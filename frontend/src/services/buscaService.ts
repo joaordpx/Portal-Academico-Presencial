@@ -4,6 +4,8 @@ import { getEditais } from "./editalService";
 import { getEventos } from "./eventoService";
 import { getLocais, getUnidades } from "./localService";
 import { formatarData, formatarPeriodo } from "../utils/data";
+import { digitosDoTelefone, numerosDoTelefone } from "../utils/telefone";
+import { normalizar } from "../utils/texto";
 
 /**
  * Busca global do portal (⌘K).
@@ -20,7 +22,16 @@ import { formatarData, formatarPeriodo } from "../utils/data";
  */
 
 export type TipoBusca =
-  "link" | "secao" | "pergunta" | "sigla" | "curso" | "local" | "campus" | "edital" | "evento";
+  | "link"
+  | "secao"
+  | "pergunta"
+  | "sigla"
+  | "contato"
+  | "curso"
+  | "local"
+  | "campus"
+  | "edital"
+  | "evento";
 
 export interface ItemBusca {
   id: string;
@@ -54,6 +65,8 @@ export const ORDEM_TIPOS: TipoBusca[] = [
   "campus",
   "edital",
   "evento",
+  // São centenas: num empate, telefones ficam depois de cursos, locais e eventos
+  "contato",
 ];
 
 export const ROTULO_TIPO: Record<TipoBusca, string> = {
@@ -61,6 +74,7 @@ export const ROTULO_TIPO: Record<TipoBusca, string> = {
   secao: "No portal",
   pergunta: "Perguntas frequentes",
   sigla: "Siglas",
+  contato: "Telefones",
   curso: "Cursos",
   local: "Locais",
   campus: "Campi",
@@ -73,15 +87,7 @@ const MAX_POR_TIPO = 5;
 /** Slug do campus-sede na API, cujos prédios a página de Unidades mostra */
 const CAMPUS_SEDE = "montes-claros";
 
-/** Sem acentos, minúsculas e espaços simples: "  Matrícula " → "matricula" */
-export function normalizar(texto: string) {
-  return texto
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "")
-    .toLowerCase()
-    .replace(/\s+/g, " ")
-    .trim();
-}
+export { normalizar };
 
 function palavrasDe(...textos: (string | null | undefined)[]) {
   const todas = textos.filter(Boolean).flatMap((t) => {
@@ -126,9 +132,10 @@ export function limparCacheBusca() {
 }
 
 async function montarIndice(hoje: Date): Promise<IndiceBusca> {
-  const [conteudo, cursos, locais, campi, editais, eventos] = await Promise.allSettled([
-    // Carregado sob demanda: só quem usa a busca baixa o conteúdo das páginas
+  const [conteudo, telefones, cursos, locais, campi, editais, eventos] = await Promise.allSettled([
+    // Carregados sob demanda: só quem usa a busca baixa o conteúdo das páginas
     import("../app/pages/conteudo").then((m) => m.indexarConteudo()),
+    import("../app/pages/conteudo/catalogoTelefonico").then((m) => m.CATALOGO_TELEFONICO),
     getCursos(),
     // Os mesmos locais que a página de Unidades mostra, para o link sempre abrir o prédio
     getLocais(CAMPUS_SEDE),
@@ -142,6 +149,48 @@ async function montarIndice(hoje: Date): Promise<IndiceBusca> {
 
   if (conteudo.status === "fulfilled") {
     for (const c of conteudo.value) itens.push(item(c));
+  } else falhas++;
+
+  if (telefones.status === "fulfilled") {
+    itens.push(
+      item({
+        id: "pagina-contatos",
+        tipo: "secao",
+        titulo: "Catálogo telefônico",
+        detalhe: "Telefones de todos os setores da Unimontes",
+        to: "/contatos",
+        extras: ["contatos", "telefones", "telefone", "ramal", "ramais", "ligar", "fale conosco"],
+      }),
+    );
+    for (const grupo of telefones.value) {
+      const destino = `/contatos#${grupo.id}`;
+      itens.push(
+        item({
+          id: `contato-${grupo.id}`,
+          tipo: "contato",
+          titulo: grupo.titulo,
+          detalhe: `${grupo.contatos.length} ${grupo.contatos.length === 1 ? "telefone" : "telefones"} · Catálogo telefônico`,
+          to: destino,
+          extras: ["telefone", "contato"],
+        }),
+      );
+      grupo.contatos.forEach(([setor, texto], i) => {
+        const numeros = numerosDoTelefone(texto);
+        const principal = numeros[0]?.exibicao ?? texto;
+        const outros = numeros.length > 1 ? ` (+${numeros.length - 1})` : "";
+        itens.push(
+          item({
+            id: `contato-${grupo.id}-${i}`,
+            tipo: "contato",
+            titulo: setor,
+            // O número já aparece no resultado: muita gente só precisa dele
+            detalhe: `${principal}${outros} · ${grupo.titulo}`,
+            to: destino,
+            extras: [grupo.titulo, "telefone", ...digitosDoTelefone(texto)],
+          }),
+        );
+      });
+    }
   } else falhas++;
 
   if (cursos.status === "fulfilled") {

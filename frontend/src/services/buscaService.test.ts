@@ -200,6 +200,26 @@ describe("buscar", () => {
     );
   });
 
+  it("mostra o telefone do setor direto no resultado", async () => {
+    const r = buscar(await indice(), "recepcao secretaria geral");
+    expect(r[0]).toMatchObject({
+      tipo: "contato",
+      titulo: "Recepção Secretaria Geral",
+      detalhe: "(38) 3229-8040 · Secretaria Geral",
+      to: "/contatos#secretaria-geral",
+    });
+  });
+
+  it("acha o setor pelo número do ramal", async () => {
+    const r = buscar(await indice(), "8040");
+    expect(r.map((i) => i.titulo)).toContain("Recepção Secretaria Geral");
+  });
+
+  it("leva ao catálogo telefônico quem busca por telefones", async () => {
+    const r = buscar(await indice(), "telefones");
+    expect(r.find((i) => i.id === "pagina-contatos")?.to).toBe("/contatos");
+  });
+
   it('acha "Wi-Fi" digitado como "wifi"', async () => {
     expect(buscar(await indice(), "wifi")[0]?.titulo).toMatch(/Wi-Fi/);
   });
