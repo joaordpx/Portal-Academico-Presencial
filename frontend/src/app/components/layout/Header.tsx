@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router";
+import { NavLink, useLocation } from "react-router";
 import { motion } from "motion/react";
 import { Search, Menu, X } from "lucide-react";
 import { SearchDialog } from "../shared/SearchDialog";
 import { EVENTO_ABRIR_BUSCA } from "../shared/abrirBusca";
+import { useTravarRolagem } from "../shared/useTravarRolagem";
 import { preCarregarBusca } from "../../../services/buscaService";
 
 const NAV = [
@@ -17,11 +18,23 @@ const NAV = [
   { to: "/unidades-localizacao", label: "Unidades e Localização", end: false },
 ];
 
+// No celular o rodapé fica longe: o menu leva também às páginas que só ele lista
+const NAV_CELULAR_EXTRA = [
+  { to: "/movimento-estudantil-lazer", label: "Movimento Estudantil e Lazer", end: false },
+  { to: "/contatos", label: "Catálogo telefônico", end: false },
+  { to: "/ajuda-suporte", label: "Ajuda e Suporte", end: false },
+];
+
 export function Header() {
   // `chave` remonta a janela quando ela é reaberta com outro termo
   const [busca, setBusca] = useState({ aberta: false, termo: "", chave: 0 });
-  const [mobileOpen, setMobileOpen] = useState(false);
+  // Guarda a página em que o menu foi aberto: ao navegar para outra, ele fecha sozinho
+  const { pathname } = useLocation();
+  const [menuAbertoEm, setMenuAbertoEm] = useState<string | null>(null);
+  const mobileOpen = menuAbertoEm === pathname;
+  const fecharMenu = () => setMenuAbertoEm(null);
   const [scrolled, setScrolled] = useState(false);
+  useTravarRolagem(mobileOpen);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -32,6 +45,7 @@ export function Header() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuAbertoEm(null);
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         setBusca((b) => ({ aberta: !b.aberta, termo: "", chave: b.chave + 1 }));
@@ -50,17 +64,24 @@ export function Header() {
     };
   }, []);
 
-  const abrirBusca = () => setBusca((b) => ({ aberta: true, termo: "", chave: b.chave + 1 }));
+  const abrirBusca = () => {
+    fecharMenu();
+    setBusca((b) => ({ aberta: true, termo: "", chave: b.chave + 1 }));
+  };
 
   return (
     <>
       <header
         className={`sticky top-0 z-50 w-full bg-white transition-all duration-300 ${
-          scrolled ? "border-b border-[#e5e5e5]" : "border-b border-transparent"
+          scrolled || mobileOpen ? "border-b border-[#e5e5e5]" : "border-b border-transparent"
         }`}
       >
-        <div className="mx-auto flex h-20 max-w-[1400px] items-center justify-between gap-6 px-6 lg:px-12">
-          <NavLink to="/" className="flex shrink-0 items-center gap-3">
+        <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between gap-6 px-6 lg:h-20 lg:px-12">
+          <NavLink
+            to="/"
+            aria-label="Unimontes — página inicial"
+            className="flex shrink-0 items-center gap-3"
+          >
             <img
               src="/figurativa-unimontes.svg"
               alt=""
@@ -76,22 +97,28 @@ export function Header() {
           </NavLink>
 
           <div className="flex items-center gap-2.5">
+            {/* A busca é o caminho mais rápido no celular: fica sempre à vista, não dentro do menu */}
             <motion.button
               onClick={abrirBusca}
               onMouseEnter={preCarregarBusca}
               onFocus={preCarregarBusca}
+              onTouchStart={preCarregarBusca}
               whileTap={{ scale: 0.97 }}
-              className="hidden items-center gap-3 rounded-[4px] border border-[#e5e5e5] bg-white px-3.5 py-2.5 text-[12px] font-medium text-[#1a1a1a]/60 transition-colors hover:border-[#1a1a1a] hover:text-[#1a1a1a] sm:flex"
+              aria-label="Buscar no portal"
+              className="flex h-11 min-w-11 items-center justify-center gap-3 rounded-[4px] border border-[#e5e5e5] bg-white px-3 text-[12px] font-medium text-[#1a1a1a]/60 transition-colors hover:border-[#1a1a1a] hover:text-[#1a1a1a] lg:px-3.5"
             >
-              <Search className="h-4 w-4" />
+              <Search className="h-[18px] w-[18px] text-[#1a1a1a] lg:h-4 lg:w-4 lg:text-current" />
               <span className="hidden lg:inline">Buscar no portal</span>
-              <kbd className="ml-1 rounded-sm bg-[#f4f4f4] px-1.5 py-0.5 text-[10px] font-semibold text-[#1a1a1a]/50">
+              <kbd className="ml-1 hidden rounded-sm bg-[#f4f4f4] px-1.5 py-0.5 text-[10px] font-semibold text-[#1a1a1a]/50 lg:inline">
                 ⌘K
               </kbd>
             </motion.button>
 
             <button
-              onClick={() => setMobileOpen((v) => !v)}
+              onClick={() => (mobileOpen ? fecharMenu() : setMenuAbertoEm(pathname))}
+              aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
+              aria-expanded={mobileOpen}
+              aria-controls="menu-celular"
               className="flex h-11 w-11 items-center justify-center rounded-[4px] border border-[#e5e5e5] text-[#1a1a1a] lg:hidden"
             >
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -132,43 +159,50 @@ export function Header() {
         </nav>
 
         {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="border-t border-[#e5e5e5] bg-white lg:hidden"
+          <motion.nav
+            id="menu-celular"
+            aria-label="Menu principal"
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.18 }}
+            // Limitado à altura da tela: em celulares baixos o menu rola em vez de ficar cortado
+            className="max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain bg-white lg:hidden"
           >
-            <div className="flex flex-col p-4">
-              {NAV.map((item) => (
-                <NavLink
-                  key={item.label}
-                  to={item.to}
-                  end={item.end}
-                  onClick={() => setMobileOpen(false)}
-                  className={({ isActive }) =>
-                    `rounded-[4px] px-4 py-3 text-[14px] font-medium ${
-                      isActive
-                        ? "bg-[#f4f4f4] text-[#1a1a1a]"
-                        : "text-[#1a1a1a]/70 hover:bg-[#fafafa]"
-                    }`
-                  }
-                >
-                  {item.label}
-                </NavLink>
-              ))}
-              <button
-                onClick={() => {
-                  setMobileOpen(false);
-                  abrirBusca();
-                }}
-                className="mt-2 flex items-center justify-center gap-2 rounded-[4px] border border-[#e5e5e5] px-4 py-3 text-sm font-semibold text-[#1a1a1a]"
-              >
-                <Search className="h-4 w-4" /> Buscar
-              </button>
+            <div className="flex flex-col px-4 pb-6 pt-3">
+              {[...NAV, null, ...NAV_CELULAR_EXTRA].map((item) =>
+                item ? (
+                  <NavLink
+                    key={item.label}
+                    to={item.to}
+                    end={item.end}
+                    onClick={fecharMenu}
+                    className={({ isActive }) =>
+                      `flex min-h-12 items-center rounded-[4px] px-4 text-[15px] font-medium ${
+                        isActive
+                          ? "bg-[#f4f4f4] text-[#1a1a1a]"
+                          : "text-[#1a1a1a]/70 active:bg-[#f4f4f4]"
+                      }`
+                    }
+                  >
+                    {item.label}
+                  </NavLink>
+                ) : (
+                  <div key="divisoria" className="mx-4 my-3 border-t border-[#e5e5e5]" />
+                ),
+              )}
             </div>
-          </motion.div>
+          </motion.nav>
         )}
       </header>
+
+      {/* Fundo escurecido do menu: tocar fora fecha */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-[#1a1a1a]/30 lg:hidden"
+          onClick={fecharMenu}
+          aria-hidden="true"
+        />
+      )}
 
       {busca.aberta && (
         <SearchDialog

@@ -14,6 +14,7 @@ import {
   Search,
   Sparkles,
   Tag,
+  X,
 } from "lucide-react";
 import {
   ROTULO_TIPO,
@@ -24,6 +25,7 @@ import {
   type ItemBusca,
   type TipoBusca,
 } from "../../../services/buscaService";
+import { useTravarRolagem } from "./useTravarRolagem";
 
 const ICONE_TIPO: Record<TipoBusca, typeof Search> = {
   link: Link2,
@@ -57,6 +59,7 @@ export function SearchDialog({
   const [indice, setIndice] = useState<IndiceBusca | null>(null);
   // Decide quando uma busca entra nas estatísticas (ver criarSessaoBusca)
   const [sessao] = useState(() => criarSessaoBusca());
+  useTravarRolagem(true);
 
   useEffect(() => {
     let ativo = true;
@@ -124,7 +127,8 @@ export function SearchDialog({
   const carregando = indice === null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-start justify-center px-4 pt-[10vh]">
+    // No celular a janela ocupa a tela toda: sobra espaço para os resultados acima do teclado
+    <div className="fixed inset-0 z-[100] flex items-start justify-center sm:px-4 sm:pt-[10vh]">
       {/* Fundo escurecido sem desfoque: o blur em tela cheia pesa em computadores mais simples */}
       <div className="absolute inset-0 bg-[#1a1a1a]/50" onClick={fechar} aria-hidden="true" />
 
@@ -132,9 +136,9 @@ export function SearchDialog({
         role="dialog"
         aria-modal="true"
         aria-label="Buscar no portal"
-        className="relative z-10 w-full max-w-2xl overflow-hidden rounded-[4px] border border-[#1a1a1a]/15 bg-white shadow-2xl animate-in fade-in-0 slide-in-from-top-2 duration-150 motion-reduce:animate-none"
+        className="relative z-10 flex h-[100dvh] w-full flex-col overflow-hidden bg-white shadow-2xl animate-in fade-in-0 slide-in-from-top-2 duration-150 motion-reduce:animate-none sm:h-auto sm:max-w-2xl sm:rounded-[4px] sm:border sm:border-[#1a1a1a]/15"
       >
-        <div className="flex items-center gap-3 border-b border-[#e5e5e5] px-5">
+        <div className="flex shrink-0 items-center gap-3 border-b border-[#e5e5e5] pl-5 pr-2 sm:pr-5">
           <Search className="h-4 w-4 shrink-0 text-[#1a1a1a]/50" />
           <input
             autoFocus
@@ -147,9 +151,21 @@ export function SearchDialog({
           <kbd className="hidden rounded-[3px] border border-[#e5e5e5] bg-[#fafafa] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[#1a1a1a]/50 sm:inline">
             Esc
           </kbd>
+          {/* No toque não há Esc: fechar precisa estar à vista */}
+          <button
+            type="button"
+            onClick={fechar}
+            aria-label="Fechar busca"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[4px] text-[#1a1a1a]/60 active:bg-[#f4f4f4] sm:hidden"
+          >
+            <X className="h-5 w-5" />
+          </button>
         </div>
 
-        <div className="max-h-[60vh] overflow-y-auto p-2" aria-live="polite">
+        <div
+          className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-2 sm:max-h-[60vh] sm:flex-none"
+          aria-live="polite"
+        >
           {!termo ? (
             <div className="px-4 py-8 text-[13.5px] leading-[1.6] text-[#1a1a1a]/60">
               Busque cursos, prédios, editais, eventos, documentos e informações do portal. Por
@@ -217,7 +233,8 @@ export function SearchDialog({
                         </span>
                       </span>
                       <span
-                        className={`flex shrink-0 items-center gap-1 text-[10px] font-bold uppercase tracking-[0.14em] ${
+                        // No celular o título precisa do espaço; o toque já deixa claro o que abre
+                        className={`hidden shrink-0 items-center gap-1 text-[10px] font-bold uppercase tracking-[0.14em] sm:flex ${
                           isActive ? "text-white" : "invisible"
                         }`}
                       >
@@ -237,8 +254,9 @@ export function SearchDialog({
           )}
         </div>
 
-        <div className="flex items-center justify-between border-t border-[#e5e5e5] bg-[#fafafa] px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#1a1a1a]/50">
-          <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center justify-between border-t border-[#e5e5e5] bg-[#fafafa] px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#1a1a1a]/50">
+          {/* Atalhos de teclado só fazem sentido com teclado físico */}
+          <div className="hidden items-center gap-3 sm:flex">
             <span className="flex items-center gap-1">
               <kbd className="rounded-[3px] border border-[#e5e5e5] bg-white px-1.5 py-0.5 font-bold">
                 ↑
