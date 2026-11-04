@@ -139,24 +139,40 @@ export function Footer() {
           </div>
 
           <div className="lg:col-span-5">
-            <ul className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
+            <ul className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2 sm:gap-y-3">
               {[
-                { icon: WhatsAppIcon, k: "WhatsApp", v: "(31) 3915-2022" },
-                { icon: Phone, k: "Disque-Ouvidoria", v: "162" },
-                { icon: Shield, k: "Disque-Saúde", v: "136" },
+                {
+                  icon: WhatsAppIcon,
+                  k: "WhatsApp",
+                  v: "(31) 3915-2022",
+                  href: "https://wa.me/553139152022",
+                },
+                { icon: Phone, k: "Disque-Ouvidoria", v: "162", href: "tel:162" },
+                { icon: Shield, k: "Disque-Saúde", v: "136", href: "tel:136" },
               ].map((c) => {
                 const Icon = c.icon;
                 return (
-                  <li key={c.k} className="flex items-center gap-3">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#e5e5e5] bg-white text-[#1a1a1a]/70">
-                      <Icon className="h-4 w-4" />
-                    </span>
-                    <div className="min-w-0">
-                      <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#1a1a1a]/45">
-                        {c.k}
-                      </div>
-                      <div className="mt-0.5 text-[14px] font-semibold text-[#1a1a1a]">{c.v}</div>
-                    </div>
+                  <li key={c.k}>
+                    {/* Tocar liga (ou abre o WhatsApp) direto do celular */}
+                    <a
+                      href={c.href}
+                      {...(c.href.startsWith("http")
+                        ? { target: "_blank", rel: "noopener noreferrer" }
+                        : {})}
+                      className="group flex items-center gap-3 rounded-[6px] py-1.5"
+                    >
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#e5e5e5] bg-white text-[#1a1a1a]/70 transition-colors group-hover:border-[#6E3AFF] group-hover:text-[#6E3AFF]">
+                        <Icon className="h-4 w-4" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-[#1a1a1a]/45">
+                          {c.k}
+                        </span>
+                        <span className="mt-0.5 block text-[14px] font-semibold text-[#1a1a1a] group-hover:text-[#6E3AFF]">
+                          {c.v}
+                        </span>
+                      </span>
+                    </a>
                   </li>
                 );
               })}
@@ -179,16 +195,16 @@ export function Footer() {
 
       {/* ─── MAPA DO SITE (sem título, é o próprio rodapé) ─── */}
       <div className="mx-auto max-w-[1400px] px-6 pt-16 lg:px-12 lg:pt-20">
-        <div className="grid grid-cols-1 gap-x-8 gap-y-12 pb-16 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 pb-16 lg:grid-cols-5 lg:gap-x-8 lg:gap-y-12">
           {sitemap.map((col) => (
             <div key={col.title}>
-              <div className="mb-4 text-[15px] font-bold tracking-[-0.01em] text-[#1a1a1a]">
+              <div className="mb-2 text-[15px] font-bold tracking-[-0.01em] text-[#1a1a1a] lg:mb-3">
                 {col.title}
               </div>
-              <ul className="space-y-2">
+              <ul className="space-y-0.5">
                 {col.links.map((l) => {
                   const estilo =
-                    "text-[13px] leading-[1.5] text-[#2563EB] transition-colors hover:text-[#1d4ed8] hover:underline";
+                    "inline-block py-1.5 text-[13px] leading-[1.4] text-[#2563EB] transition-colors hover:text-[#1d4ed8] hover:underline";
                   return (
                     <li key={l.label}>
                       {l.to ? (
@@ -233,12 +249,15 @@ export function Footer() {
             <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#1a1a1a]/40">
               Contato
             </div>
-            <div className="mt-2">
-              (38) 3229-8000
-              <br />
-              falecom@unimontes.br
-              <br />
-              <Link to="/contatos" className="font-semibold text-[#2563EB] hover:underline">
+            {/* No celular, tocar no número já liga e no e-mail já abre o aplicativo de e-mail */}
+            <div className="mt-1 flex flex-col items-start">
+              <a href="tel:+553832298000" className="py-1 hover:text-[#6E3AFF]">
+                (38) 3229-8000
+              </a>
+              <a href="mailto:falecom@unimontes.br" className="py-1 hover:text-[#6E3AFF]">
+                falecom@unimontes.br
+              </a>
+              <Link to="/contatos" className="py-1 font-semibold text-[#2563EB] hover:underline">
                 Catálogo telefônico
               </Link>
             </div>
@@ -282,7 +301,7 @@ export function Footer() {
               href="https://unimontes.br/politica-de-privacidade/"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-[#6E3AFF]"
+              className="py-1.5 hover:text-[#6E3AFF]"
             >
               Privacidade
             </a>
@@ -290,11 +309,11 @@ export function Footer() {
               href="https://unimontes.br/lgpd/"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-[#6E3AFF]"
+              className="py-1.5 hover:text-[#6E3AFF]"
             >
               LGPD
             </a>
-            <Link to="/ajuda-suporte" className="hover:text-[#6E3AFF]">
+            <Link to="/ajuda-suporte" className="py-1.5 hover:text-[#6E3AFF]">
               Acessibilidade
             </Link>
           </div>

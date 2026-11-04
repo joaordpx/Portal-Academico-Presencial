@@ -121,12 +121,12 @@ function ListaEditais() {
       </p>
 
       {/* Filtros */}
-      <div className="mt-8 rounded-[10px] border border-[#e5e5e5] bg-[#fafafa] p-6">
+      <div className="mt-6 rounded-[10px] border border-[#e5e5e5] bg-[#fafafa] p-4 sm:mt-8 sm:p-6">
         <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#1a1a1a]/70">
           Filtros
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-3 grid grid-cols-3 gap-1.5 sm:mt-4 sm:flex sm:flex-wrap sm:gap-2">
           {["Todos", "Aberto", "Encerrado"].map((s) => (
             <button
               key={s}
@@ -134,20 +134,27 @@ function ListaEditais() {
                 setStatus(s);
                 setPage(1);
               }}
-              className={`rounded-[6px] border px-3.5 py-2 text-[12.5px] font-semibold transition-colors ${
+              aria-pressed={status === s}
+              className={`min-h-10 rounded-[6px] border px-2 py-2 text-[12.5px] font-semibold transition-colors sm:px-3.5 ${
                 status === s
                   ? "border-[#6E3AFF] bg-[#6E3AFF] text-white"
                   : "border-[#e5e5e5] bg-white text-[#1a1a1a]/65 hover:border-[#1a1a1a]/40"
               }`}
             >
-              {s === "Todos" ? "Todos os editais" : `Editais ${s}s`}
+              <span className="sm:hidden">{s === "Todos" ? "Todos" : `${s}s`}</span>
+              <span className="hidden sm:inline">
+                {s === "Todos" ? "Todos os editais" : `Editais ${s}s`}
+              </span>
             </button>
           ))}
         </div>
 
-        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
-          {selects.map((s) => (
-            <label key={s.label} className="block">
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {selects.map((s, i) => (
+            <label
+              key={s.label}
+              className={`block min-w-0 ${i === 0 ? "col-span-2 sm:col-span-1" : ""}`}
+            >
               <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#1a1a1a]/45">
                 {s.label}
               </span>
@@ -172,7 +179,7 @@ function ListaEditais() {
         {ativos > 0 && (
           <button
             onClick={limpar}
-            className="mt-4 inline-flex items-center gap-1.5 text-[12px] font-bold text-[#6E3AFF] hover:underline"
+            className="mt-2 inline-flex items-center gap-1.5 py-2 text-[12px] font-bold text-[#6E3AFF] hover:underline"
           >
             <X className="h-3.5 w-3.5" /> Limpar filtros ({ativos})
           </button>
@@ -180,7 +187,7 @@ function ListaEditais() {
       </div>
 
       {/* Contagem */}
-      <div className="mt-8 flex items-center justify-between border-b border-[#e5e5e5] pb-4 text-[13px] text-[#1a1a1a]/60">
+      <div className="mt-6 flex items-center justify-between border-b border-[#e5e5e5] pb-4 text-[13px] text-[#1a1a1a]/60 sm:mt-8">
         <span>
           <span className="font-bold text-[#1a1a1a]">{filtrados.length}</span>{" "}
           {filtrados.length === 1 ? "edital encontrado" : "editais encontrados"}
@@ -287,15 +294,20 @@ function ListaEditais() {
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className="flex h-9 items-center gap-1.5 rounded-[6px] px-3 text-[12px] font-bold text-[#1a1a1a]/60 transition-colors hover:bg-[#1a1a1a]/[0.05] hover:text-[#1a1a1a] disabled:pointer-events-none disabled:opacity-30"
+            aria-label="Página anterior"
+            className="flex h-11 items-center gap-1.5 rounded-[6px] px-3 text-[12px] sm:h-9 font-bold text-[#1a1a1a]/60 transition-colors hover:bg-[#1a1a1a]/[0.05] hover:text-[#1a1a1a] disabled:pointer-events-none disabled:opacity-30"
           >
-            <ChevronLeft className="h-4 w-4" /> Anterior
+            <ChevronLeft className="h-4 w-4" /> <span className="hidden sm:inline">Anterior</span>
           </button>
+          {/* No celular os números não cabem: mostra só a posição */}
+          <span className="px-3 text-[13px] font-semibold text-[#1a1a1a]/70 sm:hidden">
+            Página {currentPage} de {totalPages}
+          </span>
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
             <button
               key={p}
               onClick={() => setPage(p)}
-              className={`flex h-9 min-w-9 items-center justify-center rounded-[6px] px-3 text-[13px] font-bold transition-colors ${
+              className={`hidden h-11 min-w-11 sm:flex items-center justify-center rounded-[6px] px-3 text-[13px] sm:h-9 sm:min-w-9 font-bold transition-colors ${
                 p === currentPage
                   ? "bg-[#6E3AFF] text-white"
                   : "text-[#1a1a1a]/60 hover:bg-[#1a1a1a]/[0.05] hover:text-[#1a1a1a]"
@@ -307,9 +319,10 @@ function ListaEditais() {
           <button
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
-            className="flex h-9 items-center gap-1.5 rounded-[6px] px-3 text-[12px] font-bold text-[#1a1a1a]/60 transition-colors hover:bg-[#1a1a1a]/[0.05] hover:text-[#1a1a1a] disabled:pointer-events-none disabled:opacity-30"
+            aria-label="Próxima página"
+            className="flex h-11 items-center gap-1.5 rounded-[6px] px-3 text-[12px] sm:h-9 font-bold text-[#1a1a1a]/60 transition-colors hover:bg-[#1a1a1a]/[0.05] hover:text-[#1a1a1a] disabled:pointer-events-none disabled:opacity-30"
           >
-            Próxima <ChevronRight className="h-4 w-4" />
+            <span className="hidden sm:inline">Próxima</span> <ChevronRight className="h-4 w-4" />
           </button>
         </div>
       )}

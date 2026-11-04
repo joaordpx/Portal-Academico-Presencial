@@ -27,11 +27,11 @@ export function PageHeader({
   const hex = ACCENT_HEX[accent];
   return (
     <section className="border-b border-[#e5e5e5] bg-white">
-      <div className="mx-auto max-w-[1400px] px-6 pb-14 pt-8 lg:px-12 lg:pb-24 lg:pt-12">
+      <div className="mx-auto max-w-[1400px] px-6 pb-12 pt-6 lg:px-12 lg:pb-24 lg:pt-12">
         <nav className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#1a1a1a]/50">
           <Link
             to="/"
-            className="flex items-center gap-1.5 transition-colors"
+            className="-my-2 flex items-center gap-1.5 py-2 transition-colors"
             onMouseEnter={(e) => (e.currentTarget.style.color = hex)}
             onMouseLeave={(e) => (e.currentTarget.style.color = "")}
           >
@@ -41,7 +41,7 @@ export function PageHeader({
           <span className="text-[#1a1a1a]">{eyebrow}</span>
         </nav>
 
-        <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
+        <div className="mt-8 grid grid-cols-1 gap-8 lg:mt-10 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-8">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -57,7 +57,7 @@ export function PageHeader({
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.05 }}
-              className="mt-6 text-balance text-[44px] font-bold leading-[0.95] tracking-[-0.04em] text-[#1a1a1a] lg:text-[80px]"
+              className="mt-6 text-balance text-[38px] font-bold leading-[0.95] tracking-[-0.04em] text-[#1a1a1a] min-[375px]:text-[44px] lg:text-[80px]"
             >
               {title}
             </motion.h1>

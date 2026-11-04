@@ -106,20 +106,23 @@ export function CursoDetalhe() {
     <>
       {/* Breadcrumb + header card */}
       <section className="border-b border-[#e5e5e5] bg-white">
-        <div className="mx-auto max-w-[1400px] px-6 pb-16 pt-8 lg:px-12 lg:pb-20 lg:pt-10">
-          <nav className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#1a1a1a]/50">
-            <Link to="/" className="flex items-center gap-1.5 hover:text-[#6E3AFF]">
+        <div className="mx-auto max-w-[1400px] px-6 pb-12 pt-6 lg:px-12 lg:pb-20 lg:pt-10">
+          <nav className="flex min-w-0 items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#1a1a1a]/50">
+            <Link
+              to="/"
+              className="-my-2 flex shrink-0 items-center gap-1.5 py-2 hover:text-[#6E3AFF]"
+            >
               <Home className="h-3 w-3" /> Início
             </Link>
-            <ChevronRight className="h-3 w-3" />
-            <Link to="/cursos" className="hover:text-[#6E3AFF]">
+            <ChevronRight className="h-3 w-3 shrink-0" />
+            <Link to="/cursos" className="-my-2 shrink-0 py-2 hover:text-[#6E3AFF]">
               Cursos
             </Link>
-            <ChevronRight className="h-3 w-3" />
-            <span className="text-[#1a1a1a]">{curso.nome}</span>
+            <ChevronRight className="h-3 w-3 shrink-0" />
+            <span className="truncate text-[#1a1a1a]">{curso.nome}</span>
           </nav>
 
-          <div className="mt-9 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
+          <div className="mt-8 grid grid-cols-1 gap-8 lg:mt-9 lg:grid-cols-12 lg:gap-10">
             <div className="lg:col-span-8">
               <div className="flex items-center gap-3 text-[12px] font-bold uppercase tracking-[0.18em] text-[#6E3AFF]">
                 <span className="h-px w-10 bg-[#6E3AFF]" />
@@ -132,7 +135,7 @@ export function CursoDetalhe() {
               >
                 {curso.nome}
               </motion.h1>
-              <div className="mt-12 grid max-w-xl grid-cols-3 gap-0 border-y border-[#e5e5e5]">
+              <div className="mt-10 grid max-w-xl grid-cols-3 gap-0 border-y border-[#e5e5e5] lg:mt-12">
                 {[
                   [curso.turnos.length > 1 ? "Turnos" : "Turno", curso.tipo],
                   ["Duração", curso.duracaoLabel],
@@ -140,12 +143,12 @@ export function CursoDetalhe() {
                 ].map(([k, v], i) => (
                   <div
                     key={k}
-                    className={`py-6 ${i < 2 ? "border-r border-[#e5e5e5] pr-4" : "pl-4"}`}
+                    className={`min-w-0 py-5 sm:py-6 ${i > 0 ? "pl-3 sm:pl-4" : ""} ${i < 2 ? "border-r border-[#e5e5e5] pr-3 sm:pr-4" : ""}`}
                   >
                     <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#1a1a1a]/50">
                       {k}
                     </div>
-                    <div className="mt-2 text-[22px] font-bold tracking-[-0.02em] text-[#1a1a1a]">
+                    <div className="mt-2 break-words text-[16px] font-bold leading-[1.2] tracking-[-0.02em] text-[#1a1a1a] sm:text-[22px]">
                       {v}
                     </div>
                   </div>
@@ -166,13 +169,22 @@ export function CursoDetalhe() {
       </section>
 
       {/* Tabs — estilo pílula, mais claramente clicáveis */}
-      <section className="sticky top-[125px] z-30 border-b border-[#e5e5e5] bg-white/95 backdrop-blur">
-        <div className="mx-auto max-w-[1400px] px-6 py-3 lg:px-12">
-          <div className="flex gap-1.5 overflow-x-auto">
+      <section className="sticky top-16 z-30 border-b border-[#e5e5e5] bg-white/95 backdrop-blur lg:top-[125px]">
+        <div className="mx-auto max-w-[1400px] py-3 lg:px-12">
+          {/* No celular as abas rolam de lado, encostando nas bordas da tela */}
+          <div className="flex gap-1.5 overflow-x-auto px-6 [scrollbar-width:none] lg:px-0 [&::-webkit-scrollbar]:hidden">
             {TABS.map((t) => (
               <button
                 key={t.id}
-                onClick={() => setTab(t.id)}
+                onClick={(e) => {
+                  setTab(t.id);
+                  // Traz a aba escolhida para a vista quando ela está parcialmente fora da tela
+                  e.currentTarget.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "nearest",
+                  });
+                }}
                 className={`relative shrink-0 cursor-pointer whitespace-nowrap rounded-full px-5 py-2.5 text-[12.5px] font-bold uppercase tracking-[0.1em] transition-colors ${
                   tab === t.id
                     ? "text-white"
@@ -195,7 +207,7 @@ export function CursoDetalhe() {
 
       {/* Panel content */}
       <section className="bg-white">
-        <div className="mx-auto max-w-[1400px] px-6 py-16 lg:px-12 lg:py-20">
+        <div className="mx-auto max-w-[1400px] px-6 py-10 lg:px-12 lg:py-20">
           <AnimatePresence mode="wait">
             <motion.div
               key={tab}

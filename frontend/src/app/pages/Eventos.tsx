@@ -179,9 +179,9 @@ export function Eventos() {
       />
 
       <section className="bg-white">
-        <div className="mx-auto max-w-[1400px] px-6 py-12 lg:px-12 lg:py-16">
-          {/* Toolbar: filtrar + busca + organizar */}
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+        <div className="mx-auto max-w-[1400px] px-6 py-8 lg:px-12 lg:py-16">
+          {/* Toolbar: filtrar + busca + organizar (no celular, a busca vem primeiro) */}
+          <div className="flex flex-wrap items-center gap-3 lg:flex-nowrap lg:gap-4">
             <button
               onClick={() => setShowFilters((s) => !s)}
               className={`inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-[6px] border px-4 py-3 text-[13px] font-bold shadow-[0_1px_2px_rgba(16,24,40,0.06)] transition-colors ${
@@ -199,7 +199,7 @@ export function Eventos() {
               )}
             </button>
 
-            <div className="relative flex-1">
+            <div className="relative order-first w-full lg:order-none lg:w-auto lg:flex-1">
               <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#1a1a1a]/55" />
               <input
                 value={q}
@@ -214,21 +214,22 @@ export function Eventos() {
                 <button
                   onClick={() => setQ("")}
                   aria-label="Limpar busca"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-[#1a1a1a]/40 transition-colors hover:bg-[#1a1a1a]/[0.06] hover:text-[#1a1a1a]"
+                  className="absolute right-1 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full text-[#1a1a1a]/40 transition-colors hover:bg-[#1a1a1a]/[0.06] hover:text-[#1a1a1a]"
                 >
-                  <X className="h-3.5 w-3.5" />
+                  <X className="h-4 w-4" />
                 </button>
               )}
             </div>
 
-            <div className="flex shrink-0 items-center gap-2.5">
+            <div className="flex min-w-0 flex-1 items-center gap-2.5 lg:flex-none lg:shrink-0">
               <span className="hidden text-[12px] font-semibold text-[#1a1a1a]/55 sm:inline">
                 Organizar por:
               </span>
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortId)}
-                className="cursor-pointer rounded-[6px] border border-[#d4d4d4] bg-white py-3 pl-3 pr-8 text-[13px] font-semibold text-[#1a1a1a] outline-none transition-colors focus:border-[#6E3AFF]"
+                aria-label="Organizar por"
+                className="w-full min-w-0 cursor-pointer rounded-[6px] border border-[#d4d4d4] bg-white py-3 pl-3 pr-8 text-[13px] font-semibold text-[#1a1a1a] outline-none transition-colors focus:border-[#6E3AFF]"
               >
                 {sortOptions.map((o) => (
                   <option key={o.id} value={o.id}>
@@ -249,7 +250,7 @@ export function Eventos() {
                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                 className="overflow-hidden"
               >
-                <div className="mt-5 grid grid-cols-1 gap-6 rounded-[10px] border border-[#e0e0e0] bg-[#fafafa] p-6 sm:grid-cols-3">
+                <div className="mt-5 grid grid-cols-1 gap-6 rounded-[10px] border border-[#e0e0e0] bg-[#fafafa] p-5 sm:grid-cols-3 sm:p-6">
                   {[
                     { label: "Tipo de evento", value: tipo, set: setTipo, opts: filtros.tipo },
                     { label: "Campus", value: campus, set: setCampus, opts: filtros.campus },
@@ -264,7 +265,7 @@ export function Eventos() {
                           <button
                             key={o}
                             onClick={() => aplicar(f.set, o)}
-                            className={`cursor-pointer rounded-[6px] border px-3 py-1.5 text-[12px] font-semibold transition-colors ${
+                            className={`min-h-9 cursor-pointer rounded-[6px] border px-3 py-1.5 text-[12px] font-semibold transition-colors ${
                               f.value === o
                                 ? "border-[#6E3AFF] bg-[#6E3AFF] text-white"
                                 : "border-[#e5e5e5] bg-white text-[#1a1a1a]/65 hover:border-[#1a1a1a]/40"
@@ -282,7 +283,7 @@ export function Eventos() {
           </AnimatePresence>
 
           {/* Resultados + alternância de visualização */}
-          <div className="mt-8 flex items-center justify-between border-b border-[#e5e5e5] pb-4">
+          <div className="mt-6 flex items-center justify-between gap-3 border-b border-[#e5e5e5] pb-4 lg:mt-8">
             <div className="text-[13px] text-[#1a1a1a]/60">
               <span className="font-bold text-[#1a1a1a]">{filtrados.length}</span>{" "}
               {filtrados.length === 1 ? "evento encontrado" : "eventos encontrados"}
@@ -290,7 +291,7 @@ export function Eventos() {
               {(activeFilters > 0 || q) && (
                 <button
                   onClick={limpar}
-                  className="ml-3 inline-flex items-center gap-1 text-[12px] font-bold text-[#6E3AFF] hover:underline"
+                  className="-my-2 ml-3 inline-flex items-center gap-1 py-2 text-[12px] font-bold text-[#6E3AFF] hover:underline"
                 >
                   <X className="h-3 w-3" /> Limpar filtros
                 </button>
@@ -301,7 +302,7 @@ export function Eventos() {
               <button
                 onClick={() => setView("grid")}
                 aria-label="Visualizar em grade"
-                className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] transition-colors ${
+                className={`flex h-9 w-9 cursor-pointer items-center justify-center rounded-[4px] transition-colors ${
                   view === "grid"
                     ? "bg-[#6E3AFF] text-white"
                     : "text-[#1a1a1a]/60 hover:bg-[#1a1a1a]/[0.05] hover:text-[#1a1a1a]"
@@ -312,7 +313,7 @@ export function Eventos() {
               <button
                 onClick={() => setView("list")}
                 aria-label="Visualizar em lista"
-                className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] transition-colors ${
+                className={`flex h-9 w-9 cursor-pointer items-center justify-center rounded-[4px] transition-colors ${
                   view === "list"
                     ? "bg-[#6E3AFF] text-white"
                     : "text-[#1a1a1a]/60 hover:bg-[#1a1a1a]/[0.05] hover:text-[#1a1a1a]"
@@ -480,11 +481,12 @@ export function Eventos() {
 
           {/* Paginação */}
           {totalPages > 1 && (
-            <div className="mt-12 flex items-center justify-center gap-1.5">
+            <div className="mt-12 flex items-center justify-center gap-1">
               <PagerButton
                 onClick={() => setPage(1)}
                 disabled={currentPage === 1}
                 ariaLabel="Primeira página"
+                soDesktop
               >
                 <ChevronsLeft className="h-4 w-4" />
               </PagerButton>
@@ -496,11 +498,17 @@ export function Eventos() {
                 <ChevronLeft className="h-4 w-4" />
               </PagerButton>
 
+              {/* No celular os números não cabem: mostra só a posição */}
+              <span className="px-3 text-[13px] font-semibold text-[#1a1a1a]/70 sm:hidden">
+                Página {currentPage} de {totalPages}
+              </span>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
                 <button
                   key={p}
                   onClick={() => setPage(p)}
-                  className={`flex h-9 min-w-9 cursor-pointer items-center justify-center rounded-[6px] px-3 text-[13px] font-bold transition-colors ${
+                  aria-label={`Página ${p}`}
+                  aria-current={p === currentPage ? "page" : undefined}
+                  className={`hidden h-11 min-w-11 sm:flex shrink-0 cursor-pointer items-center justify-center rounded-[6px] px-3 text-[14px] font-bold transition-colors sm:h-9 sm:min-w-9 sm:text-[13px] ${
                     p === currentPage
                       ? "bg-[#6E3AFF] text-white"
                       : "text-[#1a1a1a]/60 hover:bg-[#1a1a1a]/[0.05] hover:text-[#1a1a1a]"
@@ -521,6 +529,7 @@ export function Eventos() {
                 onClick={() => setPage(totalPages)}
                 disabled={currentPage === totalPages}
                 ariaLabel="Última página"
+                soDesktop
               >
                 <ChevronsRight className="h-4 w-4" />
               </PagerButton>
@@ -537,18 +546,21 @@ function PagerButton({
   onClick,
   disabled,
   ariaLabel,
+  soDesktop = false,
 }: {
   children: React.ReactNode;
   onClick: () => void;
   disabled: boolean;
   ariaLabel: string;
+  /** Primeira/última página: no celular não cabem todos os botões numa linha */
+  soDesktop?: boolean;
 }) {
   return (
     <button
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
-      className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-[6px] text-[#1a1a1a]/55 transition-colors hover:bg-[#1a1a1a]/[0.05] hover:text-[#1a1a1a] disabled:pointer-events-none disabled:opacity-30"
+      className={`${soDesktop ? "hidden sm:flex" : "flex"} h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-[6px] text-[#1a1a1a]/55 transition-colors hover:bg-[#1a1a1a]/[0.05] hover:text-[#1a1a1a] disabled:pointer-events-none disabled:opacity-30 sm:h-9 sm:w-9`}
     >
       {children}
     </button>
