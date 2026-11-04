@@ -51,8 +51,12 @@ export function SectionLayout({
   const conteudo = useRef<HTMLDivElement>(null);
   const ac = ACCENT[accent];
   const hasSearch = Boolean(popular?.length || searchPlaceholder);
+  // No celular a lista de seções fica recolhida: aberta, ela empurrava o conteúdo uma tela para baixo
+  const [listaAberta, setListaAberta] = useState(false);
+  const secaoAtual = sections.find((s) => s.id === active);
 
   function abrirSecao(id: string) {
+    setListaAberta(false);
     navigate({ hash: id }, { replace: true, preventScrollReset: true });
   }
 
@@ -61,7 +65,7 @@ export function SectionLayout({
     const el = conteudo.current;
     if (!idDoEndereco || !el) return;
     const topo = el.getBoundingClientRect().top;
-    if (topo < 140 || topo > window.innerHeight * 0.6) {
+    if (topo < 80 || topo > window.innerHeight * 0.6) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, [idDoEndereco]);
@@ -77,7 +81,7 @@ export function SectionLayout({
       {/* Mais acessados + Search */}
       {hasSearch && (
         <section className="bg-white">
-          <div className="mx-auto max-w-[1400px] px-6 pt-10 pb-12 lg:px-12 lg:pt-12 lg:pb-16">
+          <div className="mx-auto max-w-[1400px] px-6 pt-8 pb-10 lg:px-12 lg:pt-12 lg:pb-16">
             <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#1a1a1a]/40">
               Mais acessados
             </div>
@@ -89,7 +93,7 @@ export function SectionLayout({
                   {...(p.href?.startsWith("http")
                     ? { target: "_blank", rel: "noopener noreferrer" }
                     : {})}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[#1a1a1a] bg-white px-4 py-1.5 text-[12px] font-semibold text-[#1a1a1a] transition-colors hover:bg-[#1a1a1a] hover:text-white"
+                  className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-[#1a1a1a] bg-white px-4 py-1.5 text-[12px] font-semibold text-[#1a1a1a] transition-colors hover:bg-[#1a1a1a] hover:text-white"
                 >
                   {p.label}
                 </a>
@@ -100,14 +104,14 @@ export function SectionLayout({
             <form
               onSubmit={buscarNoPortal}
               role="search"
-              className="mt-10 flex items-center rounded-[4px] border border-[#e5e5e5] bg-white focus-within:border-[#6E3AFF]"
+              className="mt-8 flex items-center rounded-[4px] border border-[#e5e5e5] bg-white focus-within:border-[#6E3AFF] lg:mt-10"
             >
               <input
                 type="search"
                 name="termo"
                 aria-label="Buscar no portal"
                 placeholder={searchPlaceholder}
-                className="flex-1 bg-transparent px-5 py-4 text-[14px] text-[#1a1a1a] placeholder:text-[#1a1a1a]/40 focus:outline-none"
+                className="min-w-0 flex-1 bg-transparent px-4 py-4 text-[14px] text-[#1a1a1a] placeholder:text-[#1a1a1a]/40 focus:outline-none sm:px-5"
               />
               <button
                 type="submit"
@@ -116,8 +120,8 @@ export function SectionLayout({
                 Buscar
               </button>
             </form>
-            <div className="mt-4 flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#1a1a1a]/35">
+            <div className="mt-4 flex flex-wrap items-center gap-x-1 gap-y-1">
+              <span className="mr-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#1a1a1a]/35">
                 Sugestões:
               </span>
               {tags?.map((t) => (
@@ -125,7 +129,8 @@ export function SectionLayout({
                   key={t}
                   type="button"
                   onClick={() => abrirBusca(t)}
-                  className="text-[12px] text-[#1a1a1a]/60 transition-colors hover:text-[#6E3AFF]"
+                  // Área de toque maior que o texto, sem mudar o visual
+                  className="rounded-[4px] px-1.5 py-1.5 text-[12px] text-[#1a1a1a]/60 transition-colors hover:text-[#6E3AFF]"
                 >
                   {t}
                 </button>
@@ -137,13 +142,42 @@ export function SectionLayout({
 
       {/* Sidebar + active section content */}
       <section className="border-t border-[#e5e5e5] bg-white">
-        <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-6 py-16 lg:grid-cols-12 lg:gap-16 lg:px-12 lg:py-24">
+        <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-8 px-6 py-10 lg:grid-cols-12 lg:gap-16 lg:px-12 lg:py-24">
           <aside className="lg:col-span-3">
             <div className="lg:sticky lg:top-40">
-              <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#1a1a1a]/40">
+              {/* Celular: mostra a seção atual e abre a lista ao tocar */}
+              <button
+                type="button"
+                onClick={() => setListaAberta((v) => !v)}
+                aria-expanded={listaAberta}
+                aria-controls="lista-secoes"
+                className="flex w-full items-center justify-between gap-4 rounded-[8px] border border-[#e5e5e5] bg-white px-4 py-3 text-left lg:hidden"
+              >
+                <span className="min-w-0">
+                  <span className="block text-[10px] font-bold uppercase tracking-[0.22em] text-[#1a1a1a]/40">
+                    {sidebarTitle} · {sections.findIndex((s) => s.id === active) + 1} de{" "}
+                    {sections.length}
+                  </span>
+                  <span className={`mt-0.5 block text-[15px] font-bold ${ac.text}`}>
+                    {secaoAtual?.label}
+                  </span>
+                </span>
+                <ChevronDown
+                  className={`h-5 w-5 shrink-0 text-[#1a1a1a]/50 transition-transform ${
+                    listaAberta ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              <div className="hidden text-[10px] font-bold uppercase tracking-[0.22em] text-[#1a1a1a]/40 lg:block">
                 {sidebarTitle}
               </div>
-              <nav className="mt-4 flex flex-col gap-1">
+              <nav
+                id="lista-secoes"
+                className={`mt-2 flex-col gap-1 rounded-[8px] border border-[#e5e5e5] p-1.5 lg:mt-4 lg:flex lg:rounded-none lg:border-0 lg:p-0 ${
+                  listaAberta ? "flex" : "hidden"
+                }`}
+              >
                 {sections.map((s) => (
                   <button
                     key={s.id}
@@ -167,38 +201,14 @@ export function SectionLayout({
                 ))}
               </nav>
 
-              {sidebarRelated && sidebarRelated.length > 0 && (
-                <div className="mt-8 border-t border-[#e5e5e5] pt-6">
-                  <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#1a1a1a]/40">
-                    Links relacionados
-                  </div>
-                  <div className="mt-3 flex flex-col gap-2">
-                    {sidebarRelated.map((l) =>
-                      l.to ? (
-                        <Link
-                          key={l.label}
-                          to={l.to}
-                          className="text-[13px] font-medium text-[#2563EB] hover:underline"
-                        >
-                          {l.label}
-                        </Link>
-                      ) : (
-                        <a
-                          key={l.label}
-                          href={l.href ?? "#"}
-                          className="text-[13px] font-medium text-[#2563EB] hover:underline"
-                        >
-                          {l.label}
-                        </a>
-                      ),
-                    )}
-                  </div>
-                </div>
-              )}
+              {/* No celular estes links vão para depois do conteúdo */}
+              <div className="hidden lg:block">
+                <LinksDaLateral links={sidebarRelated} />
+              </div>
             </div>
           </aside>
 
-          <div ref={conteudo} className="scroll-mt-40 lg:col-span-9">
+          <div ref={conteudo} className="scroll-mt-24 lg:col-span-9 lg:scroll-mt-40">
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
@@ -210,6 +220,10 @@ export function SectionLayout({
                 {sections.find((s) => s.id === active)?.content}
               </motion.div>
             </AnimatePresence>
+          </div>
+
+          <div className="lg:hidden">
+            <LinksDaLateral links={sidebarRelated} />
           </div>
         </div>
       </section>
@@ -241,6 +255,31 @@ export function SectionLayout({
         </section>
       )}
     </>
+  );
+}
+
+function LinksDaLateral({ links }: { links?: { label: string; to?: string; href?: string }[] }) {
+  if (!links?.length) return null;
+  const estilo = "py-1 text-[13px] font-medium text-[#2563EB] hover:underline";
+  return (
+    <div className="border-t border-[#e5e5e5] pt-6 lg:mt-8">
+      <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#1a1a1a]/40">
+        Links relacionados
+      </div>
+      <div className="mt-2 flex flex-col items-start gap-1">
+        {links.map((l) =>
+          l.to ? (
+            <Link key={l.label} to={l.to} className={estilo}>
+              {l.label}
+            </Link>
+          ) : (
+            <a key={l.label} href={l.href ?? "#"} className={estilo}>
+              {l.label}
+            </a>
+          ),
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -311,7 +350,7 @@ export function PanelRedirect({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group mt-10 flex flex-col gap-6 rounded-[12px] border border-[#e5e5e5] bg-white p-8 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#6E3AFF]/50 hover:shadow-[0_10px_28px_rgba(110,58,255,0.12)] sm:flex-row sm:items-center sm:justify-between"
+        className="group mt-10 flex flex-col gap-6 rounded-[12px] border border-[#e5e5e5] bg-white p-6 transition-all sm:p-8 duration-200 hover:-translate-y-0.5 hover:border-[#6E3AFF]/50 hover:shadow-[0_10px_28px_rgba(110,58,255,0.12)] sm:flex-row sm:items-center sm:justify-between"
       >
         <div>
           <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#6E3AFF]">
@@ -446,13 +485,13 @@ export function PanelRelated({
       <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#1a1a1a]/70">
         Links relacionados
       </div>
-      <div className="mt-3 flex flex-wrap gap-x-8 gap-y-2.5">
+      <div className="mt-2 flex flex-wrap gap-x-8 gap-y-0.5">
         {links.map((l) =>
           l.to ? (
             <Link
               key={l.label}
               to={l.to}
-              className="text-[13px] font-medium text-[#2563EB] hover:underline"
+              className="py-1.5 text-[13px] font-medium text-[#2563EB] hover:underline"
             >
               {l.label}
             </Link>
@@ -460,7 +499,7 @@ export function PanelRelated({
             <a
               key={l.label}
               href={l.href ?? "#"}
-              className="text-[13px] font-medium text-[#2563EB] hover:underline"
+              className="py-1.5 text-[13px] font-medium text-[#2563EB] hover:underline"
             >
               {l.label}
             </a>
