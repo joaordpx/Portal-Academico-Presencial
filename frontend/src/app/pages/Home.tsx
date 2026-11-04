@@ -8,7 +8,7 @@ import {
   ScrollText,
   FileSignature,
   GraduationCap,
-  BriefcaseBusiness,
+  Phone,
   BookMarked,
   HeartPulse,
   LifeBuoy,
@@ -293,7 +293,7 @@ function AtalhosRapidos() {
     { icon: ScrollText, label: "Editais", to: "/editais-oportunidades" },
     { icon: FileSignature, label: "Documentos & Requerimentos", to: "/servicos-documentos" },
     { icon: GraduationCap, label: "Cursos", to: "/cursos" },
-    { icon: BriefcaseBusiness, label: "Estágios", to: "/editais-oportunidades" },
+    { icon: Phone, label: "Contatos", to: "/contatos" },
     { icon: BookMarked, label: "Biblioteca", to: "/vida-academica" },
     { icon: HeartPulse, label: "Assistência Estudantil", to: "/assistencia-estudantil" },
     { icon: LifeBuoy, label: "Ajuda & Suporte", to: "/ajuda-suporte" },
@@ -726,12 +726,20 @@ function Noticias({ data }: { data: Noticia[] }) {
                 </div>
               </div>
             </div>
-            <Link
-              to="/ajuda-suporte"
-              className="inline-flex items-center gap-2 rounded-[4px] bg-white px-6 py-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a] transition-colors hover:bg-[#FFB800]"
-            >
-              Abrir contato <ArrowUpRight className="h-4 w-4" />
-            </Link>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                to="/contatos"
+                className="inline-flex items-center gap-2 rounded-[4px] border border-white/40 px-6 py-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-white transition-colors hover:border-[#FFB800] hover:text-[#FFB800]"
+              >
+                Catálogo telefônico
+              </Link>
+              <Link
+                to="/ajuda-suporte"
+                className="inline-flex items-center gap-2 rounded-[4px] bg-white px-6 py-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a] transition-colors hover:bg-[#FFB800]"
+              >
+                Abrir contato <ArrowUpRight className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
         </Reveal>
       </div>

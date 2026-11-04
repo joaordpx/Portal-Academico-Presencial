@@ -66,6 +66,12 @@ export const router = createBrowserRouter([
         path: "ajuda-suporte",
         lazy: async () => ({ Component: (await import("./pages/AjudaSuporte")).AjudaSuporte }),
       },
+      {
+        path: "contatos",
+        lazy: async () => ({
+          Component: (await import("./pages/CatalogoTelefonico")).CatalogoTelefonico,
+        }),
+      },
       // Rota antiga mantida: os links existentes para /contato continuam válidos
       {
         path: "contato",
