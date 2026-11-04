@@ -2,7 +2,7 @@ import { fetchApi } from "./api";
 import { getCursos } from "./cursoService";
 import { getEditais } from "./editalService";
 import { getEventos } from "./eventoService";
-import { getLocais } from "./localService";
+import { getLocais, getUnidades } from "./localService";
 import { formatarData, formatarPeriodo } from "../utils/data";
 
 /**
@@ -20,7 +20,7 @@ import { formatarData, formatarPeriodo } from "../utils/data";
  */
 
 export type TipoBusca =
-  "link" | "secao" | "pergunta" | "sigla" | "curso" | "local" | "edital" | "evento";
+  "link" | "secao" | "pergunta" | "sigla" | "curso" | "local" | "campus" | "edital" | "evento";
 
 export interface ItemBusca {
   id: string;
@@ -51,6 +51,7 @@ export const ORDEM_TIPOS: TipoBusca[] = [
   "sigla",
   "curso",
   "local",
+  "campus",
   "edital",
   "evento",
 ];
@@ -62,11 +63,15 @@ export const ROTULO_TIPO: Record<TipoBusca, string> = {
   sigla: "Siglas",
   curso: "Cursos",
   local: "Locais",
+  campus: "Campi",
   edital: "Editais",
   evento: "Eventos",
 };
 
 const MAX_POR_TIPO = 5;
+
+/** Slug do campus-sede na API, cujos prédios a página de Unidades mostra */
+const CAMPUS_SEDE = "montes-claros";
 
 /** Sem acentos, minúsculas e espaços simples: "  Matrícula " → "matricula" */
 export function normalizar(texto: string) {
@@ -121,11 +126,13 @@ export function limparCacheBusca() {
 }
 
 async function montarIndice(hoje: Date): Promise<IndiceBusca> {
-  const [conteudo, cursos, locais, editais, eventos] = await Promise.allSettled([
+  const [conteudo, cursos, locais, campi, editais, eventos] = await Promise.allSettled([
     // Carregado sob demanda: só quem usa a busca baixa o conteúdo das páginas
     import("../app/pages/conteudo").then((m) => m.indexarConteudo()),
     getCursos(),
-    getLocais(),
+    // Os mesmos locais que a página de Unidades mostra, para o link sempre abrir o prédio
+    getLocais(CAMPUS_SEDE),
+    getUnidades(),
     getEditais(hoje),
     getEventos(hoje),
   ]);
@@ -160,7 +167,7 @@ async function montarIndice(hoje: Date): Promise<IndiceBusca> {
           tipo: "local",
           titulo: l.nome,
           detalhe: l.centro ? `${l.centro.sigla} · ${l.campus}` : `${l.tipo} · ${l.campus}`,
-          to: "/unidades-localizacao",
+          to: `/unidades-localizacao#${l.slug}`,
           extras: [
             l.descricao ?? "",
             l.centro?.nome ?? "",
@@ -168,6 +175,21 @@ async function montarIndice(hoje: Date): Promise<IndiceBusca> {
             ...l.setores,
             ...l.servicos,
           ],
+        }),
+      );
+    }
+  } else falhas++;
+
+  if (campi.status === "fulfilled") {
+    for (const u of campi.value) {
+      itens.push(
+        item({
+          id: `campus-${u.slug}`,
+          tipo: "campus",
+          titulo: u.nome,
+          detalhe: [u.cidade, u.regiao].filter(Boolean).join(" · "),
+          to: `/unidades-localizacao#campus-${u.slug}`,
+          extras: [u.endereco ?? "", "campus", ...u.cursos, ...u.servicos],
         }),
       );
     }
