@@ -120,13 +120,21 @@ export function UnidadesLocalizacao() {
         icon={MapPin}
       />
 
-      <section className="sticky top-[125px] z-30 border-b border-[#e5e5e5] bg-white/95 backdrop-blur">
-        <div className="mx-auto max-w-[1400px] px-6 py-3 lg:px-12">
-          <div className="flex gap-1.5 overflow-x-auto">
+      <section className="sticky top-16 z-30 border-b border-[#e5e5e5] bg-white/95 backdrop-blur lg:top-[125px]">
+        <div className="mx-auto max-w-[1400px] py-3 lg:px-12">
+          {/* No celular as abas rolam de lado, encostando nas bordas da tela */}
+          <div className="flex gap-1.5 overflow-x-auto px-6 [scrollbar-width:none] lg:px-0 [&::-webkit-scrollbar]:hidden">
             {TABS.map((t) => (
               <button
                 key={t}
-                onClick={() => irPara(HASH_DA_ABA[t])}
+                onClick={(e) => {
+                  irPara(HASH_DA_ABA[t]);
+                  e.currentTarget.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "nearest",
+                  });
+                }}
                 aria-current={tab === t ? "true" : undefined}
                 className={`relative shrink-0 cursor-pointer whitespace-nowrap rounded-full px-5 py-2.5 text-[12.5px] font-bold uppercase tracking-[0.1em] transition-colors ${
                   tab === t
@@ -149,7 +157,7 @@ export function UnidadesLocalizacao() {
       </section>
 
       <section className="bg-white">
-        <div className="mx-auto max-w-[1400px] px-6 py-12 lg:px-12 lg:py-16">
+        <div className="mx-auto max-w-[1400px] px-6 py-8 lg:px-12 lg:py-16">
           <AnimatePresence mode="wait">
             <motion.div
               key={tab}
@@ -299,16 +307,16 @@ function Mapa({
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Onde fica...? Busque por prédio, centro, setor ou serviço (ex.: Secretaria, CCET, RU)"
+          placeholder="Onde fica? Prédio, setor ou serviço (ex.: RU, CCET)"
           className="w-full rounded-[6px] border border-[#d4d4d4] bg-white py-3.5 pl-11 pr-10 text-[14.5px] text-[#1a1a1a] outline-none transition-colors placeholder:text-[#1a1a1a]/40 focus:border-[#6E3AFF]"
         />
         {q && (
           <button
             onClick={() => setQ("")}
             aria-label="Limpar busca"
-            className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-[#1a1a1a]/45 transition-colors hover:bg-[#1a1a1a]/[0.06] hover:text-[#1a1a1a]"
+            className="absolute right-1.5 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full text-[#1a1a1a]/45 transition-colors hover:bg-[#1a1a1a]/[0.06] hover:text-[#1a1a1a]"
           >
-            <X className="h-3.5 w-3.5" />
+            <X className="h-4 w-4" />
           </button>
         )}
       </div>
@@ -319,7 +327,7 @@ function Mapa({
             key={t}
             onClick={() => setTipo(t)}
             aria-pressed={tipo === t}
-            className={`cursor-pointer rounded-[6px] border px-3 py-1.5 text-[12.5px] font-semibold transition-colors ${
+            className={`min-h-9 cursor-pointer rounded-[6px] border px-3 py-1.5 text-[12.5px] font-semibold transition-colors ${
               tipo === t
                 ? "border-[#6E3AFF] bg-[#6E3AFF] text-white"
                 : "border-[#d4d4d4] bg-white text-[#1a1a1a]/70 hover:border-[#1a1a1a]/50 hover:text-[#1a1a1a]"
@@ -331,10 +339,10 @@ function Mapa({
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-12">
-        {/* Mapa */}
-        <div className="lg:col-span-7">
+        {/* Mapa — no celular vem depois da lista: quem busca um prédio vê o resultado primeiro */}
+        <div className="order-last lg:order-none lg:col-span-7">
           <div className="lg:sticky lg:top-[210px]">
-            <div className="relative flex aspect-[4/3] flex-col items-center justify-center overflow-hidden rounded-[12px] border border-[#e0e0e0] bg-[#fafafa]">
+            <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-[12px] border border-[#e0e0e0] bg-[#fafafa] py-10 sm:aspect-[4/3] sm:py-0">
               <div
                 aria-hidden
                 className="absolute inset-0 opacity-[0.55]"
@@ -376,7 +384,7 @@ function Mapa({
 
         {/* Lista ou detalhe */}
         <div className="lg:col-span-5">
-          <div ref={detalhe} className="scroll-mt-48">
+          <div ref={detalhe} className="scroll-mt-36 lg:scroll-mt-48">
             <AnimatePresence mode="wait">
               {atual ? (
                 <motion.div
@@ -389,7 +397,7 @@ function Mapa({
                 >
                   <button
                     onClick={() => onSelecionar(null)}
-                    className="mb-3 inline-flex cursor-pointer items-center gap-2 text-[12px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a]/60 transition-colors hover:text-[#6E3AFF]"
+                    className="mb-2 inline-flex cursor-pointer items-center gap-2 py-2 text-[12px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a]/60 transition-colors hover:text-[#6E3AFF]"
                   >
                     <ArrowLeft className="h-4 w-4" /> Todos os locais
                   </button>
@@ -791,7 +799,7 @@ function DemaisUnidades({ hash }: { hash: string }) {
             key={u.slug}
             id={`campus-${u.slug}`}
             ref={hash === `campus-${u.slug}` ? mostrar : undefined}
-            className={`scroll-mt-48 rounded-[12px] border bg-white p-6 transition-colors ${
+            className={`scroll-mt-36 rounded-[12px] border bg-white p-6 transition-colors lg:scroll-mt-48 ${
               hash === `campus-${u.slug}`
                 ? "border-[#6E3AFF] ring-2 ring-[#6E3AFF]/20"
                 : "border-[#e5e5e5]"

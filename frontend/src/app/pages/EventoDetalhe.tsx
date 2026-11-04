@@ -122,20 +122,23 @@ export function EventoDetalhe() {
     <>
       {/* Cabeçalho */}
       <section className="border-b border-[#e5e5e5] bg-white">
-        <div className="mx-auto max-w-[1400px] px-6 pb-14 pt-8 lg:px-12 lg:pb-16 lg:pt-10">
-          <nav className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#1a1a1a]/50">
-            <Link to="/" className="flex items-center gap-1.5 hover:text-[#6E3AFF]">
+        <div className="mx-auto max-w-[1400px] px-6 pb-12 pt-6 lg:px-12 lg:pb-16 lg:pt-10">
+          <nav className="flex min-w-0 items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#1a1a1a]/50">
+            <Link
+              to="/"
+              className="-my-2 flex shrink-0 items-center gap-1.5 py-2 hover:text-[#6E3AFF]"
+            >
               <Home className="h-3 w-3" /> Início
             </Link>
-            <ChevronRight className="h-3 w-3" />
-            <Link to="/eventos" className="hover:text-[#6E3AFF]">
+            <ChevronRight className="h-3 w-3 shrink-0" />
+            <Link to="/eventos" className="-my-2 shrink-0 py-2 hover:text-[#6E3AFF]">
               Eventos
             </Link>
-            <ChevronRight className="h-3 w-3" />
+            <ChevronRight className="h-3 w-3 shrink-0" />
             <span className="truncate text-[#1a1a1a]">{evento.titulo}</span>
           </nav>
 
-          <div className="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
             <div className="lg:col-span-7">
               <div className="flex flex-wrap items-center gap-2">
                 <span
@@ -187,8 +190,8 @@ export function EventoDetalhe() {
 
       {/* Conteúdo */}
       <section className="bg-white">
-        <div className="mx-auto max-w-[1400px] px-6 py-14 lg:px-12 lg:py-16">
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+        <div className="mx-auto max-w-[1400px] px-6 py-10 lg:px-12 lg:py-16">
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-16">
             {/* Texto do evento */}
             <div className="lg:col-span-7">
               {evento.conteudo && evento.conteudo.length > 0 ? (
@@ -232,14 +235,14 @@ export function EventoDetalhe() {
 
               <Link
                 to="/eventos"
-                className="mt-12 inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a] transition-colors hover:text-[#6E3AFF]"
+                className="mt-10 inline-flex items-center gap-2 py-2 text-[12px] font-bold uppercase tracking-[0.14em] text-[#1a1a1a] transition-colors hover:text-[#6E3AFF] lg:mt-12"
               >
                 <ArrowLeft className="h-4 w-4" /> Voltar para eventos
               </Link>
             </div>
 
-            {/* Painel de informações + ação */}
-            <aside className="lg:col-span-5">
+            {/* Painel de informações + ação — no celular vem antes do texto: data, local e inscrição primeiro */}
+            <aside className="order-first lg:order-none lg:col-span-5">
               <div className="lg:sticky lg:top-40">
                 <div className="overflow-hidden rounded-[10px] border border-[#e5e5e5]">
                   <div className="border-b border-[#e5e5e5] bg-[#fafafa] px-5 py-3 text-[11px] font-bold uppercase tracking-[0.16em] text-[#1a1a1a]/60">
